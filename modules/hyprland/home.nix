@@ -23,7 +23,7 @@ let
 
   #### Rofi helpers
   toRgbHex = s: "#" + builtins.substring 0 6 s;
-  addPix = s: s + "px";
+  addPx = s: s + "px";
 in
 {
   home.sessionVariables = {
@@ -42,6 +42,20 @@ in
       "XCURSOR_SIZE,24"
       "GTK_THEME,Adwaita:dark"
     ];
+  };
+
+  # 0. Scripts
+  xdg.configFile."hypr/scripts/toggle_special.sh" = {
+    text = ''
+      #!/usr/bin/env bash
+      workspace=$(hyprctl activewindow -j | jq -r '.workspace.name')
+      if [ "$workspace" == "special:magic" ]; then
+          hyprctl dispatch movetoworkspace "+0"
+      else
+          hyprctl dispatch movetoworkspace "special:magic"
+      fi
+    '';
+    executable = true;
   };
 
   # 1. Generate Hyprland Variables
@@ -65,8 +79,8 @@ in
         accent-color:   ${toRgbHex primary};
         inactive-color: ${toRgbHex inactive};
         
-        border-width:   ${addPix borderSize};
-        radius:         ${addPix borderRadius};
+        border-width:   ${addPx borderSize};
+        radius:         ${addPx borderRadius};
     }
   '';
 
@@ -131,8 +145,7 @@ in
       ${builtins.readFile ./waybar.css}
 
       window#waybar {
-        border-bottom-left-radius: ${borderRadius}px;
-        border-bottom-right-radius: ${borderRadius}px;
+        border-radius: ${borderRadius}px;
       }
     '';
     settings = {
