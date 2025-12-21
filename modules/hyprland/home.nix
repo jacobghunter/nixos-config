@@ -1,9 +1,9 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 
 let
-  # --- YOUR DESIGN TOKENS ---
-  primary = "33ccffee";
-  secondary = "00ff99ee";
+  primary = "ce00ffcc";
+  secondary = "00dbffcc";
+  gradientDegrees = "45";
   inactive = "595959ee";
   background = "1e1e2eee";
   text = "cdd6f4ee";
@@ -12,18 +12,35 @@ let
   borderSize = "1";
   borderRadius = "10";
 
-  # Give the hyperland supported format
+  #### Hyprland helpers
   toRgbaDef = s: "rgba(" + s + ")";
-  # Strip rgba to rgb and make it hex
+  toDegrees = s: s + "deg";
+
+  #### Rofi helpers
   toRgbHex = s: "#" + builtins.substring 0 6 s;
-  # Helper to add "px" for rofi
   addPix = s: s + "px";
 in
 {
+  home.sessionVariables = {
+    HYPRCURSOR_THEME = "Bibata-Modern-Classic";
+    HYPRCURSOR_SIZE = "24";
+    XCURSOR_THEME = "Bibata-Modern-Classic";
+    XCURSOR_SIZE = "24";
+  };
+
+  wayland.windowManager.hyprland.settings = {
+    env = [
+      "HYPRCURSOR_THEME,Bibata-Modern-Classic"
+      "HYPRCURSOR_SIZE,24"
+      "XCURSOR_THEME,Bibata-Modern-Classic"
+      "XCURSOR_SIZE,24"
+    ];
+  };
+
   # 1. Generate Hyprland Variables
   xdg.configFile."hypr/variables.conf".text = ''
     # Hyprland gets the raw rgba values and the gradient logic
-    $activeBorder = ${toRgbaDef primary} ${toRgbaDef secondary} 45deg
+    $activeBorder = ${toRgbaDef primary} ${toRgbaDef secondary} ${toDegrees gradientDegrees}
     $inactiveBorder = ${toRgbaDef inactive}
 
     $shadow = ${toRgbaDef shadow}
@@ -59,9 +76,43 @@ in
     # };
   };
 
+  xdg.configFile."waybar/variables.css".text = ''
+    @define-color primary ${toRgbHex primary};
+    @define-color secondary ${toRgbHex secondary};
+    @define-color inactive ${toRgbHex inactive};
+    @define-color background ${toRgbHex background};
+    @define-color text ${toRgbHex text};
+  '';
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Ice";
+    size = 10;
+    x11.enable = true; # Helper to keep X11 apps consistent
+  };
+
+  gtk = {
+    enable = true;
+    cursorTheme = {
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+    };
+  };
+
+  # --- NEW: WAYBAR CONFIG ---
+  programs.waybar = {
+    enable = true;
+    style = ./waybar.css;
+    settings = {
+      mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
+    };
+  };
+
   # 4. Configure Hyprland to use your static config
   wayland.windowManager.hyprland = {
     enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     systemd.enable = true;
     extraConfig = builtins.readFile ./hyprland.conf;
   };

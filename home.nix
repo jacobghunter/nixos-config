@@ -9,6 +9,8 @@
   # --- ENVIRONMENT VARIABLES ---
   home.sessionVariables = {
     EDITOR = "code --wait";
+    NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+    PATH = "$HOME/.npm-global/bin:$PATH";
   };
 
   programs.bash = {
@@ -46,6 +48,7 @@
     gcc
     gnumake
     cmake
+    gemini-cli
 
     # Electronics / Hardware
     qmk

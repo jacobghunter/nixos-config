@@ -1,0 +1,59 @@
+@import "variables.css";
+
+* {
+  border: none;
+  font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+#waybar > box {
+  padding: 0;
+  margin: 0;
+}
+
+window#waybar {
+  background: @background;
+  color: @text;
+}
+
+#workspaces button {
+  padding: 0 5px;
+  background-color: transparent;
+  color: @text;
+}
+
+#workspaces button.active {
+  color: @primary;
+  border-bottom: 2px solid @primary;
+}
+
+#workspaces,
+#clock,
+#battery,
+#pulseaudio,
+#tray {
+  padding: 0 10px; /* Horizontal spacing only */
+  margin: 0 2px;
+  background-color: transparent;
+}
+
+#workspaces button {
+  padding: 0 5px;
+  color: #ffffff;
+}
+
+#battery.charging,
+#battery.plugged {
+  color: @background;
+  background-color: @secondary;
+}
+
+#battery.critical:not(.charging) {
+  background-color: #f38ba8;
+  color: @background;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}

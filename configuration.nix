@@ -5,6 +5,7 @@
   # --- BOOT & HARDWARE ---
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.kernelModules = [ "i915" ];
 
   # Hardware Acceleration (Video)
   hardware.graphics = {
@@ -80,7 +81,6 @@
       "wheel"
       "docker"
     ];
-    # Note: We removed 'packages = ...' here. We use home.nix for that now.
   };
 
   # --- SYSTEM MAINTENANCE ---
@@ -93,7 +93,7 @@
   system.autoUpgrade = {
     enable = true;
     allowReboot = false;
-    dates = "daily";
+    dates = "weekly";
     flags = [ "--upgrade" ];
   };
 
@@ -105,6 +105,8 @@
 
   system.stateVersion = "25.05";
 
+  fonts.fontconfig.enable = true;
+
   # --- SYSTEM PACKAGES ---
   # Only tools needed by "root" or for system rescue
   environment.systemPackages = with pkgs; [
@@ -112,6 +114,8 @@
     wget
     git
     htop
+    btop
+    tree
     usbutils
     util-linux
     nixfmt-rfc-style
