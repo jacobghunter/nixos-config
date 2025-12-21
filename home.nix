@@ -16,7 +16,10 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestion.enable = true;
+    autosuggestion = {
+      enable = true;
+      highlight = "fg=#6c6c6c";
+    };
     syntaxHighlighting.enable = true;
 
     oh-my-zsh = {
@@ -33,7 +36,7 @@
   # --- ALIASES ---
   home.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
-    hyperbinds = "cat ~/.config/hypr/hyprland.conf | grep bind";
+    hyprbinds = "cat ~/.config/hypr/hyprland.conf | grep bind";
     ll = "ls -l";
     gs = "git status";
     ga = "git add";

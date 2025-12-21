@@ -16,6 +16,7 @@
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = false;
+    package = pkgs.libsForQt5.sddm;
     theme = "sugar-dark";
   };
 
@@ -42,6 +43,9 @@
   environment.systemPackages = with pkgs; [
     # SDDM Theme
     sddm-sugar-dark
+    libsForQt5.qt5.qtquickcontrols2
+    libsForQt5.qt5.qtgraphicaleffects
+    libsForQt5.qt5.qtsvg
 
     kitty
     waybar
