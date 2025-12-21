@@ -15,9 +15,15 @@
 
   services.displayManager.sddm = {
     enable = true;
+    package = pkgs.kdePackages.sddm;
     wayland.enable = false;
     theme = "sddm-astronaut-theme";
-    extraPackages = [ pkgs.sddm-astronaut ];
+    extraPackages = with pkgs; [
+      sddm-astronaut
+      kdePackages.qtmultimedia
+      kdePackages.qtsvg
+      kdePackages.qt5compat
+    ];
   };
 
   services.displayManager.defaultSession = "hyprland";

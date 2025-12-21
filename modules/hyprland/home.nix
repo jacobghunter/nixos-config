@@ -1,4 +1,9 @@
-{ pkgs, config, inputs, ... }:
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 
 let
   primary = "ce00ffcc";

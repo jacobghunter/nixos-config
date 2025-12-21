@@ -14,6 +14,8 @@
 window#waybar {
   background: @background;
   color: @text;
+  border-radius: 10;
+  border: 1px solid @inactive;
 }
 
 #workspaces button {
