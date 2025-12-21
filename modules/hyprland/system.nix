@@ -16,7 +16,8 @@
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = false;
-    theme = "sddm-astronaut";
+    theme = "sddm-astronaut-theme";
+    extraPackages = [ pkgs.sddm-astronaut ];
   };
 
   services.displayManager.defaultSession = "hyprland";
@@ -42,7 +43,7 @@
   environment.systemPackages = with pkgs; [
     # SDDM Theme
     sddm-astronaut
-    
+
     kitty
     waybar
     dunst

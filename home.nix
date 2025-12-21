@@ -16,11 +16,24 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestion = {
-      enable = true;
-      highlight = "fg=#6c6c6c";
-    };
+    autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+
+    plugins = [
+      {
+        name = "fzf-tab";
+        src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      }
+    ];
+
+    initExtra = ''
+      # disable sort when completing `git checkout`
+      zstyle ':completion:*:git-checkout:*' sort false
+      # set descriptions format to enable group support
+      zstyle ':completion:*:descriptions' format '[%d]'
+      # set list-colors to enable filename colorizing
+      zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
+    '';
 
     oh-my-zsh = {
       enable = true;

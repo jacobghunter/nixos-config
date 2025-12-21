@@ -20,10 +20,12 @@ window#waybar {
   padding: 0 5px;
   background-color: transparent;
   color: @text;
+  border-bottom: 2px solid transparent;
 }
 
 #workspaces button.active {
   color: @primary;
+  border-radius: 0;
   border-bottom: 2px solid @primary;
 }
 
@@ -35,11 +37,6 @@ window#waybar {
   padding: 0 10px; /* Horizontal spacing only */
   margin: 0 2px;
   background-color: transparent;
-}
-
-#workspaces button {
-  padding: 0 5px;
-  color: #ffffff;
 }
 
 #battery.charging,
