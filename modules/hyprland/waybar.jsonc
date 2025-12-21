@@ -1,9 +1,8 @@
 {
   "layer": "top",
   "position": "top",
-  "width": 1080,
-  "margin-top": 2,
-  "margin-left": 10,
+  "width": 1920,
+  "margin-top": 0,
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
   "modules-right": ["pulseaudio", "bluetooth", "battery", "tray"],

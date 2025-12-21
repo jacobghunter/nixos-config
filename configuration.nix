@@ -17,6 +17,8 @@
   hardware.keyboard.qmk.enable = true;
 
   # Bluetooth (System Service)
+  hardware.bluetooth.enable = true; # <--- Enable the daemon
+  hardware.bluetooth.powerOnBoot = true;
   hardware.bluetooth.settings.General.ControllerMode = "bredr";
 
   # --- NETWORKING ---
@@ -72,9 +74,13 @@
   services.printing.enable = true; # CUPS
   virtualisation.docker.enable = true;
 
+  programs.dconf.enable = true;
+  programs.zsh.enable = true;
+
   # --- USERS ---
   users.users.jacob = {
     isNormalUser = true;
+    shell = pkgs.zsh;
     description = "Jacob Hunter";
     extraGroups = [
       "networkmanager"

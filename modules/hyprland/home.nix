@@ -26,6 +26,7 @@ in
     HYPRCURSOR_SIZE = "24";
     XCURSOR_THEME = "Bibata-Modern-Classic";
     XCURSOR_SIZE = "24";
+    GTK_THEME = "Adwaita:dark";
   };
 
   wayland.windowManager.hyprland.settings = {
@@ -34,6 +35,7 @@ in
       "HYPRCURSOR_SIZE,24"
       "XCURSOR_THEME,Bibata-Modern-Classic"
       "XCURSOR_SIZE,24"
+      "GTK_THEME,Adwaita:dark"
     ];
   };
 
@@ -94,16 +96,40 @@ in
 
   gtk = {
     enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
     cursorTheme = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Classic";
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "Adwaita-dark";
     };
   };
 
   # --- NEW: WAYBAR CONFIG ---
   programs.waybar = {
     enable = true;
-    style = ./waybar.css;
+    style = ''
+      ${builtins.readFile ./waybar.css}
+
+      window#waybar {
+        border-bottom-left-radius: ${borderRadius}px;
+        border-bottom-right-radius: ${borderRadius}px;
+      }
+    '';
     settings = {
       mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
     };

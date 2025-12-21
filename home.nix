@@ -13,9 +13,21 @@
     PATH = "$HOME/.npm-global/bin:$PATH";
   };
 
-  programs.bash = {
+  programs.zsh = {
     enable = true;
     enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+
+    oh-my-zsh = {
+      enable = true;
+      plugins = [
+        "git"
+        "sudo"
+        "docker"
+      ];
+      theme = "robbyrussell"; # You can change this later!
+    };
   };
 
   # --- ALIASES ---

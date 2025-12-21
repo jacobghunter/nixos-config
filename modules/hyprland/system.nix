@@ -13,9 +13,10 @@
 
   services.xserver.enable = true;
 
-  services.xserver.displayManager.gdm = {
+  services.displayManager.sddm = {
     enable = true;
-    wayland = true;
+    wayland.enable = false;
+    theme = "sugar-dark";
   };
 
   services.displayManager.defaultSession = "hyprland";
@@ -39,6 +40,9 @@
   };
 
   environment.systemPackages = with pkgs; [
+    # SDDM Theme
+    sddm-sugar-dark
+
     kitty
     waybar
     dunst
