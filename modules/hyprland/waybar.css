@@ -12,9 +12,10 @@
 }
 
 window#waybar {
-  background: @background;
+  background: alpha(@background, 0.8);
+  opacity: 0.8;
   color: @text;
-  border: 1px solid @inactive;
+  border-bottom: 1px solid @inactive;
 }
 
 #workspaces button {

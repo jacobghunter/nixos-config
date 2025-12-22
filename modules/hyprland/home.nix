@@ -8,9 +8,10 @@
 let
   primary = "ce00ffcc";
   secondary = "00dbffcc";
+  special = "eb4034aa";
   gradientDegrees = "45";
   inactive = "595959ee";
-  background = "1e1e2eee";
+  background = "000000b3";
   text = "cdd6f4ee";
   shadow = "1a1a1aee";
 
@@ -74,6 +75,7 @@ in
   xdg.configFile."hypr/variables.conf".text = ''
     # Hyprland gets the raw rgba values and the gradient logic
     $activeBorder = ${toRgbaDef primary} ${toRgbaDef secondary} ${toDegrees gradientDegrees}
+    $specialBorder = ${toRgbaDef special}
     $inactiveBorder = ${toRgbaDef inactive}
 
     $shadow = ${toRgbaDef shadow}
@@ -117,6 +119,16 @@ in
     @define-color text ${toRgbHex text};
   '';
 
+  programs.waybar = {
+    enable = true;
+    style = ''
+      ${builtins.readFile ./waybar.css}
+    '';
+    settings = {
+      mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
+    };
+  };
+
   home.pointerCursor = {
     gtk.enable = true;
     package = pkgs.bibata-cursors;
@@ -147,28 +159,6 @@ in
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       gtk-theme = "Adwaita-dark";
-    };
-  };
-
-  # --- NEW: WAYBAR CONFIG ---
-  programs.waybar = {
-    enable = true;
-    style = ''
-      ${builtins.readFile ./waybar.css}
-
-      window#waybar {
-        border-radius: ${borderRadius}px;
-      }
-
-      window#waybar:hover {
-        background: linear-gradient(${toRgbHex background}, ${toRgbHex background}) padding-box,
-                    linear-gradient(to right, ${toRgbHex primary} 0%, ${toRgbHex secondary} 100%) border-box;
-        border: 1px solid transparent;
-        border-radius: ${borderRadius}px;
-      }
-    '';
-    settings = {
-      mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
     };
   };
 
