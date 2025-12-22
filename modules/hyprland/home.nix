@@ -32,6 +32,8 @@ in
     XCURSOR_THEME = "Bibata-Modern-Classic";
     XCURSOR_SIZE = "24";
     GTK_THEME = "Adwaita:dark";
+    MOZ_ENABLE_WAYLAND = "1";
+    NIXOS_OZONE_WL = "1";
   };
 
   wayland.windowManager.hyprland.settings = {
@@ -48,11 +50,21 @@ in
   xdg.configFile."hypr/scripts/toggle_special.sh" = {
     text = ''
       #!/usr/bin/env bash
-      workspace=$(hyprctl activewindow -j | jq -r '.workspace.name')
-      if [ "$workspace" == "special:magic" ]; then
-          hyprctl dispatch movetoworkspace "+0"
+      JQ=${pkgs.jq}/bin/jq
+      HYPRCTL=${config.wayland.windowManager.hyprland.package}/bin/hyprctl
+
+      # Get current window info
+      WINDOW_INFO=$($HYPRCTL activewindow -j)
+      WORKSPACE=$(echo "$WINDOW_INFO" | $JQ -r '.workspace.name')
+
+      if [ "$WORKSPACE" == "special:magic" ]; then
+          # Move OUT to the active workspace of the current monitor
+          MONITOR_ID=$(echo "$WINDOW_INFO" | $JQ -r '.monitor')
+          TARGET=$( $HYPRCTL monitors -j | $JQ -r --argjson m "$MONITOR_ID" '.[] | select(.id == $m) | .activeWorkspace.name' )
+          $HYPRCTL dispatch movetoworkspace "name:$TARGET"
       else
-          hyprctl dispatch movetoworkspace "special:magic"
+          # Move IN to special workspace
+          $HYPRCTL dispatch movetoworkspace "special:magic"
       fi
     '';
     executable = true;
@@ -147,6 +159,13 @@ in
       window#waybar {
         border-radius: ${borderRadius}px;
       }
+
+      window#waybar:hover {
+        background: linear-gradient(${toRgbHex background}, ${toRgbHex background}) padding-box,
+                    linear-gradient(to right, ${toRgbHex primary} 0%, ${toRgbHex secondary} 100%) border-box;
+        border: 1px solid transparent;
+        border-radius: ${borderRadius}px;
+      }
     '';
     settings = {
       mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
@@ -161,8 +180,5 @@ in
     extraConfig = builtins.readFile ./hyprland.conf;
   };
 
-  home.sessionVariables = {
-    MOZ_ENABLE_WAYLAND = "1";
-    NIXOS_OZONE_WL = "1";
-  };
+
 }
