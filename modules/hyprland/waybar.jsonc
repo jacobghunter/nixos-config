@@ -8,8 +8,11 @@
   "modules-right": ["pulseaudio", "bluetooth", "battery", "tray"],
 
   "battery": {
-    "format": "{icon}  {capacity}%",
-    "format-icons": ["", "", "", "", ""]
+    "format": "{icon} <span font_size='small' foreground='#AAAAAA'>{capacity:3}%</span>",
+    "format-charging": "{icon} <span font_size='small' foreground='#49FF37'>{capacity:3}%</span>",
+    "format-critical": "{icon} <span font_size='small' foreground='#FF3434'>{capacity:3}%</span>",
+    "format-icons": ["", "", "", "", ""],
+    "interval": 25
   },
 
   "bluetooth": {
@@ -23,15 +26,21 @@
   },
 
   "pulseaudio": {
-    "format": "{icon} {volume}%",
-    "format-muted": "",
-    "format-icons": ["", "", ""],
-    "on-click": "pavucontrol"
+    "format": "{icon}  <span font_size='small' foreground='#AAAAAA'>{volume:3}%</span>",
+    "format-muted": "  <span font_size='small' foreground='#AAAAAA'></span>",
+    "scroll-step": 2,
+    "on-click": "pavucontrol",
+    "format-icons": {
+      "headphones": "",
+      "handsfree": "",
+      "headset": "",
+      "default": ["", "", "", ""]
+    }
   },
 
   "clock": {
-    "format": "{:%H:%M}",
-    "tooltip-format": "{:%Y-%m-%d}",
+    "format": "{:%a %d %b %H:%M}",
+    "tooltip": false,
     "on-click": "gnome-calendar"
   }
 }
