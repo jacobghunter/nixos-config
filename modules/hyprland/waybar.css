@@ -36,7 +36,13 @@ window#waybar {
 #clock,
 #battery,
 #pulseaudio,
-#tray {
+#tray,
+#cpu,
+#memory,
+#disk,
+#network,
+#backlight,
+#idle_inhibitor {
   padding: 0 10px; /* Horizontal spacing only */
   margin: 0 2px;
   background-color: transparent;
@@ -56,4 +62,26 @@ window#waybar {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
+}
+
+#backlight-slider slider {
+  min-height: 0px;
+  min-width: 0px;
+  opacity: 0;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+#backlight-slider trough {
+  min-height: 10px;
+  min-width: 80px;
+  border-radius: 5px;
+  background-color: @inactive;
+}
+
+#backlight-slider highlight {
+  min-width: 10px;
+  border-radius: 5px;
+  background-color: @primary;
 }
