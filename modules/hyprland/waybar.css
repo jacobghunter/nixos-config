@@ -9,35 +9,7 @@
 
 window#waybar {
   background: rgba(21, 18, 27, 0);
-  color: #cdd6f4;
-}
-
-#workspaces button {
-  padding: 5px;
-  color: #555869;
-  margin-right: 5px;
-}
-
-#workspaces button.active {
-  color: #a6adc8;
-}
-
-#workspaces button.focused {
-  color: #a6adc8;
-  background: #eba0ac;
-  border-radius: 10px;
-}
-
-#workspaces button.urgent {
-  color: #11111b;
-  background: #a6e3a1;
-  border-radius: 10px;
-}
-
-#workspaces button:hover {
-  background: #cdd6f4;
-  color: #11111b;
-  border-radius: 10px;
+  color: @text;
 }
 
 #window,
@@ -52,10 +24,38 @@ window#waybar {
 #workspaces,
 #tray,
 #backlight {
-  background: #1e1e2e;
+  background: alpha(@waybar-bg, 0.8);
   padding: 0px 10px;
   margin: 5px 0;
   /* border: 1px solid #181825; */
+}
+
+#workspaces button {
+  padding: 5px;
+  color: @inactive;
+  margin-right: 5px;
+}
+
+#workspaces button.active {
+  color: @waybar-active;
+}
+
+#workspaces button.focused {
+  color: @waybar-active;
+  background: @waybar-focused;
+  border-radius: 10px;
+}
+
+#workspaces button.urgent {
+  color: @waybar-dark;
+  background: @waybar-urgent;
+  border-radius: 10px;
+}
+
+#workspaces button:hover {
+  background: @waybar-hover;
+  color: @waybar-dark;
+  border-radius: 10px;
 }
 
 #backlight {
@@ -63,7 +63,6 @@ window#waybar {
 }
 
 #backlight-slider {
-  background: #1e1e2e;
   padding: 0px 10px;
   margin: 5px 0px;
   margin-right: 5px;
@@ -84,13 +83,50 @@ window#waybar {
   min-height: 10px;
   min-width: 80px;
   border-radius: 5px;
-  background-color: #313244;
+  background-color: @waybar-trough;
 }
 
 #backlight-slider highlight {
   min-width: 10px;
   border-radius: 5px;
-  background-color: #a6adc8;
+  background-color: @waybar-active;
+}
+
+
+#pulseaudio {
+  border-left: 0px;
+  border-right: 0px;
+  border-radius: 10px 0px 0px 10px;
+}
+
+#pulseaudio-slider {
+  padding: 0px 10px;
+  margin: 5px 0;
+  margin-right: 5px;
+  border-radius: 0px 10px 10px 0px;
+}
+
+#pulseaudio-slider slider {
+  min-height: 0px;
+  min-width: 0px;
+  opacity: 1;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 10px;
+}
+
+#pulseaudio-slider trough {
+  min-height: 10px;
+  min-width: 80px;
+  border-radius: 5px;
+  background-color: @waybar-trough;
+}
+
+#pulseaudio-slider highlight {
+  min-width: 10px;
+  border-radius: 5px;
+  background-color: @waybar-active;
 }
 
 #tray {
@@ -99,7 +135,6 @@ window#waybar {
 }
 
 #workspaces {
-  background: #1e1e2e;
   border-radius: 10px;
   margin-left: 5px;
   padding-right: 0px;
@@ -122,57 +157,19 @@ window#waybar {
 }
 
 #clock {
-  color: #a6adc8;
+  /* color: @waybar-active; */
   border-radius: 10px 10px 10px 10px;
   margin-left: 5px;
   border-right: 0px;
 }
 
 #network {
-  color: #a6adc8;
+  /* color: @waybar-active; */
   border-radius: 10px 0px 0px 10px;
-}
-
-#pulseaudio {
-  color: #a6adc8;
-  border-left: 0px;
-  border-right: 0px;
-  border-radius: 10px 0px 0px 10px;
-}
-
-#pulseaudio-slider {
-  background: #1e1e2e;
-  padding: 0px 10px;
-  margin: 5px 0;
-  margin-right: 5px;
-  border-radius: 0px 10px 10px 0px;
-}
-
-#pulseaudio-slider slider {
-  min-height: 0px;
-  min-width: 0px;
-  opacity: 1;
-  background-image: none;
-  border: none;
-  box-shadow: none;
-  border-radius: 10px;
-}
-
-#pulseaudio-slider trough {
-  min-height: 10px;
-  min-width: 80px;
-  border-radius: 5px;
-  background-color: #313244;
-}
-
-#pulseaudio-slider highlight {
-  min-width: 10px;
-  border-radius: 5px;
-  background-color: #a6adc8;
 }
 
 #battery {
-  color: #a6adc8;
+  color: @waybar-active;
   border-radius: 0px 10px 10px 0px;
   margin-right: 5px;
 }
