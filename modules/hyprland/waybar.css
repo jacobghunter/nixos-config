@@ -1,7 +1,7 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: JetBrainsMono Nerd Font, monospace;
+  font-family: "JetBrainsMono Nerd Font", monospace;
   font-weight: bold;
   font-size: 14px;
   min-height: 0;
@@ -172,4 +172,16 @@ window#waybar {
   color: @waybar-active;
   border-radius: 0px 10px 10px 0px;
   margin-right: 5px;
+}
+
+#battery.warning {
+  color: #c7ca00; /* Yellow */
+}
+
+#battery.critical:not(.charging) {
+  color: #e41111; /* Red */
+}
+
+#battery.charging, #battery.plugged {
+  color: #13a300; /* Green */
 }
