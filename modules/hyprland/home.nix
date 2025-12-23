@@ -14,6 +14,15 @@ let
   background = "000000b3";
   text = "cdd6f4ee";
   shadow = "1a1a1aee";
+  
+  # Waybar specific colors
+  waybar-bg = "1e1e2eee";
+  waybar-active = primary;
+  waybar-focused = "eba0acee";
+  waybar-urgent = "a6e3a1ee";
+  waybar-hover = "cdd6f4ee";
+  waybar-dark = "11111bee";
+  waybar-trough = "313244ee";
 
   borderSize = "1";
   borderRadius = "10";
@@ -299,11 +308,21 @@ in
     @define-color inactive ${toRgbHex inactive};
     @define-color background ${toRgbHex background};
     @define-color text ${toRgbHex text};
+    
+    /* Waybar specific */
+    @define-color waybar-bg ${toRgbHex waybar-bg};
+    @define-color waybar-active ${toRgbHex waybar-active};
+    @define-color waybar-focused ${toRgbHex waybar-focused};
+    @define-color waybar-urgent ${toRgbHex waybar-urgent};
+    @define-color waybar-hover ${toRgbHex waybar-hover};
+    @define-color waybar-dark ${toRgbHex waybar-dark};
+    @define-color waybar-trough ${toRgbHex waybar-trough};
   '';
 
   programs.waybar = {
     enable = true;
     style = ''
+      @import "variables.css";
       ${builtins.readFile ./waybar.css}
     '';
     settings = {
