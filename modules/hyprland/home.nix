@@ -36,6 +36,18 @@ in
     MOZ_ENABLE_WAYLAND = "1";
     NIXOS_OZONE_WL = "1";
   };
+  
+  home.packages = with pkgs; [
+    tofi
+    swww
+    wlogout
+    grimblast
+    hyprpicker
+    cliphist
+    obsidian
+    nautilus
+    brave
+  ];
 
   wayland.windowManager.hyprland.settings = {
     env = [
@@ -83,7 +95,7 @@ in
     $rounding = ${borderRadius}
   '';
 
-  # 2. Generate Rofi Colors/Vars
+  # 2. Generate Rofi Colors/Vars (Keeping Rofi configs for backward compatibility/switching)
   xdg.configFile."rofi/variables.rasi".text = ''
     /* Rofi gets the stripped HEX codes */
     * {
@@ -110,6 +122,176 @@ in
     #   drun-display-format = "{icon} {name}";
     # };
   };
+
+  # Tofi Configs
+  xdg.configFile."tofi/configA".text = ''
+    width = 100%
+    height = 100%
+    border-width = 0
+    outline-width = 0
+    padding-left = 33%
+    padding-top = 33%
+    result-spacing = 25
+    num-results = 5
+    font = JetBrainsMono Nerd Font
+    font-size = 24
+    text-color = #4e4e5f
+    prompt-text = " : "
+    background-color = #11111bd9
+    selection-color = #83A4E7
+  '';
+
+  xdg.configFile."tofi/configV".text = ''
+    width = 100%
+    height = 100%
+    border-width = 0
+    outline-width = 0
+    padding-top = 33%
+    padding-left = 10%
+    padding-right = 10%
+    result-spacing = 25
+    num-results = 5
+    font = JetBrainsMono Nerd Font
+    font-size = 24
+    text-color = #4e4e5f
+    prompt-text = " : "
+    background-color = #11111bd9
+    selection-color =  #83A4E7
+  '';
+
+  # Wlogout Configs
+  xdg.configFile."wlogout/layout".text = ''
+    {
+        "label" : "exit",
+        "action" : "",
+        "text" : "Exit",
+        "keybind" : "h"
+    }
+    {
+        "label" : "shutdown",
+        "action" : "systemctl poweroff",
+        "text" : "Shutdown",
+        "keybind" : "s"
+    }
+    {
+        "label" : "suspend",
+        "action" : "systemctl suspend-then-hibernate",
+        "text" : "Suspend",
+        "keybind" : "u"
+    }
+    {
+        "label" : "lock",
+        "action" : "hyprlock",
+        "text" : "Lock",
+        "keybind" : "l"
+    }
+    {
+        "label" : "logout",
+        "action" : "hyprctl dispatch exit",
+        "text" : "Logout",
+        "keybind" : "e"
+    }
+    {
+        "label" : "reboot",
+        "action" : "systemctl reboot",
+        "text" : "Reboot",
+        "keybind" : "r"
+    }
+  '';
+
+  xdg.configFile."wlogout/style.css".text = builtins.replaceStrings
+    [ "/usr/local/share/wlogout/icons" ]
+    [ "${pkgs.wlogout}/share/wlogout/icons" ]
+    ''
+    * {
+        font-family: JetBrains Mono, Symbols Nerd Font;
+        font-size: 24px;
+        transition-property: background-color;
+        transition-duration: 0.7s;
+    }
+
+    window {
+        background-color: #11111b;
+        /* border-radius: 10px; */
+    }
+
+    button {
+        background-color: #11111b;
+        border-style: solid;
+        /* border-width: 2px; */
+        border-radius: 50px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 15%;
+        margin: 15px;
+    }
+
+    button:active,
+    button:hover {
+        background-color: #cdd6f4;
+    }
+
+    button:focus {
+        background-color: #cdd6f4;
+    }
+
+    #lock {
+        background-image: image(url("../assets/wlogout/assets/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+    }
+
+    #lock:hover {
+        background-image: image(url("../assets/wlogout/assets/lock-hover.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+        color: #11111b;
+    }
+
+    #logout {
+        background-image: image(url("../assets/wlogout/assets/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+    }
+
+    #logout:hover {
+        background-image: image(url("../assets/wlogout/assets/logout-hover.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+        color: #11111b;
+    }
+
+    #suspend {
+        background-image: image(url("../assets/wlogout/assets/sleep.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+    }
+
+    #suspend:hover {
+        background-image: image(url("../assets/wlogout/assets/sleep-hover.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+        color: #11111b;
+    }
+
+    #shutdown {
+        background-image: image(url("../assets/wlogout/assets/power.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+    }
+
+    #shutdown:hover {
+        background-image: image(url("../assets/wlogout/assets/power-hover.png"), url("/usr/local/share/wlogout/icons/shutdown.png")); 
+        color: #11111b;
+    }
+
+    #reboot {
+        background-image: image(url("../assets/wlogout/assets/restart.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+    }
+
+    #reboot:hover {
+        background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+        color: #11111b;
+    }
+
+    #exit {
+        background-image: image(url("../assets/wlogout/assets/restart.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+        background-color: #11111b;
+
+    }
+
+    #exit:hover {
+        background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+        color: #11111b;
+        background-color: #cdd6f4;
+    }
+    '';
 
   xdg.configFile."waybar/variables.css".text = ''
     @define-color primary ${toRgbHex primary};
@@ -162,12 +344,29 @@ in
     };
   };
 
+  xdg.configFile."assets/backgrounds/README.md".text = ''
+    # Wallpapers
+    Place your wallpaper images here.
+    The config expects a file named 'cat_leaves.png' by default.
+  '';
+
   # 4. Configure Hyprland to use your static config
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     systemd.enable = true;
-    extraConfig = builtins.readFile ./hyprland.conf;
+    extraConfig = builtins.replaceStrings
+      [
+        "/usr/lib/polkit-kde-authentication-agent-1"
+        "/usr/bin/dunst"
+        "thorium-browser"
+      ]
+      [
+        "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+        "dunst" # Assumed in PATH
+        "brave" # Use brave as it is installed
+      ]
+      (builtins.readFile ./hyprland.conf);
   };
 
   # 5. Screen Locking (Hyprlock)
