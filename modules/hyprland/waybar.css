@@ -19,6 +19,7 @@ window#waybar {
 #pulseaudio-slider,
 #backlight-slider,
 #network,
+#bluetooth,
 #cpu,
 #memory,
 #workspaces,
@@ -141,15 +142,6 @@ window#waybar {
   padding-left: 5px;
 }
 
-#cpu {
-  border-radius: 0px 10px 10px 0px;
-  margin-right: 5px;
-}
-
-#memory {
-  border-radius: 10px 0px 0px 10px;
-}
-
 #window {
   border-radius: 10px;
   margin-left: 60px;
@@ -163,8 +155,23 @@ window#waybar {
   border-right: 0px;
 }
 
+#cpu {
+  border-radius: 0px 10px 10px 0px;
+  margin-right: 5px;
+}
+
+#memory {
+  border-radius: 10px 0px 0px 10px;
+}
+
 #network {
   /* color: @waybar-active; */
+  border-radius: 0px;
+  padding: 0 5px 0 0;
+}
+
+#bluetooth {
+  color: @waybar-active;
   border-radius: 10px 0px 0px 10px;
 }
 
