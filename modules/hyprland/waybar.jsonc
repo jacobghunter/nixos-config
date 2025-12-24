@@ -9,13 +9,13 @@
   "modules-left": ["clock", "hyprland/workspaces"],
   "modules-center": ["hyprland/window"],
   "modules-right": [
-    "tray",
-    "memory",
-    "cpu",
     "backlight",
     "backlight/slider",
     "pulseaudio",
     "pulseaudio/slider",
+    "memory",
+    "cpu",
+    "tray",
     "bluetooth",
     "network",
     "battery"
