@@ -81,9 +81,9 @@
       "warning": 25,
       "critical": 10
     },
-    "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-41500'>{icon}</span><span font='Sans Heavy' size='8000' rise='8500' foreground='#cdd6f4' letter_spacing='0'>{capacity}</span>",
-    "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-41500'>{icon}</span><span font='Sans Heavy' size='8000' rise='8500' foreground='#cdd6f4' letter_spacing='0'>{capacity}󱐋</span>",
-    "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-41500'>{icon}</span><span font='Sans Heavy' size='8000' rise='8500' foreground='#cdd6f4' letter_spacing='0'>{capacity}</span>",
+    "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#cdd6f4' letter_spacing='-1000'>{capacity:3}</span>",
+    "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#cdd6f4' letter_spacing='-1000'>{capacity:3}󱐋</span>",
+    "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#cdd6f4' letter_spacing='-1000'>{capacity:3}</span>",
     "format-alt": "{time} Left",
     "format-icons": ["\uf30d", "\uf30c", "\uf30b", "\uf30a", "\uf309", "\uf308", "\uf307", "\uf304"]
   },
