@@ -46,7 +46,11 @@
 
   "tray": {
     "icon-size": 13,
-    "spacing": 10
+    "spacing": 10,
+    "ignored-icons": [
+      "nm-applet",
+      "blueman"
+    ]
   },
 
   "clock": {
@@ -82,9 +86,9 @@
       "warning": 25,
       "critical": 10
     },
-    "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#cdd6f4' letter_spacing='-1000'>{capacity:3}</span>",
-    "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#cdd6f4' letter_spacing='-1000'>{capacity:3}󱐋</span>",
-    "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#cdd6f4' letter_spacing='-1000'>{capacity:3}</span>",
+    "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
+    "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}󱐋</span>",
+    "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
     "format-alt": "{time} Left",
     "format-icons": ["\uf30d", "\uf30c", "\uf30b", "\uf30a", "\uf309", "\uf308", "\uf307", "\uf304"]
   },
@@ -140,19 +144,18 @@
     "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "on-click": "blueman-manager"
+    "on-click": "hyprctl dispatch exec \"[float; size 40% 50%; move 100%-w-20 60] blueman-manager\""
   },
 
   "network": {
     "tooltip": true,
-    "on-click": "nm-connection-editor",
+    "on-click": "hyprctl dispatch exec \"[float; size 40% 50%; move 100%-w-20 60] nm-connection-editor\"",
     "format-wifi": "  {essid}",
     "format-ethernet": "󰈀 ",
-    "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>",
+    "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>\n\nDownload: <b>{bandwidthDownBytes}</b>\nUpload: <b>{bandwidthUpBytes}</b>",
     "format-linked": "󰈀 {ifname} (No IP)",
     "format-disconnected": "󰖪 ",
     "tooltip-format-disconnected": "Disconnected",
-    "format-alt": "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>",
     "interval": 2
   }
 }
