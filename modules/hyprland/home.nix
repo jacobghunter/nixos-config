@@ -8,7 +8,7 @@
 let
   primary = "ce00ffcc";
   secondary = "00dbffcc";
-  special = "eb4034aa";
+  special = "fb42b6cc";
   gradientDegrees = "45";
   inactive = "595959ee";
   background = "000000b3";
@@ -47,6 +47,9 @@ in
   };
   
   home.packages = with pkgs; [
+    hyprpolkitagent
+    wl-clipboard
+    jgmenu
     tofi
     swww
     wlogout
@@ -92,11 +95,67 @@ in
     executable = true;
   };
 
+  xdg.configFile."jgmenu/jgmenurc".text = ''
+    tint2_look = 0
+    shades_of_gray = 0
+    font = JetBrainsMono Nerd Font 12
+    icon_theme = Papirus
+    color_menu_bg = ${toRgbHex waybar-bg} 100
+    color_menu_border = ${toRgbHex primary} 100
+    color_norm_fg = ${toRgbHex text} 100
+    color_sel_bg = ${toRgbHex primary} 100
+    color_sel_fg = ${toRgbHex waybar-bg} 100
+    color_sep_fg = ${toRgbHex inactive} 100
+    menu_margin_x = 10
+    menu_margin_y = 30
+    menu_padding_top = 5
+    menu_padding_right = 5
+    menu_padding_bottom = 5
+    menu_padding_left = 5
+    menu_radius = 10
+    menu_border = 2
+    menu_halign = right
+    menu_valign = top
+    sub_hover_action = 1
+  '';
+
+  xdg.configFile."hypr/scripts/wifi_jgmenu.sh" = {
+    text = ''
+      #!/usr/bin/env bash
+
+      # Generate menu content
+      {
+          echo "<b>Wi-Fi Networks</b>,^sep()"
+          
+          # Use cached results (remove --rescan yes) for instant rendering
+          nmcli -t -f SSID,SECURITY,BARS,ACTIVE device wifi list | awk -F: '!seen[$1]++' | while IFS=: read -r ssid security bars active; do
+              if [[ -z "$ssid" ]]; then continue; fi
+              
+              display_text="$ssid"
+              if [[ "$active" == "yes" ]]; then
+                  display_text="<b>* $ssid</b>"
+              fi
+              
+              # Escape quotes in SSID for the command
+              safe_ssid=$(echo "$ssid" | sed 's/"/\\"/g')
+              
+              # jgmenu format: Label, command
+              echo "$display_text  <small>($bars)</small>,nmcli device wifi connect \"$safe_ssid\" && notify-send \"Connected to $safe_ssid\""
+          done
+
+          echo "^sep()"
+          echo "  Rescan Networks,notify-send 'Scanning...' && nmcli device wifi list --rescan yes && notify-send 'Scan Complete' 'Re-open menu to see new networks'"
+          echo "Open Connection Editor,nm-connection-editor"
+      } | jgmenu --simple --at-pointer
+    '';
+    executable = true;
+  };
+
   # 1. Generate Hyprland Variables
   xdg.configFile."hypr/variables.conf".text = ''
     # Hyprland gets the raw rgba values and the gradient logic
     $activeBorder = ${toRgbaDef primary} ${toRgbaDef secondary} ${toDegrees gradientDegrees}
-    $specialBorder = ${toRgbaDef special}
+    $specialBorder = ${toRgbaDef primary} ${toRgbaDef special} ${toDegrees gradientDegrees}
     $inactiveBorder = ${toRgbaDef inactive}
 
     $shadow = ${toRgbaDef shadow}
@@ -104,7 +163,7 @@ in
     $rounding = ${borderRadius}
   '';
 
-  # 2. Generate Rofi Colors/Vars (Keeping Rofi configs for backward compatibility/switching)
+  # 2. Generate Rofi Colors/Vars
   xdg.configFile."rofi/variables.rasi".text = ''
     /* Rofi gets the stripped HEX codes */
     * {
@@ -119,17 +178,11 @@ in
     }
   '';
 
-  # 3. Configure Rofi to use your static theme
+  # 3. Rofi Config
   programs.rofi = {
     enable = true;
     package = pkgs.rofi;
     theme = ./rofi-theme.rasi;
-    # extraConfig = {
-    #   modi = "drun";
-    #   show-icons = true;
-    #   display-drun = "Apps";
-    #   drun-display-format = "{icon} {name}";
-    # };
   };
 
   # Tofi Configs
@@ -144,10 +197,10 @@ in
     num-results = 5
     font = JetBrainsMono Nerd Font
     font-size = 24
-    text-color = #4e4e5f
+    text-color = ${toRgbHex text}
     prompt-text = " : "
-    background-color = #11111bd9
-    selection-color = #83A4E7
+    background-color = ${toRgbHex waybar-dark}d9
+    selection-color = ${toRgbHex secondary}
   '';
 
   xdg.configFile."tofi/configV".text = ''
@@ -162,10 +215,10 @@ in
     num-results = 5
     font = JetBrainsMono Nerd Font
     font-size = 24
-    text-color = #4e4e5f
-    prompt-text = " : "
-    background-color = #11111bd9
-    selection-color =  #83A4E7
+    text-color = ${toRgbHex text}
+    prompt-text = "Clipboard: "
+    background-color = ${toRgbHex waybar-dark}d9
+    selection-color =  ${toRgbHex secondary}
   '';
 
   # Wlogout Configs
@@ -220,12 +273,12 @@ in
     }
 
     window {
-        background-color: #11111b;
+        background-color: ${toRgbHex waybar-dark};
         /* border-radius: 10px; */
     }
 
     button {
-        background-color: #11111b;
+        background-color: ${toRgbHex waybar-dark};
         border-style: solid;
         /* border-width: 2px; */
         border-radius: 50px;
@@ -237,11 +290,11 @@ in
 
     button:active,
     button:hover {
-        background-color: #cdd6f4;
+        background-color: ${toRgbHex text};
     }
 
     button:focus {
-        background-color: #cdd6f4;
+        background-color: ${toRgbHex text};
     }
 
     #lock {
@@ -250,7 +303,7 @@ in
 
     #lock:hover {
         background-image: image(url("../assets/wlogout/assets/lock-hover.png"), url("/usr/local/share/wlogout/icons/lock.png"));
-        color: #11111b;
+        color: ${toRgbHex waybar-dark};
     }
 
     #logout {
@@ -259,7 +312,7 @@ in
 
     #logout:hover {
         background-image: image(url("../assets/wlogout/assets/logout-hover.png"), url("/usr/local/share/wlogout/icons/logout.png"));
-        color: #11111b;
+        color: ${toRgbHex waybar-dark};
     }
 
     #suspend {
@@ -268,7 +321,7 @@ in
 
     #suspend:hover {
         background-image: image(url("../assets/wlogout/assets/sleep-hover.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
-        color: #11111b;
+        color: ${toRgbHex waybar-dark};
     }
 
     #shutdown {
@@ -277,7 +330,7 @@ in
 
     #shutdown:hover {
         background-image: image(url("../assets/wlogout/assets/power-hover.png"), url("/usr/local/share/wlogout/icons/shutdown.png")); 
-        color: #11111b;
+        color: ${toRgbHex waybar-dark};
     }
 
     #reboot {
@@ -286,19 +339,19 @@ in
 
     #reboot:hover {
         background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-        color: #11111b;
+        color: ${toRgbHex waybar-dark};
     }
 
     #exit {
         background-image: image(url("../assets/wlogout/assets/restart.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-        background-color: #11111b;
+        background-color: ${toRgbHex waybar-dark};
 
     }
 
     #exit:hover {
         background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-        color: #11111b;
-        background-color: #cdd6f4;
+        color: ${toRgbHex waybar-dark};
+        background-color: ${toRgbHex text};
     }
     '';
 
@@ -381,9 +434,9 @@ in
         "thorium-browser"
       ]
       [
-        "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+        "systemctl --user start hyprpolkitagent"
         "dunst" # Assumed in PATH
-        "brave" # Use brave as it is installed
+        "firefox"
       ]
       (builtins.readFile ./hyprland.conf);
   };

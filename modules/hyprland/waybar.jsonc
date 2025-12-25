@@ -22,7 +22,7 @@
   ],
 
   "backlight/slider": {
-    "min": 0,
+    "min": 1,
     "max": 100,
     "orientation": "horizontal",
     "device": "intel_backlight"
@@ -41,7 +41,12 @@
   "hyprland/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
-    "on-click": "activate"
+    "on-click": "activate",
+    "show-special": true,
+    "format": "{icon}",
+    "format-icons": {
+        "magic": "" 
+    }
   },
 
   "tray": {
@@ -57,6 +62,7 @@
     "format": "{:%A %B-%d-%Y %I:%M:%S %p}",
     "interval": 1,
     "rotate": 0,
+    "on-click": "hyprctl dispatch exec \"[float; size 60% 60%; center] gnome-calendar\"",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {
       "mode": "month",
@@ -120,11 +126,11 @@
       "m": 30
     },
     "interval": 10,
-    "format": "󰾆 {used}GB",
-    "format-m": "󰾅 {used}GB",
-    "format-h": "󰓅 {used}GB",
-    "format-c": " {used}GB",
-    "format-alt": "󰾆 {percentage}%",
+    "format": "󰾆 {percentage}%",
+    "format-m": "󰾅 {percentage}%",
+    "format-h": "󰓅 {percentage}%",
+    "format-c": " {percentage}%",
+    "format-alt": "󰾆 {used}GB",
     "max-length": 10,
     "tooltip": true,
     "tooltip-format": "󰾆 {percentage}%\n {used:0.1f}GB/{total:0.1f}GB"
@@ -133,8 +139,7 @@
   "cpu": {
     "interval": 10,
     "format": "󰍛 {usage}%",
-    "format-alt": "{icon0}{icon1}{icon2}{icon3}",
-    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+    "on-click": "kitty btop"
   },
 
   "bluetooth": {
@@ -149,7 +154,8 @@
 
   "network": {
     "tooltip": true,
-    "on-click": "hyprctl dispatch exec \"[float; size 40% 50%; move 100%-w-20 60] nm-connection-editor\"",
+    "on-click": "hyprctl dispatch exec \"[float; size 40% 50%; center] nm-connection-editor\"",
+    "on-click-right": "hyprctl dispatch exec \"[float; size 50% 50%; center] kitty -e nmtui\"",
     "format-wifi": "  {essid}",
     "format-ethernet": "󰈀 ",
     "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>\n\nDownload: <b>{bandwidthDownBytes}</b>\nUpload: <b>{bandwidthUpBytes}</b>",
