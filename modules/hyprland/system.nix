@@ -50,7 +50,6 @@
     # SDDM Theme
     sddm-astronaut
 
-    kitty
     waybar
     dunst
     kdePackages.dolphin

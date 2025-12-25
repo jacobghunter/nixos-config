@@ -376,6 +376,40 @@ in
     @define-color waybar-trough ${toRgbHex waybar-trough};
   '';
 
+  programs.kitty = {
+    enable = true;
+    font = {
+      name = "JetBrainsMono Nerd Font";
+      size = 13;
+    };
+    settings = {
+      window_padding_width = 8;
+      italic_font = "auto";
+      bold_italic_font = "auto";
+
+      # Theming based on nix variables
+      foreground = toRgbHex text;
+      background = toRgbHex waybar-bg;
+      selection_foreground = toRgbHex waybar-bg;
+      selection_background = toRgbHex primary;
+      
+      cursor = toRgbHex secondary;
+      cursor_text_color = toRgbHex waybar-bg;
+      
+      url_color = toRgbHex secondary;
+      
+      active_border_color = toRgbHex primary;
+      inactive_border_color = toRgbHex inactive;
+      bell_border_color = toRgbHex special;
+      
+      active_tab_foreground = toRgbHex waybar-bg;
+      active_tab_background = toRgbHex primary;
+      inactive_tab_foreground = toRgbHex text;
+      inactive_tab_background = toRgbHex waybar-dark;
+      tab_bar_background = toRgbHex waybar-dark;
+    };
+  };
+
   programs.waybar = {
     enable = true;
     style = ''
@@ -409,7 +443,7 @@ in
       gtk-application-prefer-dark-theme = 1;
     };
     gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
+      gtk-application-prefer-dark-theme = 1;ACTIVE
     };
   };
 
