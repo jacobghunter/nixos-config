@@ -70,6 +70,9 @@
     remmina
     copyq
 
+    # Games
+    heroic
+
     # Dev Tools
     nodejs
     python3
