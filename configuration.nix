@@ -19,7 +19,8 @@
   # Bluetooth (System Service)
   hardware.bluetooth.enable = true; # <--- Enable the daemon
   hardware.bluetooth.powerOnBoot = false;
-  hardware.bluetooth.settings.General.ControllerMode = "bredr";
+  hardware.bluetooth.settings.General.ControllerMode = "dual";
+  services.blueman.enable = true;
 
   # --- NETWORKING ---
   networking.hostName = "nixos";
