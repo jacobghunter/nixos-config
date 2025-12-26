@@ -45,7 +45,6 @@ in
     HYPRCURSOR_SIZE = "24";
     XCURSOR_THEME = "Bibata-Modern-Classic";
     XCURSOR_SIZE = "24";
-    GTK_THEME = "Adwaita:dark";
     MOZ_ENABLE_WAYLAND = "1";
     NIXOS_OZONE_WL = "1";
   };
@@ -56,6 +55,7 @@ in
     jgmenu
     tofi
     swww
+    mpvpaper
     wlogout
     grimblast
     hyprpicker
@@ -443,14 +443,13 @@ in
       gtk-application-prefer-dark-theme = 1;
     };
     gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;ACTIVE
+      gtk-application-prefer-dark-theme = 1;
     };
   };
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
-      gtk-theme = "Adwaita-dark";
     };
   };
 

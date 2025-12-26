@@ -69,6 +69,7 @@
     bitwarden-desktop
     remmina
     copyq
+    calibre
 
     # Games
     heroic

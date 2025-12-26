@@ -13,6 +13,12 @@
 
   services.xserver.enable = true;
 
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+
+  # Load udev rules for Calibre (e-reader detection)
+  services.udev.packages = [ pkgs.calibre ];
+
   services.displayManager.sddm = {
     enable = true;
     package = pkgs.kdePackages.sddm;
