@@ -93,6 +93,8 @@
     btop
     zip
     unzip
+    powerstat
+    upower
   ];
 
   # --- PROGRAMS CONFIGURATION ---

@@ -38,6 +38,10 @@ let
   #### Rofi helpers
   toRgbHex = s: "#" + builtins.substring 0 6 s;
   addPx = s: s + "px";
+
+  # Wallpapers
+  staticWallpaper = "${config.xdg.configHome}/assets/backgrounds/outer-wilds.png";
+  videoWallpaper = "${config.xdg.configHome}/assets/backgrounds/outer-wilds.mp4";
 in
 {
   home.sessionVariables = {
@@ -95,6 +99,67 @@ in
           # Move IN to special workspace
           $HYPRCTL dispatch movetoworkspace "special:magic"
       fi
+    '';
+    executable = true;
+  };
+
+  xdg.configFile."hypr/scripts/power_monitor.sh" = {
+    text = ''
+      #!/usr/bin/env bash
+      
+      # Paths injected from nix
+      STATIC_WALLPAPER="${staticWallpaper}"
+      VIDEO_WALLPAPER="${videoWallpaper}"
+
+      # Function to set static wallpaper
+      set_static() {
+          if pgrep "mpvpaper" > /dev/null; then
+              killall mpvpaper
+          fi
+          # Ensure swww is running
+          if ! pgrep "swww-daemon" > /dev/null; then
+              swww-daemon &
+              sleep 0.5
+          fi
+          swww img "$STATIC_WALLPAPER" --transition-type none
+      }
+
+      # Function to set video wallpaper
+      set_video() {
+          if ! pgrep "mpvpaper" > /dev/null; then
+              killall swww-daemon 2>/dev/null
+              mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
+          fi
+      }
+
+      # Check power state function
+      check_power() {
+          # Common names are AC, AC0, ADP0, ADP1. We'll search for one starting with A.
+          AC_SUPPLY=$(ls /sys/class/power_supply/ | grep -E "^(AC|ADP)" | head -n 1)
+
+          if [ -z "$AC_SUPPLY" ]; then
+              set_static
+              return
+          fi
+
+          STATUS=$(cat /sys/class/power_supply/$AC_SUPPLY/online)
+
+          if [ "$STATUS" = "1" ]; then
+              set_video
+          else
+              set_static
+          fi
+      }
+
+      # Initial check
+      check_power
+
+      # Event loop using upower
+      upower --monitor | while read -r line; do
+          # We only care if the line-power changed or battery state changed significantly
+          # But simpler to just re-check on any upower event.
+          check_power
+      done
     '';
     executable = true;
   };

@@ -18,7 +18,7 @@
 
   # Bluetooth (System Service)
   hardware.bluetooth.enable = true; # <--- Enable the daemon
-  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.powerOnBoot = false;
   hardware.bluetooth.settings.General.ControllerMode = "bredr";
 
   # --- NETWORKING ---
@@ -54,6 +54,23 @@
     7236
     5353
   ];
+
+  # --- POWER MANAGEMENT ---
+  services.power-profiles-daemon.enable = false; # Disable GNOME power profiles to use TLP
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+
+      # Optional: Charge thresholds for ThinkPad longevity (starts charging at 75%, stops at 80%)
+      # START_CHARGE_THRESH_BAT0 = 75;
+      # STOP_CHARGE_THRESH_BAT0 = 80;
+    };
+  };
 
   # --- LOCALIZATION ---
   time.timeZone = "America/Los_Angeles";
