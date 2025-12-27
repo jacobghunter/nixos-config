@@ -11,14 +11,6 @@
   #   trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
   # };
 
-  services.xserver.enable = true;
-
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
-
-  # Load udev rules for Calibre (e-reader detection)
-  services.udev.packages = [ pkgs.calibre ];
-
   services.displayManager.sddm = {
     enable = true;
     package = pkgs.kdePackages.sddm;
@@ -37,7 +29,7 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   };
 
   xdg.portal = {

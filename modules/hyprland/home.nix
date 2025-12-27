@@ -64,9 +64,7 @@ in
     grimblast
     hyprpicker
     cliphist
-    obsidian
     nautilus
-    brave
   ];
 
   wayland.windowManager.hyprland.settings = {
@@ -527,7 +525,7 @@ in
   # 4. Configure Hyprland to use your static config
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     systemd.enable = true;
     extraConfig = builtins.replaceStrings
       [

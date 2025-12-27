@@ -97,6 +97,12 @@
     pulse.enable = true;
   };
 
+  # General Services
+  services.xserver.enable = true;
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+  services.udev.packages = [ pkgs.calibre ];
+
   services.printing.enable = true; # CUPS
   virtualisation.docker.enable = true;
 

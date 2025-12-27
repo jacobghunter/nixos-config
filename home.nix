@@ -26,7 +26,7 @@
       }
     ];
 
-    initExtra = ''
+    initContent = ''
       # disable sort when completing `git checkout`
       zstyle ':completion:*:git-checkout:*' sort false
       # set descriptions format to enable group support
@@ -76,6 +76,7 @@
 
     # Dev Tools
     nodejs
+    pnpm
     python3
     gcc
     gnumake
@@ -101,8 +102,10 @@
 
   programs.git = {
     enable = true;
-    userName = "Jacob Hunter";
-    userEmail = "jacobguinhunter@gmail.com"; # <--- Don't forget to set this!
+    settings.user = {
+      name = "Jacob Hunter";
+      email = "jacobguinhunter@gmail.com";
+    };
   };
 
   programs.home-manager.enable = true;
