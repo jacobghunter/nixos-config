@@ -102,6 +102,7 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
   services.udev.packages = [ pkgs.calibre ];
+  services.gnome.gnome-keyring.enable = true;
 
   services.printing.enable = true; # CUPS
   virtualisation.docker.enable = true;
@@ -138,7 +139,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 7d";
+    options = "--delete-older-than 14d";
   };
 
   system.stateVersion = "25.05";
@@ -157,5 +158,6 @@
     usbutils
     util-linux
     nixfmt-rfc-style
+    seahorse # GUI for gnome-keyring
   ];
 }
