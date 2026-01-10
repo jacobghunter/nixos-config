@@ -1,5 +1,5 @@
 {
-  description = "Jacob's NixOS Flake";
+  description = "Jacob's NixOS Monorepo";
 
   inputs = {
     # The source of your packages (NixOS Unstable is best for Hyprland)
@@ -9,6 +9,12 @@
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    vscode-server.url = "github:msteen/nixos-vscode-server";
+
+    # Server specific
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -17,27 +23,30 @@
       nixpkgs,
       nixos-hardware,
       home-manager,
+      disko,
       ...
     }@inputs:
     {
       nixosConfigurations = {
+        # LAPTOP CONFIG
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
-            ./configuration.nix
-            ./hardware-configuration.nix
+            ./laptop/configuration.nix
+            ./laptop/hardware-configuration.nix
             nixos-hardware.nixosModules.lenovo-thinkpad-e15-intel
+            inputs.vscode-server.nixosModules.default
 
             # ==========================================
             # DESKTOP ENVIRONMENT SELECTION (PICK ONE)
             # ==========================================
 
             # --- OPTION 1: HYPRLAND ---
-            ./modules/hyprland/system.nix
+            ./laptop/modules/hyprland/system.nix
 
             # --- OPTION 2: GNOME ---
-            # ./modules/gnome/system.nix
+            # ./laptop/modules/gnome/system.nix
 
             home-manager.nixosModules.home-manager
             {
@@ -50,16 +59,26 @@
               # Here we merge your base home.nix with the DE-specific home.nix
               home-manager.users.jacob = {
                 imports = [
-                  ./home.nix # Always import base config
+                  ./laptop/home.nix # Always import base config
 
                   # --- OPTION 1: HYPRLAND HOME ---
-                  ./modules/hyprland/home.nix
+                  ./laptop/modules/hyprland/home.nix
 
                   # --- OPTION 2: GNOME HOME ---
-                  # ./modules/gnome/home.nix
+                  # ./laptop/modules/gnome/home.nix
                 ];
               };
             }
+          ];
+        };
+
+        # SERVER CONFIG
+        optiplex = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./server/configuration.nix
+            ./server/disk-config.nix
           ];
         };
       };

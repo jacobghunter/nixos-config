@@ -42,6 +42,7 @@
     "1.1.1.1"
   ];
   services.openssh.enable = true;
+  services.vscode-server.enable = true;
 
   # Steam
   programs.steam = {
