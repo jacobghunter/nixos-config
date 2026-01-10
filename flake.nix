@@ -29,7 +29,7 @@
     {
       nixosConfigurations = {
         # LAPTOP CONFIG
-        nixos = nixpkgs.lib.nixosSystem {
+        nixos-laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
@@ -73,7 +73,7 @@
         };
 
         # SERVER CONFIG
-        optiplex = nixpkgs.lib.nixosSystem {
+        nixos-server = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             disko.nixosModules.disko
