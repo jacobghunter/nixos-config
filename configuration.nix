@@ -23,8 +23,18 @@
   services.blueman.enable = true;
 
   # --- NETWORKING ---
-  networking.hostName = "nixos";
+  networking.hostName = "nixos-laptop";
   networking.networkmanager.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
+  };
 
   # Firewall & DNS
   networking.nameservers = [
@@ -53,7 +63,6 @@
   ];
   networking.firewall.allowedUDPPorts = [
     7236
-    5353
   ];
 
   # --- POWER MANAGEMENT ---
