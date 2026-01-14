@@ -77,6 +77,10 @@
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
 
+      # Fix slow internet
+      WIFI_PWR_ON_AC = "off";
+      WIFI_PWR_ON_BAT = "off";
+
       # Optional: Charge thresholds for ThinkPad longevity (starts charging at 75%, stops at 80%)
       # START_CHARGE_THRESH_BAT0 = 75;
       # STOP_CHARGE_THRESH_BAT0 = 80;
