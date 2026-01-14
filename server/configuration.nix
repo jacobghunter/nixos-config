@@ -45,6 +45,9 @@
   # Enable nix-ld for VS Code Remote SSH support
   programs.nix-ld.enable = true;
 
+  # Allow members of the wheel group to be trusted by the Nix daemon
+  nix.settings.trusted-users = [ "root" "@wheel" ];
+
   environment.systemPackages = with pkgs; [
     vim
     git

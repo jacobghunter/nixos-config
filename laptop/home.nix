@@ -2,63 +2,21 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ../shared/home.nix
+  ];
+
   home.username = "jacob";
   home.homeDirectory = "/home/jacob";
   home.stateVersion = "24.11";
 
-  # --- ENVIRONMENT VARIABLES ---
-  home.sessionVariables = {
-    EDITOR = "code --wait";
-    NPM_CONFIG_PREFIX = "$HOME/.npm-global";
-    PATH = "$HOME/.npm-global/bin:$PATH";
-  };
-
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-
-    plugins = [
-      {
-        name = "fzf-tab";
-        src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
-      }
-    ];
-
-    initContent = ''
-      # disable sort when completing `git checkout`
-      zstyle ':completion:*:git-checkout:*' sort false
-      # set descriptions format to enable group support
-      zstyle ':completion:*:descriptions' format '[%d]'
-      # set list-colors to enable filename colorizing
-      zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
-    '';
-
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-        "docker"
-      ];
-      theme = "robbyrussell"; # You can change this later!
-    };
-  };
-
   # --- ALIASES ---
   home.shellAliases = {
-    rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
     hyprbinds = "cat ~/.config/hypr/hyprland.conf | grep bind";
-    ll = "ls -l";
-    gs = "git status";
-    ga = "git add";
-    gc = "git commit -m";
-    gp = "git push";
   };
 
   # --- USER PACKAGES ---
-  # Everything you use day-to-day goes here
+  # Laptop specific packages
   home.packages = with pkgs; [
     # Applications
     firefox
@@ -74,40 +32,20 @@
     # Games
     heroic
 
-    # Dev Tools
-    nodejs
-    pnpm
-    python3
-    gcc
-    gnumake
+    # Dev Tools (Moved shared ones to shared/home.nix)
     cmake
-    gemini-cli
 
     # Electronics / Hardware
     qmk
     kicad-small
 
-    # Utilities
-    ripgrep
-    jq
-    fzf
-    btop
-    zip
-    unzip
+    # Utilities (Moved shared ones to shared/home.nix)
     powerstat
     upower
   ];
 
   # --- PROGRAMS CONFIGURATION ---
-
-  programs.git = {
-    enable = true;
-    settings.user = {
-      name = "Jacob Hunter";
-      email = "jacobguinhunter@gmail.com";
-    };
-  };
-
+  
   programs.home-manager.enable = true;
 
   # --- DEFAULT APPS (XDG MIME) ---
