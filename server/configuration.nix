@@ -39,7 +39,8 @@
       "networkmanager"
     ];
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBSF1X9Rhk/20YAwdqLI5zlZSIIZjL06/Rri8UZqv/Or jacob@nixos"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBSF1X9Rhk/20YAwdqLI5zlZSIIZjL06/Rri8UZqv/Or jacob@nixos",
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFX1rPVicE6akrUGmXwuP5C2qmLtJ22E+Od1ZsU/on0H jacob@Jacobs-PC"
     ];
   };
 
