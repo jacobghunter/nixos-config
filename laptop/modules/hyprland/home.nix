@@ -4,10 +4,10 @@
   inputs,
   ...
 }:
-# battery format with percentage number in icon
-# "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
-# "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}󱐋</span>",
-# "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
+# battery format without percentage number in icon
+# "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
+# "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
+# "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
 
 let
   primary = "ce00ffcc";
@@ -18,7 +18,7 @@ let
   background = "000000b3";
   text = "cdd6f4ee";
   shadow = "1a1a1aee";
-  
+
   # Waybar specific colors
   waybar-bg = "1e1e2eee";
   waybar-active = primary;
@@ -52,7 +52,7 @@ in
     MOZ_ENABLE_WAYLAND = "1";
     NIXOS_OZONE_WL = "1";
   };
-  
+
   home.packages = with pkgs; [
     hyprpolkitagent
     wl-clipboard
@@ -104,7 +104,7 @@ in
   xdg.configFile."hypr/scripts/power_monitor.sh" = {
     text = ''
       #!/usr/bin/env bash
-      
+
       # Paths injected from nix
       STATIC_WALLPAPER="${staticWallpaper}"
       VIDEO_WALLPAPER="${videoWallpaper}"
@@ -328,99 +328,100 @@ in
     }
   '';
 
-  xdg.configFile."wlogout/style.css".text = builtins.replaceStrings
-    [ "/usr/local/share/wlogout/icons" ]
-    [ "${pkgs.wlogout}/share/wlogout/icons" ]
-    ''
-    * {
-        font-family: JetBrains Mono, Symbols Nerd Font;
-        font-size: 24px;
-        transition-property: background-color;
-        transition-duration: 0.7s;
-    }
+  xdg.configFile."wlogout/style.css".text =
+    builtins.replaceStrings
+      [ "/usr/local/share/wlogout/icons" ]
+      [ "${pkgs.wlogout}/share/wlogout/icons" ]
+      ''
+        * {
+            font-family: JetBrains Mono, Symbols Nerd Font;
+            font-size: 24px;
+            transition-property: background-color;
+            transition-duration: 0.7s;
+        }
 
-    window {
-        background-color: ${toRgbHex waybar-dark};
-        /* border-radius: 10px; */
-    }
+        window {
+            background-color: ${toRgbHex waybar-dark};
+            /* border-radius: 10px; */
+        }
 
-    button {
-        background-color: ${toRgbHex waybar-dark};
-        border-style: solid;
-        /* border-width: 2px; */
-        border-radius: 50px;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 15%;
-        margin: 15px;
-    }
+        button {
+            background-color: ${toRgbHex waybar-dark};
+            border-style: solid;
+            /* border-width: 2px; */
+            border-radius: 50px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 15%;
+            margin: 15px;
+        }
 
-    button:active,
-    button:hover {
-        background-color: ${toRgbHex text};
-    }
+        button:active,
+        button:hover {
+            background-color: ${toRgbHex text};
+        }
 
-    button:focus {
-        background-color: ${toRgbHex text};
-    }
+        button:focus {
+            background-color: ${toRgbHex text};
+        }
 
-    #lock {
-        background-image: image(url("../assets/wlogout/assets/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
-    }
+        #lock {
+            background-image: image(url("../assets/wlogout/assets/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+        }
 
-    #lock:hover {
-        background-image: image(url("../assets/wlogout/assets/lock-hover.png"), url("/usr/local/share/wlogout/icons/lock.png"));
-        color: ${toRgbHex waybar-dark};
-    }
+        #lock:hover {
+            background-image: image(url("../assets/wlogout/assets/lock-hover.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+            color: ${toRgbHex waybar-dark};
+        }
 
-    #logout {
-        background-image: image(url("../assets/wlogout/assets/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
-    }
+        #logout {
+            background-image: image(url("../assets/wlogout/assets/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+        }
 
-    #logout:hover {
-        background-image: image(url("../assets/wlogout/assets/logout-hover.png"), url("/usr/local/share/wlogout/icons/logout.png"));
-        color: ${toRgbHex waybar-dark};
-    }
+        #logout:hover {
+            background-image: image(url("../assets/wlogout/assets/logout-hover.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+            color: ${toRgbHex waybar-dark};
+        }
 
-    #suspend {
-        background-image: image(url("../assets/wlogout/assets/sleep.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
-    }
+        #suspend {
+            background-image: image(url("../assets/wlogout/assets/sleep.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+        }
 
-    #suspend:hover {
-        background-image: image(url("../assets/wlogout/assets/sleep-hover.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
-        color: ${toRgbHex waybar-dark};
-    }
+        #suspend:hover {
+            background-image: image(url("../assets/wlogout/assets/sleep-hover.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+            color: ${toRgbHex waybar-dark};
+        }
 
-    #shutdown {
-        background-image: image(url("../assets/wlogout/assets/power.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
-    }
+        #shutdown {
+            background-image: image(url("../assets/wlogout/assets/power.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+        }
 
-    #shutdown:hover {
-        background-image: image(url("../assets/wlogout/assets/power-hover.png"), url("/usr/local/share/wlogout/icons/shutdown.png")); 
-        color: ${toRgbHex waybar-dark};
-    }
+        #shutdown:hover {
+            background-image: image(url("../assets/wlogout/assets/power-hover.png"), url("/usr/local/share/wlogout/icons/shutdown.png")); 
+            color: ${toRgbHex waybar-dark};
+        }
 
-    #reboot {
-        background-image: image(url("../assets/wlogout/assets/restart.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-    }
+        #reboot {
+            background-image: image(url("../assets/wlogout/assets/restart.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+        }
 
-    #reboot:hover {
-        background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-        color: ${toRgbHex waybar-dark};
-    }
+        #reboot:hover {
+            background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+            color: ${toRgbHex waybar-dark};
+        }
 
-    #exit {
-        background-image: image(url("../assets/wlogout/assets/restart.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-        background-color: ${toRgbHex waybar-dark};
+        #exit {
+            background-image: image(url("../assets/wlogout/assets/restart.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+            background-color: ${toRgbHex waybar-dark};
 
-    }
+        }
 
-    #exit:hover {
-        background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-        color: ${toRgbHex waybar-dark};
-        background-color: ${toRgbHex text};
-    }
-    '';
+        #exit:hover {
+            background-image: image(url("../assets/wlogout/assets/restart-hover.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+            color: ${toRgbHex waybar-dark};
+            background-color: ${toRgbHex text};
+        }
+      '';
 
   xdg.configFile."waybar/variables.css".text = ''
     @define-color primary ${toRgbHex primary};
@@ -428,7 +429,7 @@ in
     @define-color inactive ${toRgbHex inactive};
     @define-color background ${toRgbHex background};
     @define-color text ${toRgbHex text};
-    
+
     /* Waybar specific */
     @define-color waybar-bg ${toRgbHex waybar-bg};
     @define-color waybar-active ${toRgbHex waybar-active};
@@ -455,16 +456,16 @@ in
       background = toRgbHex waybar-bg;
       selection_foreground = toRgbHex waybar-bg;
       selection_background = toRgbHex primary;
-      
+
       cursor = toRgbHex secondary;
       cursor_text_color = toRgbHex waybar-bg;
-      
+
       url_color = toRgbHex secondary;
-      
+
       active_border_color = toRgbHex primary;
       inactive_border_color = toRgbHex inactive;
       bell_border_color = toRgbHex special;
-      
+
       active_tab_foreground = toRgbHex waybar-bg;
       active_tab_background = toRgbHex primary;
       inactive_tab_foreground = toRgbHex text;
@@ -527,18 +528,19 @@ in
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     systemd.enable = true;
-    extraConfig = builtins.replaceStrings
-      [
-        "/usr/lib/polkit-kde-authentication-agent-1"
-        "/usr/bin/dunst"
-        "thorium-browser"
-      ]
-      [
-        "systemctl --user start hyprpolkitagent"
-        "dunst" # Assumed in PATH
-        "firefox"
-      ]
-      (builtins.readFile ./hyprland.conf);
+    extraConfig =
+      builtins.replaceStrings
+        [
+          "/usr/lib/polkit-kde-authentication-agent-1"
+          "/usr/bin/dunst"
+          "thorium-browser"
+        ]
+        [
+          "systemctl --user start hyprpolkitagent"
+          "dunst" # Assumed in PATH
+          "firefox"
+        ]
+        (builtins.readFile ./hyprland.conf);
   };
 
   # 5. Screen Locking (Hyprlock)

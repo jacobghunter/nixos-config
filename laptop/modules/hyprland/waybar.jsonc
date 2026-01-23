@@ -92,9 +92,9 @@
       "warning": 25,
       "critical": 10
     },
-    "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
-    "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
-    "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
+    "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
+"format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}󱐋</span>",
+"format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
     "tooltip-format": "{capacity}%, {time} Left",
     "format-alt": "{time} Left",
     "format-icons": ["\uf30d", "\uf30c", "\uf30b", "\uf30a", "\uf309", "\uf308", "\uf307", "\uf304"]

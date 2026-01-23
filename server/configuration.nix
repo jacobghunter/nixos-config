@@ -10,7 +10,7 @@
   # SSH for remote access
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = false;
+    settings.PasswordAuthentication = true;
     settings.KbdInteractiveAuthentication = false;
     settings.PermitRootLogin = "no";
   };
@@ -23,12 +23,16 @@
     publish = {
       enable = true;
       addresses = true;
+      workstation = true;
+      userServices = true;
+      domain = true;
     };
   };
 
   # User Setup
   users.users.jacob = {
     isNormalUser = true;
+    shell = pkgs.zsh;
     initialPassword = "password";
     extraGroups = [
       "wheel"
@@ -46,7 +50,13 @@
   programs.nix-ld.enable = true;
 
   # Allow members of the wheel group to be trusted by the Nix daemon
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
+
+  # Enable ZSH
+  programs.zsh.enable = true;
 
   environment.systemPackages = with pkgs; [
     vim
