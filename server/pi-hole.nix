@@ -31,7 +31,7 @@
       
       settings = {
         # TEMPORARY, ALLOWS SETTING WEB PASSWORD
-        misc.readOnly = false;
+        # misc.readOnly = false;
 
         # DHCP SERVER (Default is OFF - set active=true if you want Pi-hole to be your router's DHCP)
         dhcp = {
@@ -50,7 +50,7 @@
         webserver = {
           api = {
             # Hashed password goes here (See Step 3 below)
-            # pwhash = "..."; 
+            pwhash = "$BALLOON-SHA256$v=1$s=1024,t=32$kVqB62qUpnPUQulGDapmBA==$pFYWzIfOzQKS+vs6LcQPz9wfqhkJANVE8pD+PvwumFI="; 
           };
           session.timeout = 43200; # 12 hours
         };
