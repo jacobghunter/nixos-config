@@ -2,7 +2,6 @@
   description = "Jacob's NixOS Monorepo";
 
   inputs = {
-    # The source of your packages (NixOS Unstable is best for Hyprland)
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     hyprland.url = "github:hyprwm/Hyprland";
@@ -80,6 +79,7 @@
             disko.nixosModules.disko
             ./server/configuration.nix
             ./server/disk-config.nix
+            ./server/pi-hole.nix
 
             home-manager.nixosModules.home-manager
             {
