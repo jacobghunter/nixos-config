@@ -33,6 +33,8 @@
     publish = {
       enable = true;
       addresses = true;
+      workstation = true;
+      userServices = true;
     };
   };
 
@@ -61,6 +63,8 @@
   networking.firewall.allowedTCPPorts = [
     7236
     7250
+    9090 # Calibre Wireless Connection
+    8080 # Calibre Content Server
   ];
   networking.firewall.allowedUDPPorts = [
     7236

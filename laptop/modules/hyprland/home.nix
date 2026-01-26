@@ -471,6 +471,7 @@ in
       inactive_tab_foreground = toRgbHex text;
       inactive_tab_background = toRgbHex waybar-dark;
       tab_bar_background = toRgbHex waybar-dark;
+      term = "xterm-256color";
     };
   };
 
