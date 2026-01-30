@@ -6,15 +6,13 @@
   "passthrough": false,
   "gtk-layer-shell": true,
   "height": 0,
-  "modules-left": ["clock", "hyprland/workspaces"],
+  "modules-left": ["clock", "hyprland/workspaces", "memory", "cpu"],
   "modules-center": ["hyprland/window"],
   "modules-right": [
     "backlight",
     "backlight/slider",
     "pulseaudio",
     "pulseaudio/slider",
-    "memory",
-    "cpu",
     "tray",
     "bluetooth",
     "network",
@@ -45,21 +43,18 @@
     "show-special": true,
     "format": "{icon}",
     "format-icons": {
-        "magic": "" 
+      "magic": ""
     }
   },
 
   "tray": {
     "icon-size": 13,
     "spacing": 10,
-    "ignored-icons": [
-      "nm-applet",
-      "blueman"
-    ]
+    "ignored-icons": ["blueman"]
   },
 
   "clock": {
-    "format": "{:%A %B-%d-%Y %I:%M:%S %p}",
+    "format": "{:%A %b-%d-%Y %I:%M %p}",
     "interval": 1,
     "rotate": 0,
     "on-click": "hyprctl dispatch exec \"[float; size 60% 60%; center] gnome-calendar\"",
@@ -93,11 +88,20 @@
       "critical": 10
     },
     "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
-"format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}󱐋</span>",
-"format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
+    "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}󱐋</span>",
+    "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
     "tooltip-format": "{capacity}%, {time} Left",
     "format-alt": "{time} Left",
-    "format-icons": ["\uf30d", "\uf30c", "\uf30b", "\uf30a", "\uf309", "\uf308", "\uf307", "\uf304"]
+    "format-icons": [
+      "\uf30d",
+      "\uf30c",
+      "\uf30b",
+      "\uf30a",
+      "\uf309",
+      "\uf308",
+      "\uf307",
+      "\uf304"
+    ]
   },
 
   "pulseaudio": {
@@ -155,8 +159,8 @@
 
   "network": {
     "tooltip": true,
-    "on-click": "hyprctl dispatch exec \"[float; size 40% 50%; center] nm-connection-editor\"",
-    "on-click-right": "hyprctl dispatch exec \"[float; size 50% 50%; center] kitty -e nmtui\"",
+    "on-click": "~/.config/hypr/scripts/wifi_jgmenu.sh",
+    "on-click-right": "hyprctl dispatch exec \"[float; size 40% 50%; center] nm-connection-editor\"",
     "format-wifi": "  {essid}",
     "format-ethernet": "󰈀 ",
     "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>\n\nDownload: <b>{bandwidthDownBytes}</b>\nUpload: <b>{bandwidthUpBytes}</b>",
