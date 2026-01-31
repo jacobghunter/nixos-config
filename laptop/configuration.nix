@@ -126,7 +126,6 @@
   virtualisation.docker.enable = true;
 
   programs.dconf.enable = true;
-  programs.zsh.enable = true;
 
   # --- USERS ---
   users.users.jacob = {

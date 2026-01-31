@@ -6,6 +6,9 @@
 }:
 
 {
+  # Enable ZSH
+  programs.zsh.enable = true;
+  
   # Enable VS Code Server service (requires the module to be imported in flake.nix)
   services.vscode-server.enable = true;
 
