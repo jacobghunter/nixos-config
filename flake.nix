@@ -14,6 +14,10 @@
     # Server specific
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+
+    # WSL specific
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -23,6 +27,7 @@
       nixos-hardware,
       home-manager,
       disko,
+      nixos-wsl,
       ...
     }@inputs:
     {
@@ -86,6 +91,21 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.jacob = import ./server/home.nix;
+            }
+          ];
+        };
+
+        # WSL CONFIG
+        nixos-wsl = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./wsl/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.jacob = import ./wsl/home.nix;
             }
           ];
         };
