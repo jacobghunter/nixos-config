@@ -26,18 +26,6 @@
   networking.hostName = "nixos-laptop";
   networking.networkmanager.enable = true;
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;
-      userServices = true;
-    };
-  };
-
   # Firewall & DNS
   networking.nameservers = [
     "94.140.14.14"

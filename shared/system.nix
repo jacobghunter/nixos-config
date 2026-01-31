@@ -8,6 +8,18 @@
 {
   # Enable ZSH
   programs.zsh.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
+  };
   
   # Enable VS Code Server service (requires the module to be imported in flake.nix)
   services.vscode-server.enable = true;

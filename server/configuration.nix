@@ -19,20 +19,6 @@
     settings.PermitRootLogin = "no";
   };
 
-  # Avahi for mDNS (allows accessing via nixos-server.local)
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;
-      userServices = true;
-      domain = true;
-    };
-  };
-
   # User Setup
   users.users.jacob = {
     isNormalUser = true;
