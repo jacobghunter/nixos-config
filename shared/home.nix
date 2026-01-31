@@ -39,6 +39,15 @@
         name = "zsh-z";
         src = pkgs.zsh-z.src;
       }
+      {
+        name = "zsh-bat";
+        src = pkgs.fetchFromGitHub {
+          owner = "fdellwing";
+          repo = "zsh-bat";
+          rev = "master";
+          sha256 = "0sj8dwqlnd7dz7djs6kv92vsxqai2sc2pq865r7i5lxgjxk9hfsd";
+        };
+      }
     ];
 
     initContent = ''
@@ -88,5 +97,6 @@
     btop
     zip
     unzip
+    bat
   ];
 }
