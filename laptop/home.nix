@@ -20,7 +20,6 @@
   home.packages = with pkgs; [
     # Applications
     firefox
-    vscode
     brave
     discord
     obsidian

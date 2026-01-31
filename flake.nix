@@ -82,9 +82,9 @@
           specialArgs = { inherit inputs; };
           modules = [
             disko.nixosModules.disko
+            inputs.vscode-server.nixosModules.default
             ./server/configuration.nix
             ./server/disk-config.nix
-            ./server/pi-hole.nix
 
             home-manager.nixosModules.home-manager
             {
@@ -100,6 +100,7 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
+            inputs.vscode-server.nixosModules.default
             ./wsl/configuration.nix
             home-manager.nixosModules.home-manager
             {

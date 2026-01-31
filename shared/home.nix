@@ -64,6 +64,9 @@
   # --- SHARED PACKAGES ---
   # Utilities common to both laptop and server
   home.packages = with pkgs; [
+    # Applications
+    vscode
+    
     # Dev Tools
     nodejs
     pnpm
