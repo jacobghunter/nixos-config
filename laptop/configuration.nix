@@ -25,6 +25,7 @@
   # --- NETWORKING ---
   networking.hostName = "nixos-laptop";
   networking.networkmanager.enable = true;
+  networking.enableIPv6 = false; # Fix sluggish internet
 
   services.avahi = {
     enable = true;
@@ -177,5 +178,6 @@
     util-linux
     nixfmt-rfc-style
     seahorse # GUI for gnome-keyring
+    texlive.combined.scheme-full # Latex engine
   ];
 }

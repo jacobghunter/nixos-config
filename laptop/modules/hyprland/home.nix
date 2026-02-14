@@ -124,10 +124,12 @@ in
 
       # Function to set video wallpaper
       set_video() {
-          if ! pgrep "mpvpaper" > /dev/null; then
-              killall swww-daemon 2>/dev/null
-              mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
-          fi
+          # Video wallpaper disabled by user request (performance)
+          # if ! pgrep "mpvpaper" > /dev/null; then
+          #     killall swww-daemon 2>/dev/null
+          #     mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
+          # fi
+          set_static
       }
 
       # Check power state function
