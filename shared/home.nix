@@ -11,14 +11,42 @@
   # --- SHARED SHELL CONFIGURATION (ZSH) ---
   programs.zsh = {
     enable = true;
-    enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+    enableCompletion = true;
+
+    oh-my-zsh = {
+      enable = true;
+      plugins = [
+        "git"
+        "sudo"
+      ];
+      theme = "robbyrussell";
+    };
 
     plugins = [
+      # Your fzf-tab config
       {
         name = "fzf-tab";
         src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      }
+      # These are sourced directly from nixpkgs for reliability
+      {
+        name = "you-should-use";
+        src = pkgs.zsh-you-should-use.src;
+      }
+      {
+        name = "zsh-z";
+        src = pkgs.zsh-z.src;
+      }
+      {
+        name = "zsh-bat";
+        src = pkgs.fetchFromGitHub {
+          owner = "fdellwing";
+          repo = "zsh-bat";
+          rev = "master";
+          sha256 = "0sj8dwqlnd7dz7djs6kv92vsxqai2sc2pq865r7i5lxgjxk9hfsd";
+        };
       }
     ];
 
@@ -30,16 +58,6 @@
       # set list-colors to enable filename colorizing
       zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
     '';
-
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-        "docker"
-      ];
-      theme = "robbyrussell";
-    };
   };
 
   # --- SHARED ALIASES ---
@@ -64,9 +82,6 @@
   # --- SHARED PACKAGES ---
   # Utilities common to both laptop and server
   home.packages = with pkgs; [
-    # Applications
-    vscode
-    
     # Dev Tools
     nodejs
     pnpm
@@ -74,7 +89,7 @@
     gcc
     gnumake
     gemini-cli
-    
+
     # Utilities
     ripgrep
     jq
@@ -82,5 +97,6 @@
     btop
     zip
     unzip
+    bat
   ];
 }

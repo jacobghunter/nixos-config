@@ -11,5 +11,7 @@
 
   networking.hostName = "nixos-wsl";
 
+  users.users.jacob.shell = pkgs.zsh;
+
   system.stateVersion = "24.11";
 }

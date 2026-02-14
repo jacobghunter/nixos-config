@@ -27,18 +27,6 @@
   networking.networkmanager.enable = true;
   networking.enableIPv6 = false; # Fix sluggish internet
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;
-      userServices = true;
-    };
-  };
-
   # Firewall & DNS
   networking.nameservers = [
     "94.140.14.14"
@@ -127,7 +115,6 @@
   virtualisation.docker.enable = true;
 
   programs.dconf.enable = true;
-  programs.zsh.enable = true;
 
   # --- USERS ---
   users.users.jacob = {

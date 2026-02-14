@@ -6,6 +6,21 @@
 }:
 
 {
+  # Enable ZSH
+  programs.zsh.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
+  };
+  
   # Enable VS Code Server service (requires the module to be imported in flake.nix)
   services.vscode-server.enable = true;
 
@@ -35,6 +50,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBSF1X9Rhk/20YAwdqLI5zlZSIIZjL06/Rri8UZqv/Or jacob@nixos-laptop"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFX1rPVicE6akrUGmXwuP5C2qmLtJ22E+Od1ZsU/on0H jacob@Jacobs-PC"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB0WYLgYAAWBISrS7w+QTxPohk4xb8kHbBQIwlJWMCiY jacob@nixos-wsl"
     ];
   };
 }
