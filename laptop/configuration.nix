@@ -2,6 +2,10 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ../shared/system.nix
+  ];
+
   # --- BOOT & HARDWARE ---
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
