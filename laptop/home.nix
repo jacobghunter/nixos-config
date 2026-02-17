@@ -31,6 +31,7 @@
 
     # Games
     heroic
+    love
 
     # Dev Tools (Moved shared ones to shared/home.nix)
     cmake
