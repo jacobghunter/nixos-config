@@ -124,10 +124,12 @@ in
 
       # Function to set video wallpaper
       set_video() {
-          if ! pgrep "mpvpaper" > /dev/null; then
-              killall swww-daemon 2>/dev/null
-              mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
-          fi
+          # Video wallpaper disabled by user request (performance)
+          # if ! pgrep "mpvpaper" > /dev/null; then
+          #     killall swww-daemon 2>/dev/null
+          #     mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
+          # fi
+          set_static
       }
 
       # Check power state function
@@ -586,7 +588,7 @@ in
     settings = {
       general = {
         before_sleep_cmd = "loginctl lock-session";
-        after_sleep_cmd = "hyprctl dispatch dpms on";
+        after_sleep_cmd = "hyprctl dispatch dpms on && brightnessctl -r";
         ignore_dbus_inhibit = false;
         lock_cmd = "pidof hyprlock || hyprlock";
       };
@@ -599,7 +601,7 @@ in
         {
           timeout = 300;
           on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          on-resume = "hyprctl dispatch dpms on && brightnessctl -r";
         }
       ];
     };

@@ -2,6 +2,10 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ../shared/system.nix
+  ];
+
   # --- BOOT & HARDWARE ---
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -25,6 +29,7 @@
   # --- NETWORKING ---
   networking.hostName = "nixos-laptop";
   networking.networkmanager.enable = true;
+  networking.enableIPv6 = false; # Fix sluggish internet
 
   # Firewall & DNS
   networking.nameservers = [
@@ -164,5 +169,6 @@
     util-linux
     nixfmt-rfc-style
     seahorse # GUI for gnome-keyring
+    texlive.combined.scheme-full # Latex engine
   ];
 }
