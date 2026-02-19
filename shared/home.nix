@@ -98,5 +98,6 @@
     zip
     unzip
     bat
+    tmux
   ];
 }
