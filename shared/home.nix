@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 {
+  imports = [ ./neovim.nix ];
   # --- SHARED ENVIRONMENT VARIABLES ---
   home.sessionVariables = {
     EDITOR = "code --wait";
