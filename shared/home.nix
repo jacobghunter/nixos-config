@@ -98,6 +98,6 @@
     zip
     unzip
     bat
-    tmux
+    zellij
   ];
 }
