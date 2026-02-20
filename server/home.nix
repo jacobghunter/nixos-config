@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -7,6 +7,9 @@
 
   home.username = "jacob";
   home.homeDirectory = "/home/jacob";
+  home.sessionVariables = {
+    EDITOR = lib.mkForce "vim";
+  };
   
   # Server state version
   home.stateVersion = "24.11"; 
