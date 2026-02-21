@@ -44,6 +44,10 @@ let
   videoWallpaper = "${config.xdg.configHome}/assets/backgrounds/outer-wilds.mp4";
 in
 {
+  imports = [
+    ./ags.nix
+  ];
+
   home.sessionVariables = {
     HYPRCURSOR_THEME = "Bibata-Modern-Classic";
     HYPRCURSOR_SIZE = "24";

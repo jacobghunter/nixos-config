@@ -6,6 +6,13 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
+    astal.url = "github:aylur/astal";
+    ags.url = "github:aylur/ags";
+    ags.inputs.astal.follows = "astal";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
