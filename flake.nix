@@ -25,6 +25,11 @@
     # WSL specific
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+
+    lazyvim-starter = {
+      url = "github:LazyVim/starter";
+      flake = false;
+    };
   };
 
   outputs =
@@ -35,6 +40,7 @@
       home-manager,
       disko,
       nixos-wsl,
+      lazyvim-starter,
       ...
     }@inputs:
     {
@@ -92,11 +98,13 @@
             inputs.vscode-server.nixosModules.default
             ./server/configuration.nix
             ./server/disk-config.nix
+            ./server/pi-hole.nix
 
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.jacob = import ./server/home.nix;
             }
           ];
@@ -113,6 +121,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.jacob = import ./wsl/home.nix;
             }
           ];
