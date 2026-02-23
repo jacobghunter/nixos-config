@@ -87,6 +87,7 @@
       "warning": 25,
       "critical": 10
     },
+    "on-click": "ags -t quicksettings",
     "format": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
     "format-charging": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}󱐋</span>",
     "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span><span font='Sans Heavy' size='8000' rise='8750' foreground='#ffffff' letter_spacing='-1000'>{capacity:3}</span>",
@@ -154,12 +155,12 @@
     "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "on-click": "hyprctl dispatch exec \"[float; size 40% 50%; move 100%-w-20 60] blueman-manager\""
+    "on-click": "ags -t quicksettings"
   },
 
   "network": {
     "tooltip": true,
-    "on-click": "~/.config/hypr/scripts/wifi_jgmenu.sh",
+    "on-click": "ags -t quicksettings",
     "on-click-right": "hyprctl dispatch exec \"[float; size 40% 50%; center] nm-connection-editor\"",
     "format-wifi": "  {essid}",
     "format-ethernet": "󰈀 ",
