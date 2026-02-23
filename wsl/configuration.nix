@@ -8,6 +8,11 @@
 
   wsl.enable = true;
   wsl.defaultUser = "jacob";
+  
+  system.activationScripts.modprobeSymlink = ''
+   # The -f flag ensures this command works even if the link already exists
+   ln -sf ${pkgs.kmod}/bin/modprobe /usr/bin/modprobe
+   '';
 
   networking.hostName = "nixos-wsl";
 
