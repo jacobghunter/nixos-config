@@ -12,4 +12,8 @@
   # WSL-specific overrides can go here
   
   programs.home-manager.enable = true;
+
+  home.packages = with pkgs; [
+    mkmod
+  ]
 }
