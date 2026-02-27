@@ -8,12 +8,13 @@ try {
     Set-Location $RepoPath
     "[$Time] Starting Sync..." | Out-File -FilePath $LogFile -Append
 
-    # 1. Force Git to ignore permission noise (Double check)
+    # 1. Clean up permission noise
     git config core.filemode false
 
-    # 2. Sync with GitHub (Force local to match origin)
-    git fetch origin main
-    git reset --hard origin/main 2>&1 | Out-File -FilePath $LogFile -Append
+    # 2. Pull changes safely
+    # We use --rebase to keep history clean. If there's a conflict, 
+    # it will fail safely rather than deleting files.
+    git pull --rebase origin main 2>&1 | Out-File -FilePath $LogFile -Append
 
     # 3. Check for new OrcaSlicer changes
     $HasChanges = git status --short $OrcaSubPath
