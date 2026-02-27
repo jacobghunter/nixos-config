@@ -1,0 +1,2 @@
+- outline special workspace differently
+- waybar color on hover
