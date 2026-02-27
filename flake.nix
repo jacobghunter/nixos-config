@@ -126,6 +126,47 @@
             }
           ];
         };
+	nixos-pc = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./pc/configuration.nix
+            ./pc/hardware-configuration.nix
+            inputs.vscode-server.nixosModules.default
+
+            # ==========================================
+            # DESKTOP ENVIRONMENT SELECTION (PICK ONE)
+            # ==========================================
+
+            # --- OPTION 1: HYPRLAND ---
+            ./pc/modules/hyprland/system.nix
+
+            # --- OPTION 2: GNOME ---
+            # ./laptop/modules/gnome/system.nix
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+
+              home-manager.backupFileExtension = "backup";
+
+              # Here we merge your base home.nix with the DE-specific home.nix
+              home-manager.users.jacob = {
+                imports = [
+                  ./pc/home.nix # Always import base config
+
+                  # --- OPTION 1: HYPRLAND HOME ---
+                  ./pc/modules/hyprland/home.nix
+
+                  # --- OPTION 2: GNOME HOME ---
+                  # ./laptop/modules/gnome/home.nix
+                ];
+              };
+            }
+          ];
+        };
       };
     };
 }
