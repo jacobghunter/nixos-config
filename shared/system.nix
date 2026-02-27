@@ -51,6 +51,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBSF1X9Rhk/20YAwdqLI5zlZSIIZjL06/Rri8UZqv/Or jacob@nixos-laptop"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFX1rPVicE6akrUGmXwuP5C2qmLtJ22E+Od1ZsU/on0H jacob@Jacobs-PC"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB0WYLgYAAWBISrS7w+QTxPohk4xb8kHbBQIwlJWMCiY jacob@nixos-wsl"
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIENlOaDve6NsoV4BfHjM0xbNnfwPOZzm4FQ+up6eHz9d jacob@nixos-pc
     ];
   };
 }
