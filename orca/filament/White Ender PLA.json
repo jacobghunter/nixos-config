@@ -1,0 +1,28 @@
+{
+    "compatible_printers": [
+        "SV06 0.4 nozzle"
+    ],
+    "default_filament_colour": [
+        "#FFFFFF"
+    ],
+    "enable_pressure_advance": [
+        "1"
+    ],
+    "filament_flow_ratio": [
+        "0.9177"
+    ],
+    "filament_settings_id": [
+        "White Ender PLA"
+    ],
+    "filament_vendor": [
+        "Ender"
+    ],
+    "from": "User",
+    "inherits": "Generic PLA @System",
+    "is_custom_defined": "0",
+    "name": "White Ender PLA",
+    "pressure_advance": [
+        "0.045"
+    ],
+    "version": "2.3.1.10"
+}

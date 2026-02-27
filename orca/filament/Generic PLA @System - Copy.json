@@ -1,0 +1,22 @@
+{
+    "compatible_printers": [
+        "SV06 0.4 nozzle"
+    ],
+    "enable_pressure_advance": [
+        "1"
+    ],
+    "filament_flow_ratio": [
+        "0.9177"
+    ],
+    "filament_settings_id": [
+        "Generic PLA @System - Copy"
+    ],
+    "from": "User",
+    "inherits": "Generic PLA @System",
+    "is_custom_defined": "0",
+    "name": "Generic PLA @System - Copy",
+    "pressure_advance": [
+        "0.045"
+    ],
+    "version": "2.3.1.10"
+}

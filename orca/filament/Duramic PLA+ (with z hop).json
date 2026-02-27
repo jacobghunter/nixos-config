@@ -1,0 +1,43 @@
+{
+    "enable_pressure_advance": [
+        "1"
+    ],
+    "filament_flow_ratio": [
+        "0.9555"
+    ],
+    "filament_retract_when_changing_layer": [
+        "0"
+    ],
+    "filament_settings_id": [
+        "Duramic PLA+ (with z hop)"
+    ],
+    "filament_vendor": [
+        "Duramic"
+    ],
+    "filament_wipe": [
+        "0"
+    ],
+    "filament_z_hop": [
+        "0.5"
+    ],
+    "from": "User",
+    "hot_plate_temp": [
+        "60"
+    ],
+    "inherits": "Generic PLA @System",
+    "is_custom_defined": "0",
+    "name": "Duramic PLA+ (with z hop)",
+    "nozzle_temperature": [
+        "225"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "225"
+    ],
+    "pressure_advance": [
+        "0.018"
+    ],
+    "slow_down_layer_time": [
+        "8"
+    ],
+    "version": "2.3.0.3"
+}

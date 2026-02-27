@@ -1,0 +1,9 @@
+{
+    "brim_object_gap": "0.15",
+    "from": "User",
+    "inherits": "0.20mm Standard @Sovol SV06",
+    "is_custom_defined": "0",
+    "name": "0.20mm Standard @Sovol SV06 - Copy",
+    "print_settings_id": "0.20mm Standard @Sovol SV06 - Copy",
+    "version": "2.3.1.10"
+}

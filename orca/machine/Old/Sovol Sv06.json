@@ -1,0 +1,139 @@
+{
+   "bed_custom_model" : "",
+   "bed_custom_texture" : "",
+   "before_layer_change_gcode" : [
+      ";BEFORE_LAYER_CHANGE\nG92 E0.0\n;[layer_z]\n\n"
+   ],
+   "change_filament_gcode" : [
+      ""
+   ],
+   "default_filament_profile" : "Prusament PLA",
+   "default_print_profile" : "0.15mm QUALITY @MK3",
+   "deretraction_speed" : "0",
+   "from" : "User",
+   "gcode_flavor" : "marlin",
+   "host_type" : "octoprint",
+   "inherits" : "Sovol SV06 0.4 nozzle",
+   "is_custom_defined" : "1",
+   "layer_change_gcode" : [
+      ";AFTER_LAYER_CHANGE\n;[layer_z]"
+   ],
+   "machine_end_gcode" : [
+      "G91 ;Relative positioning\nG1 X5 Y5 F3000 ;Wipe out\nG1 Z10 ;Raise Z more\nG90 ;Absolute positioning\nG1 X10 Y220 ;Present print\nM106 S0 ;Turn-off fan\nM104 S0 ;Turn-off hotend\nM140 S0 ;Turn-off bed\nM84 X Y E ;Disable all steppers but Z"
+   ],
+   "machine_max_acceleration_e" : [
+      "5000",
+      "5000"
+   ],
+   "machine_max_acceleration_extruding" : [
+      "1250",
+      "1250"
+   ],
+   "machine_max_acceleration_retracting" : [
+      "1250",
+      "1250"
+   ],
+   "machine_max_acceleration_travel" : [
+      "1500",
+      "1250"
+   ],
+   "machine_max_acceleration_x" : [
+      "1000",
+      "960"
+   ],
+   "machine_max_acceleration_y" : [
+      "1000",
+      "960"
+   ],
+   "machine_max_acceleration_z" : [
+      "200",
+      "200"
+   ],
+   "machine_max_jerk_e" : [
+      "4.5",
+      "4.5"
+   ],
+   "machine_max_jerk_x" : [
+      "8",
+      "8"
+   ],
+   "machine_max_jerk_y" : [
+      "8",
+      "8"
+   ],
+   "machine_max_jerk_z" : [
+      "0.4",
+      "0.4"
+   ],
+   "machine_max_speed_e" : [
+      "120",
+      "120"
+   ],
+   "machine_max_speed_x" : [
+      "200",
+      "100"
+   ],
+   "machine_max_speed_y" : [
+      "200",
+      "100"
+   ],
+   "machine_max_speed_z" : [
+      "12",
+      "12"
+   ],
+   "machine_min_extruding_rate" : [
+      "0",
+      "0"
+   ],
+   "machine_min_travel_rate" : [
+      "0",
+      "0"
+   ],
+   "machine_pause_gcode" : [
+      "M601"
+   ],
+   "machine_start_gcode" : [
+      "M104 S[first_layer_temperature] ; set extruder temp\nM140 S[first_layer_bed_temperature] ; set bed temp\nM190 S[first_layer_bed_temperature] ; wait for bed temp\nM109 S[first_layer_temperature] ; wait for extruder temp\nG28;\nG1 Z4.0 F3000 ;Move Z Axis up\nG92 E0 ;Reset Extruder\nG1 X5.1 Y20 Z0.28 F5000.0 ;Move to start position\nG1 X5.1 Y30.0 Z0.28 F1500.0 E1 ;Draw a short bit in case the extruder turns in the wrong direction\nG1 X5.1 Y200.0 Z0.28 F1500.0 E15 ;Draw the first line\nG1 X5.4 Y200.0 Z0.28 F5000.0 ;Move to side a little\nG1 X5.4 Y20 Z0.28 F1500.0 E30 ;Draw the second line\nG92 E0 ;Reset Extruder\nG1 Z2.0 F3000 ;Move Z Axis up"
+   ],
+   "max_layer_height" : "0.28",
+   "min_layer_height" : "0.08",
+   "name" : "Sovol Sv06",
+   "nozzle_diameter" : "0.4",
+   "print_host" : "",
+   "printable_area" : [
+      "0x0",
+      "220x0",
+      "220x220",
+      "0x220"
+   ],
+   "printable_height" : "250",
+   "printer_notes" : [
+      "Don't remove the following keywords! These keywords are used in the \"compatible printer\" condition of the print and filament profiles to link the particular print and filament profiles to this printer profile.\nPRINTER_VENDOR_PRUSA3D\nPRINTER_MODEL_MK3\n"
+   ],
+   "printer_settings_id" : "Sovol Sv06",
+   "printer_technology" : "FFF",
+   "printer_variant" : "0.4",
+   "retract_before_wipe" : "0%",
+   "retract_length_toolchange" : "4",
+   "retract_restart_extra" : "0",
+   "retract_restart_extra_toolchange" : "0",
+   "retract_when_changing_layer" : "1",
+   "retraction_length" : "0.5",
+   "retraction_minimum_travel" : "2",
+   "retraction_speed" : "40",
+   "silent_mode" : "1",
+   "single_extruder_multi_material" : "0",
+   "template_custom_gcode" : [
+      ""
+   ],
+   "thumbnails" : [
+      "32x32",
+      "400x300"
+   ],
+   "thumbnails_format" : "PNG",
+   "use_firmware_retraction" : "0",
+   "use_relative_e_distances" : "1",
+   "version" : "1.6.0.0",
+   "wipe" : "0",
+   "z_hop" : "0"
+}

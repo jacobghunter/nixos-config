@@ -1,0 +1,82 @@
+{
+    "close_fan_the_first_x_layers": [
+        "1000"
+    ],
+    "compatible_printers": [
+        "Sovol SV06 0.4 nozzle"
+    ],
+    "enable_overhang_bridge_fan": [
+        "0"
+    ],
+    "fan_cooling_layer_time": [
+        "30"
+    ],
+    "fan_max_speed": [
+        "0"
+    ],
+    "fan_min_speed": [
+        "0"
+    ],
+    "filament_cost": [
+        "50"
+    ],
+    "filament_density": [
+        "1.27"
+    ],
+    "filament_flow_ratio": [
+        "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+        "15"
+    ],
+    "filament_retract_when_changing_layer": [
+        "0"
+    ],
+    "filament_retraction_length": [
+        "0.8"
+    ],
+    "filament_settings_id": [
+        "Fiberon PET-CF"
+    ],
+    "filament_type": [
+        "PET-CF"
+    ],
+    "filament_vendor": [
+        "Fiberon"
+    ],
+    "filament_wipe": [
+        "0"
+    ],
+    "from": "User",
+    "hot_plate_temp": [
+        "80"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "80"
+    ],
+    "inherits": "Generic PLA @System",
+    "is_custom_defined": "0",
+    "name": "Fiberon PET-CF",
+    "nozzle_temperature": [
+        "300"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "300"
+    ],
+    "nozzle_temperature_range_high": [
+        "300"
+    ],
+    "nozzle_temperature_range_low": [
+        "270"
+    ],
+    "pressure_advance": [
+        "0.018"
+    ],
+    "reduce_fan_stop_start_freq": [
+        "0"
+    ],
+    "slow_down_layer_time": [
+        "8"
+    ],
+    "version": "2.3.0.3"
+}

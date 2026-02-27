@@ -1,0 +1,21 @@
+{
+    "bottom_shell_layers": "4",
+    "enable_support": "0",
+    "from": "User",
+    "inherits": "Ellis_PIF_Standard_15mm3 - 0.4 nozzle",
+    "inner_wall_acceleration": "3000",
+    "inner_wall_speed": "100",
+    "ironing_flow": "5%",
+    "ironing_spacing": "0.15",
+    "is_custom_defined": "0",
+    "name": "Product",
+    "outer_wall_acceleration": "3000",
+    "outer_wall_speed": "180",
+    "print_settings_id": "Product",
+    "seam_position": "back",
+    "sparse_infill_density": "30%",
+    "sparse_infill_speed": "120",
+    "top_surface_speed": "40",
+    "version": "2.2.0.0",
+    "wall_loops": "6"
+}

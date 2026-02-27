@@ -1,0 +1,22 @@
+{
+    "alternate_extra_wall": "1",
+    "bottom_shell_layers": "8",
+    "enable_support": "1",
+    "ensure_vertical_shell_thickness": "ensure_moderate",
+    "from": "User",
+    "infill_direction": "215",
+    "inherits": "0.20mm Standard @Sovol SV06",
+    "initial_layer_print_height": "0.2",
+    "is_custom_defined": "0",
+    "name": "PA6CF .2 8 wall",
+    "print_settings_id": "PA6CF .2 8 wall",
+    "solid_infill_direction": "215",
+    "sparse_infill_density": "100%",
+    "sparse_infill_pattern": "zig-zag",
+    "support_on_build_plate_only": "1",
+    "support_style": "default",
+    "support_type": "tree(manual)",
+    "top_shell_layers": "8",
+    "version": "2.1.1.0",
+    "wall_loops": "8"
+}
