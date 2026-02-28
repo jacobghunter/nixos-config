@@ -1,25 +1,20 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
     ../shared/home.nix
   ];
 
-  home.username = "jacob";
-  home.homeDirectory = "/home/jacob";
   home.sessionVariables = {
     EDITOR = lib.mkForce "vim";
   };
-  
-  # Server state version
-  home.stateVersion = "24.11"; 
 
   # --- SERVER SPECIFIC PACKAGES ---
   home.packages = with pkgs; [
-    # Add server-only packages here if needed
-    vim
-    htop
   ];
-  
-  programs.home-manager.enable = true;
 }

@@ -13,28 +13,13 @@
 
   # SSH for remote access
   services.openssh = {
-    enable = true;
     settings.PasswordAuthentication = true;
     settings.KbdInteractiveAuthentication = false;
     settings.PermitRootLogin = "no";
   };
 
-  # User Setup
-  users.users.jacob = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    initialPassword = "password";
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
-  };
-
   # Allow sudo without password
   security.sudo.wheelNeedsPassword = false;
-
-  # Enable nix-ld for VS Code Remote SSH support
-  programs.nix-ld.enable = true;
 
   # Allow members of the wheel group to be trusted by the Nix daemon
   nix.settings.trusted-users = [
@@ -43,9 +28,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    vim
-    git
-    htop
     nodejs
   ];
 

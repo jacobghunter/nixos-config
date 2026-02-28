@@ -2,6 +2,14 @@
 
 {
   imports = [ ./neovim.nix ];
+
+  # --- SHARED HOME SETUP ---
+  home.username = "jacob";
+  home.homeDirectory = "/home/jacob";
+  home.stateVersion = "24.11";
+
+  programs.home-manager.enable = true;
+
   # --- SHARED ENVIRONMENT VARIABLES ---
   home.sessionVariables = {
     EDITOR = "code --wait";
@@ -90,6 +98,8 @@
   # --- SHARED PACKAGES ---
   # Utilities common to both laptop and server
   home.packages = with pkgs; [
+    vim
+
     # Dev Tools
     nodejs
     pnpm
@@ -107,6 +117,6 @@
     unzip
     bat
     zellij
-    tree 
+    tree
   ];
 }
