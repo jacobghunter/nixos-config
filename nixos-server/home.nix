@@ -7,7 +7,7 @@
 
 {
   imports = [
-    ../shared/home.nix
+    ../nixos-shared/home.nix
   ];
 
   home.sessionVariables = {

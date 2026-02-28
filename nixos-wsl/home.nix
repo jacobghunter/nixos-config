@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../shared/home.nix
+    ../nixos-shared/home.nix
   ];
 
   home.packages = with pkgs; [

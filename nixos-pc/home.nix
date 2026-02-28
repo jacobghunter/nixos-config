@@ -2,8 +2,8 @@
 
 {
   imports = [
-    ../shared/home.nix
-    ../shared/graphical/home.nix
+    ../nixos-shared/home.nix
+    ../nixos-shared/graphical/home.nix
   ];
 
   home.packages = with pkgs; [

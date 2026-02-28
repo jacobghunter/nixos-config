@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../shared/system.nix
+    ../nixos-shared/system.nix
   ];
 
   boot.loader.systemd-boot.enable = true;

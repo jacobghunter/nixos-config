@@ -6,6 +6,6 @@
 }:
 {
   imports = [
-    ../../../shared/modules/hyprland/system.nix
+    ../../../nixos-shared/modules/hyprland/system.nix
   ];
 }

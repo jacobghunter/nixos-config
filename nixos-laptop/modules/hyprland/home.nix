@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../../shared/modules/hyprland/home.nix
+    ../../../nixos-shared/modules/hyprland/home.nix
   ];
 
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''

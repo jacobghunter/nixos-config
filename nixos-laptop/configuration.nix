@@ -3,8 +3,8 @@
 
 {
   imports = [
-    ../shared/system.nix
-    ../shared/graphical/configuration.nix
+    ../nixos-shared/system.nix
+    ../nixos-shared/graphical/configuration.nix
   ];
 
   # --- BOOT & HARDWARE ---
