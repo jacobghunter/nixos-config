@@ -50,8 +50,8 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
-            ./laptop/configuration.nix
-            ./laptop/hardware-configuration.nix
+            ./nixos-laptop/configuration.nix
+            ./nixos-laptop/hardware-configuration.nix
             nixos-hardware.nixosModules.lenovo-thinkpad-e15-intel
             inputs.vscode-server.nixosModules.default
 
@@ -60,10 +60,10 @@
             # ==========================================
 
             # --- OPTION 1: HYPRLAND ---
-            ./laptop/modules/hyprland/system.nix
+            ./nixos-laptop/modules/hyprland/system.nix
 
             # --- OPTION 2: GNOME ---
-            # ./laptop/modules/gnome/system.nix
+            # ./nixos-laptop/modules/gnome/system.nix
 
             home-manager.nixosModules.home-manager
             {
@@ -76,13 +76,13 @@
               # Here we merge your base home.nix with the DE-specific home.nix
               home-manager.users.jacob = {
                 imports = [
-                  ./laptop/home.nix # Always import base config
+                  ./nixos-laptop/home.nix # Always import base config
 
                   # --- OPTION 1: HYPRLAND HOME ---
-                  ./laptop/modules/hyprland/home.nix
+                  ./nixos-laptop/modules/hyprland/home.nix
 
                   # --- OPTION 2: GNOME HOME ---
-                  # ./laptop/modules/gnome/home.nix
+                  # ./nixos-laptop/modules/gnome/home.nix
                 ];
               };
             }
@@ -96,16 +96,16 @@
           modules = [
             disko.nixosModules.disko
             inputs.vscode-server.nixosModules.default
-            ./server/configuration.nix
-            ./server/disk-config.nix
-            ./server/pi-hole.nix
+            ./nixos-server/configuration.nix
+            ./nixos-server/disk-config.nix
+            ./nixos-server/pi-hole.nix
 
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.jacob = import ./server/home.nix;
+              home-manager.users.jacob = import ./nixos-server/home.nix;
             }
           ];
         };
@@ -116,22 +116,22 @@
           specialArgs = { inherit inputs; };
           modules = [
             inputs.vscode-server.nixosModules.default
-            ./wsl/configuration.nix
+            ./nixos-wsl/configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.jacob = import ./wsl/home.nix;
+              home-manager.users.jacob = import ./nixos-wsl/home.nix;
             }
           ];
         };
-	nixos-pc = nixpkgs.lib.nixosSystem {
+        nixos-pc = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
-            ./pc/configuration.nix
-            ./pc/hardware-configuration.nix
+            ./nixos-pc/configuration.nix
+            ./nixos-pc/hardware-configuration.nix
             inputs.vscode-server.nixosModules.default
 
             # ==========================================
@@ -139,10 +139,10 @@
             # ==========================================
 
             # --- OPTION 1: HYPRLAND ---
-            ./pc/modules/hyprland/system.nix
+            ./nixos-pc/modules/hyprland/system.nix
 
             # --- OPTION 2: GNOME ---
-            # ./laptop/modules/gnome/system.nix
+            # ./nixos-laptop/modules/gnome/system.nix
 
             home-manager.nixosModules.home-manager
             {
@@ -155,13 +155,13 @@
               # Here we merge your base home.nix with the DE-specific home.nix
               home-manager.users.jacob = {
                 imports = [
-                  ./pc/home.nix # Always import base config
+                  ./nixos-pc/home.nix # Always import base config
 
                   # --- OPTION 1: HYPRLAND HOME ---
-                  ./pc/modules/hyprland/home.nix
+                  ./nixos-pc/modules/hyprland/home.nix
 
                   # --- OPTION 2: GNOME HOME ---
-                  # ./laptop/modules/gnome/home.nix
+                  # ./nixos-laptop/modules/gnome/home.nix
                 ];
               };
             }
