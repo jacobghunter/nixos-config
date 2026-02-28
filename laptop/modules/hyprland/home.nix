@@ -6,6 +6,6 @@
   ];
 
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
-    monitor=,highres,auto,1
+    monitor=,preferred,auto,1,mirror,DP-1
   '';
 }
