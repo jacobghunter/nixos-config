@@ -1,11 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ../nixos-shared/system.nix
-    ../nixos-shared/graphical/configuration.nix
-  ];
-
   # --- BOOT & HARDWARE ---
   boot.loader.systemd-boot.enable = true;
   boot.loader.grub.enable = false;

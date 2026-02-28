@@ -8,7 +8,6 @@
 {
   imports = [
     inputs.nixos-wsl.nixosModules.default
-    ../nixos-shared/system.nix
   ];
 
   wsl.enable = true;

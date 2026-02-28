@@ -50,39 +50,32 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
+            # Host-specific configurations
             ./nixos-laptop/configuration.nix
             ./nixos-laptop/hardware-configuration.nix
             nixos-hardware.nixosModules.lenovo-thinkpad-e15-intel
             inputs.vscode-server.nixosModules.default
 
-            # ==========================================
-            # DESKTOP ENVIRONMENT SELECTION (PICK ONE)
-            # ==========================================
+            # Shared configurations
+            ./nixos-shared/system.nix
+            ./nixos-shared/graphical/configuration.nix
 
-            # --- OPTION 1: HYPRLAND ---
+            # Hyprland specific
             ./nixos-laptop/modules/hyprland/system.nix
 
-            # --- OPTION 2: GNOME ---
-            # ./nixos-laptop/modules/gnome/system.nix
-
+            # Home Manager
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-
               home-manager.backupFileExtension = "backup";
-
-              # Here we merge your base home.nix with the DE-specific home.nix
               home-manager.users.jacob = {
                 imports = [
-                  ./nixos-laptop/home.nix # Always import base config
-
-                  # --- OPTION 1: HYPRLAND HOME ---
+                  ./nixos-laptop/home.nix
+                  ./nixos-shared/home.nix
+                  ./nixos-shared/graphical/home.nix
                   ./nixos-laptop/modules/hyprland/home.nix
-
-                  # --- OPTION 2: GNOME HOME ---
-                  # ./nixos-laptop/modules/gnome/home.nix
                 ];
               };
             }
@@ -94,18 +87,28 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
+            # Host-specific configurations
             disko.nixosModules.disko
             inputs.vscode-server.nixosModules.default
             ./nixos-server/configuration.nix
             ./nixos-server/disk-config.nix
             ./nixos-server/pi-hole.nix
 
+            # Shared configurations
+            ./nixos-shared/system.nix
+
+            # Home Manager
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.jacob = import ./nixos-server/home.nix;
+              home-manager.users.jacob = {
+                imports = [
+                  ./nixos-server/home.nix
+                  ./nixos-shared/home.nix
+                ];
+              };
             }
           ];
         };
@@ -115,53 +118,59 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
+            # Host-specific configurations
             inputs.vscode-server.nixosModules.default
             ./nixos-wsl/configuration.nix
+
+            # Shared configurations
+            ./nixos-shared/system.nix
+
+            # Home Manager
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.jacob = import ./nixos-wsl/home.nix;
+              home-manager.users.jacob = {
+                imports = [
+                  ./nixos-wsl/home.nix
+                  ./nixos-shared/home.nix
+                ];
+              };
             }
           ];
         };
+
+        # PC CONFIG
         nixos-pc = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
+            # Host-specific configurations
             ./nixos-pc/configuration.nix
             ./nixos-pc/hardware-configuration.nix
             inputs.vscode-server.nixosModules.default
 
-            # ==========================================
-            # DESKTOP ENVIRONMENT SELECTION (PICK ONE)
-            # ==========================================
+            # Shared configurations
+            ./nixos-shared/system.nix
+            ./nixos-shared/graphical/configuration.nix
 
-            # --- OPTION 1: HYPRLAND ---
+            # Hyprland specific
             ./nixos-pc/modules/hyprland/system.nix
 
-            # --- OPTION 2: GNOME ---
-            # ./nixos-laptop/modules/gnome/system.nix
-
+            # Home Manager
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-
               home-manager.backupFileExtension = "backup";
-
-              # Here we merge your base home.nix with the DE-specific home.nix
               home-manager.users.jacob = {
                 imports = [
-                  ./nixos-pc/home.nix # Always import base config
-
-                  # --- OPTION 1: HYPRLAND HOME ---
+                  ./nixos-pc/home.nix
+                  ./nixos-shared/home.nix
+                  ./nixos-shared/graphical/home.nix
                   ./nixos-pc/modules/hyprland/home.nix
-
-                  # --- OPTION 2: GNOME HOME ---
-                  # ./nixos-laptop/modules/gnome/home.nix
                 ];
               };
             }

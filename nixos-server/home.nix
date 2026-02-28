@@ -6,10 +6,6 @@
 }:
 
 {
-  imports = [
-    ../nixos-shared/home.nix
-  ];
-
   home.sessionVariables = {
     EDITOR = lib.mkForce "vim";
   };
