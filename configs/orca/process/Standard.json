@@ -1,5 +1,6 @@
 {
     "bottom_shell_layers": "4",
+    "enable_support": "0",
     "from": "User",
     "inherits": "Ellis_PIF_Standard_15mm3 - 0.4 nozzle",
     "is_custom_defined": "0",
