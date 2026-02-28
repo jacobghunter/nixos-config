@@ -66,10 +66,13 @@
 
     # DISABLE SYSTEMD-RESOLVED STUB (Conflicts with Pi-hole on port 53)
     resolved = {
-      extraConfig = ''
-        DNSStubListener=no
-        MulticastDNS=off
-      '';
+      enable = true;
+      settings = {
+        "Resolve" = {
+          "DNSStubListener" = "no";
+          "MulticastDNS" = "no";
+        };
+      };
     };
   };
 
