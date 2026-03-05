@@ -40,8 +40,8 @@ let
   addPx = s: s + "px";
 
   # Wallpapers
-  staticWallpaper = "${config.xdg.configHome}/assets/backgrounds/outer-wilds.png";
-  videoWallpaper = "${config.xdg.configHome}/assets/backgrounds/outer-wilds.mp4";
+  staticWallpaper = ../../../assets/backgrounds/outer-wilds.png;
+  videoWallpaper = ../../../assets/backgrounds/outer-wilds.mp4;
 in
 {
   imports = [
