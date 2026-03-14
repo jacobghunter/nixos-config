@@ -84,7 +84,7 @@
     ga = "git add";
     gc = "git commit -m";
     gp = "git push";
-    alias gprune="git fetch --prune && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d";
+    gprune = "git fetch --prune && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d";
   };
 
   # --- SHARED GIT CONFIGURATION ---

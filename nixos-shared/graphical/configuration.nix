@@ -7,10 +7,16 @@
   # QMK Keyboard Support (Needs root for udev rules)
   hardware.keyboard.qmk.enable = true;
 
-  # Bluetooth (System Service)
-  hardware.bluetooth.enable = true; # <--- Enable the daemon
+  hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = false;
-  hardware.bluetooth.settings.General.ControllerMode = "dual";
+  hardware.bluetooth.package = pkgs.bluez;
+  hardware.bluetooth.settings = {
+    General = {
+      ControllerMode = "dual";
+      Experimental = true;
+      FastConnectable = true;
+    };
+  };
   services.blueman.enable = true;
 
   # Firewall & DNS
