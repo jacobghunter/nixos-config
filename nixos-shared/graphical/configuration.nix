@@ -87,6 +87,11 @@
 
   fonts.fontconfig.enable = true;
 
+  environment.pathsToLink = [
+    "/share/applications"
+    "/share/xdg-desktop-portal"
+  ];
+
   # --- SYSTEM PACKAGES ---
   # Only tools needed by "root" or for system rescue
   environment.systemPackages = with pkgs; [
@@ -98,7 +103,7 @@
     tree
     usbutils
     util-linux
-    nixfmt-rfc-style
+    nixfmt
     seahorse # GUI for gnome-keyring
     texlive.combined.scheme-full # Latex engine
   ];
