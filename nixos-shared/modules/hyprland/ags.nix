@@ -8,14 +8,13 @@
 {
   imports = [ inputs.ags.homeManagerModules.default ];
 
-  programs.ags = {
-    enable = true;
-
-    # Symlink to ~/.config/ags
-    configDir = ./ags;
-
-    # Extra packages available to GJS
-    extraPackages = with pkgs; [
+      programs.ags = {
+        enable = true;
+  
+        # Symlink to ~/.config/ags
+        configDir = "${inputs.self}/nixos-shared/modules/hyprland/ags";
+  
+        # Extra packages available to GJS    extraPackages = with pkgs; [
       gtksourceview
       webkitgtk_4_1
       accountsservice

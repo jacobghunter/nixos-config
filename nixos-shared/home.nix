@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
-  imports = [ ./neovim.nix ];
+  imports = [ "${inputs.self}/nixos-shared/neovim.nix" ];
 
   home.username = "jacob";
   home.homeDirectory = "/home/jacob";

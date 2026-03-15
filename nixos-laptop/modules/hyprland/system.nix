@@ -5,7 +5,4 @@
   ...
 }:
 {
-  imports = [
-    ../../../nixos-shared/modules/hyprland/system.nix
-  ];
 }

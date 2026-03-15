@@ -10,7 +10,7 @@
 # "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
 
 let
-  palette = import ../palette.nix { };
+  palette = import "${inputs.self}/nixos-shared/palette.nix" { };
 
   primary = palette.primary + palette.alpha;
   secondary = palette.secondary + palette.alpha;
@@ -42,12 +42,12 @@ let
   addPx = s: s + "px";
 
   # Wallpapers
-  staticWallpaper = ../../../assets/backgrounds/outer-wilds.png;
-  videoWallpaper = ../../../assets/backgrounds/outer-wilds.mp4;
+  staticWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.png";
+  videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
 in
 {
   imports = [
-    ./ags.nix
+    "${inputs.self}/nixos-shared/modules/hyprland/ags.nix"
   ];
 
   modules.kitty.enable = true;
@@ -91,7 +91,7 @@ in
           "dunst" # Assumed in PATH
           "firefox"
         ]
-        (builtins.readFile ./hyprland.conf);
+        (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/hyprland.conf");
     settings = {
       env = [
         "HYPRCURSOR_THEME,Bibata-Modern-Classic"
@@ -277,7 +277,7 @@ in
   programs.rofi = {
     enable = true;
     package = pkgs.rofi;
-    theme = ./rofi-theme.rasi;
+    theme = "${inputs.self}/nixos-shared/modules/hyprland/rofi-theme.rasi";
   };
 
   # Tofi Configs
@@ -472,10 +472,10 @@ in
     enable = true;
     style = ''
       @import "variables.css";
-      ${builtins.readFile ./waybar.css}
+      ${builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/waybar.css"}
     '';
     settings = {
-      mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
+      mainBar = builtins.fromJSON (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/waybar.jsonc");
     };
   };
 

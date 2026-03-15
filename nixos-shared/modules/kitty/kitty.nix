@@ -1,10 +1,16 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.modules.kitty;
-  palette = import ../../palette.nix { };
+  palette = import "${inputs.self}/nixos-shared/palette.nix" { };
 in {
   options.modules.kitty = {
     enable = mkEnableOption "kitty";
@@ -23,13 +29,14 @@ in {
     programs.kitty = {
       enable = true;
       font = {
-        name = "JetBrainsMono Nerd Font";
+        name = "JetBrainsMono NF";
         size = 13;
       };
       settings = {
         window_padding_width = 8;
         italic_font = "auto";
         bold_italic_font = "auto";
+        disable_ligatures = "always";
 
         # Theming based on options
         foreground = "#${cfg.colors.text}";

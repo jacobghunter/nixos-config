@@ -1,9 +1,12 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports = [
-    ../system.nix
-  ];
+  imports = [ "${inputs.self}/nixos-shared/system.nix" ];
   # QMK Keyboard Support (Needs root for udev rules)
   hardware.keyboard.qmk.enable = true;
 

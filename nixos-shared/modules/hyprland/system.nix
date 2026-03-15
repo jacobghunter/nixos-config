@@ -59,9 +59,4 @@
     playerctl
     gnome-calendar
   ];
-
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    material-symbols
-  ];
 }

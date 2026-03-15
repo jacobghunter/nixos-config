@@ -1,9 +1,12 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports = [
-    ../home.nix
-  ];
+  imports = [ "${inputs.self}/nixos-shared/home.nix" ];
 
   home.username = "jacob";
   home.homeDirectory = "/home/jacob";
