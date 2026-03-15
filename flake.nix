@@ -75,6 +75,7 @@
                   ./nixos-laptop/home.nix
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
+                  ./nixos-shared/modules/kitty/kitty.nix
                   ./nixos-laptop/modules/hyprland/home.nix
                 ];
               };
@@ -135,6 +136,7 @@
                 imports = [
                   ./nixos-wsl/home.nix
                   ./nixos-shared/home.nix
+                  ./nixos-shared/modules/kitty/kitty.nix
                 ];
               };
             }
@@ -170,6 +172,7 @@
                   ./nixos-pc/home.nix
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
+                  ./nixos-shared/modules/kitty/kitty.nix
                   ./nixos-pc/modules/hyprland/home.nix
                 ];
               };

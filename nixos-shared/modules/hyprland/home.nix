@@ -10,26 +10,28 @@
 # "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
 
 let
-  primary = "ce00ffcc";
-  secondary = "00dbffcc";
-  special = "fb42b6cc";
+  palette = import ../palette.nix { };
+
+  primary = palette.primary + palette.alpha;
+  secondary = palette.secondary + palette.alpha;
+  special = palette.special + palette.alpha;
   gradientDegrees = "45";
-  inactive = "595959ee";
-  background = "000000b3";
-  text = "cdd6f4ee";
-  shadow = "1a1a1aee";
+  inactive = palette.inactive + palette.alpha-inactive;
+  background = palette.background + palette.alpha-bg;
+  text = palette.text + palette.alpha-inactive;
+  shadow = palette.shadow + palette.alpha-inactive;
 
   # Waybar specific colors
-  waybar-bg = "1e1e2eee";
+  waybar-bg = palette.waybar-bg + palette.alpha-waybar;
   waybar-active = primary;
   waybar-focused = "eba0acee";
   waybar-urgent = "a6e3a1ee";
   waybar-hover = "cdd6f4ee";
-  waybar-dark = "11111bee";
-  waybar-trough = "313244ee";
+  waybar-dark = palette.waybar-dark + palette.alpha-waybar;
+  waybar-trough = palette.waybar-trough + palette.alpha-waybar;
 
-  borderSize = "1";
-  borderRadius = "10";
+  borderSize = palette.borderSize;
+  borderRadius = palette.borderRadius;
 
   #### Hyprland helpers
   toRgbaDef = s: "rgba(" + s + ")";
@@ -47,6 +49,8 @@ in
   imports = [
     ./ags.nix
   ];
+
+  modules.kitty.enable = true;
 
   home.sessionVariables = {
     HYPRCURSOR_THEME = "Bibata-Modern-Classic";
@@ -463,41 +467,6 @@ in
     @define-color waybar-dark ${toRgbHex waybar-dark};
     @define-color waybar-trough ${toRgbHex waybar-trough};
   '';
-
-  programs.kitty = {
-    enable = true;
-    font = {
-      name = "JetBrainsMono Nerd Font";
-      size = 13;
-    };
-    settings = {
-      window_padding_width = 8;
-      italic_font = "auto";
-      bold_italic_font = "auto";
-
-      # Theming based on nix variables
-      foreground = toRgbHex text;
-      background = toRgbHex waybar-bg;
-      selection_foreground = toRgbHex waybar-bg;
-      selection_background = toRgbHex primary;
-
-      cursor = toRgbHex secondary;
-      cursor_text_color = toRgbHex waybar-bg;
-
-      url_color = toRgbHex secondary;
-
-      active_border_color = toRgbHex primary;
-      inactive_border_color = toRgbHex inactive;
-      bell_border_color = toRgbHex special;
-
-      active_tab_foreground = toRgbHex waybar-bg;
-      active_tab_background = toRgbHex primary;
-      inactive_tab_foreground = toRgbHex text;
-      inactive_tab_background = toRgbHex waybar-dark;
-      tab_bar_background = toRgbHex waybar-dark;
-      term = "xterm-256color";
-    };
-  };
 
   programs.waybar = {
     enable = true;
