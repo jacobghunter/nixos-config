@@ -18,13 +18,14 @@
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
+    syntaxHighlighting.enable = false;
     enableCompletion = true;
 
     oh-my-zsh = {
       enable = true;
       plugins = [
         "git"
+        "gitfast"
         "sudo"
       ];
       theme = "robbyrussell";
@@ -34,6 +35,10 @@
       {
         name = "fzf-tab";
         src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      }
+      {
+        name = "fast-syntax-highlighting";
+        src = pkgs.zsh-fast-syntax-highlighting.src;
       }
       {
         name = "you-should-use";
@@ -73,13 +78,23 @@
 
   home.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
-    ll = "ls -l";
+    ll = "eza -l --git";
     gs = "git status";
     ga = "git add";
     gc = "git commit -m";
     gp = "git push";
     gprune = "git fetch --prune && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d";
     nf = "fzf -m --preview='bat --color=always {}' --bind 'enter:become(nvim {+})'";
+
+    # Tool replacements
+    cd = "z";
+    cdi = "zi";
+    ls = "eza";
+    grep = "rg";
+    cat = "bat";
+    find = "fd";
+    ps = "procs";
+    fuck = "f";
   };
 
   programs.git = {
@@ -96,6 +111,23 @@
     defaultCommand = "fd --type f";
   };
 
+  # Replaces cd
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  # Replaces zsh history
+  programs.atuin = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.pay-respects = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   home.packages = with pkgs; [
     vim
 
@@ -107,15 +139,30 @@
     gnumake
     gemini-cli
 
-    # Utilities
+    # Tool replacements
+    # grep
     ripgrep
+    # ls
+    eza
+    # ps
+    procs
+    # find
     fd
-    jq
+    # top
     btop
+    # cat
+    bat
+    # tmux
+    zellij
+    # du
+    dust
+
+
+    # Utilities
+    jq
+    tldr
     zip
     unzip
-    bat
-    zellij
     tree
   ];
 }
