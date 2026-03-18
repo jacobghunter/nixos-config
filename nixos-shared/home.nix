@@ -123,6 +123,12 @@
     enableZshIntegration = true;
   };
 
+  programs.yazi = {
+		enable = true;
+		enableZshIntegration = true;
+		shellWrapperName = "y";
+  };
+
   programs.pay-respects = {
     enable = true;
     enableZshIntegration = true;

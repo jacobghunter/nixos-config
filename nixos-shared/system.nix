@@ -53,6 +53,10 @@
     wget
     curl
     htop
+    gping
+    hyperfine
+    curlie
+    ffmpeg
   ];
 
   fonts.packages = with pkgs; [
