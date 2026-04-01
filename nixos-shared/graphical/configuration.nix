@@ -11,15 +11,22 @@
   hardware.keyboard.qmk.enable = true;
 
   hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = false;
+  hardware.bluetooth.powerOnBoot = true;
   hardware.bluetooth.package = pkgs.bluez;
   hardware.bluetooth.settings = {
     General = {
       ControllerMode = "dual";
       Experimental = true;
-      FastConnectable = true;
+      KernelExperimental = true;
+      FastConnectable = false;
+      Privacy = "off";
+      JustWorksRepairing = "always";
     };
   };
+  systemd.services.bluetooth.serviceConfig.ExecStart = [
+    ""
+    "${pkgs.bluez}/libexec/bluetooth/bluetoothd -E -f /etc/bluetooth/main.conf"
+  ];
   services.blueman.enable = true;
 
   # Firewall & DNS
@@ -75,12 +82,6 @@
     allowReboot = false;
     dates = "weekly";
     flags = [ "--upgrade" ];
-  };
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
   };
 
   system.stateVersion = "25.05";

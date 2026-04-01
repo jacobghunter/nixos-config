@@ -59,9 +59,7 @@
             # Shared configurations
             ./nixos-shared/system.nix
             ./nixos-shared/graphical/configuration.nix
-
-            # Hyprland specific
-            ./nixos-laptop/modules/hyprland/system.nix
+            ./nixos-shared/modules/hyprland/system.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -156,9 +154,7 @@
             # Shared configurations
             ./nixos-shared/system.nix
             ./nixos-shared/graphical/configuration.nix
-
-            # Hyprland specific
-            ./nixos-pc/modules/hyprland/system.nix
+            ./nixos-shared/modules/hyprland/system.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager

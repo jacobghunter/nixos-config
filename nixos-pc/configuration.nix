@@ -52,9 +52,13 @@
     9090 # Calibre Wireless Connection
     8080 # Calibre Content Server
   ];
-  networking.firewall.allowedUDPPorts = [
-    7236
-  ];
+  # --- SYSTEM MAINTENANCE ---
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  boot.loader.systemd-boot.configurationLimit = 5;
 
   # --- AUDIO & SERVICES ---
   # Some already defined in graphical/configration.nix

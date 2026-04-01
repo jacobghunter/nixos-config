@@ -57,6 +57,12 @@
       WIFI_PWR_ON_AC = "off";
       WIFI_PWR_ON_BAT = "off";
 
+      # Keep bluetooth on
+      BLUETOOTH_PWR_ON_AC = "on";
+      BLUETOOTH_PWR_ON_BAT = "on";
+      USB_EXCLUDE_BTUSB = 1;
+      USB_DENYLIST = "8087:0033";
+
       # Optional: Charge thresholds for ThinkPad longevity (starts charging at 75%, stops at 80%)
       # START_CHARGE_THRESH_BAT0 = 75;
       # STOP_CHARGE_THRESH_BAT0 = 80;
