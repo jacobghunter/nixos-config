@@ -59,6 +59,8 @@ in
     XCURSOR_SIZE = "24";
     MOZ_ENABLE_WAYLAND = "1";
     NIXOS_OZONE_WL = "1";
+    BROWSER = "firefox";
+    DEFAULT_BROWSER = "firefox";
   };
 
   home.packages = with pkgs; [

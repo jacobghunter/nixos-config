@@ -11,6 +11,8 @@
 
   home.sessionVariables = {
     EDITOR = "code --wait";
+    BROWSER = "firefox";
+    DEFAULT_BROWSER = "firefox";
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
     PATH = "$HOME/.npm-global/bin:$PATH";
   };
