@@ -72,7 +72,7 @@
       # Automatically start zellij on SSH
       if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$ZELLIJ" ]]; then
         if command -v zellij >/dev/null 2>&1; then
-          exec zellij
+          exec zellij attach -c
         fi
       fi
     '';
