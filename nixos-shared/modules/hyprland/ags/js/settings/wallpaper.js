@@ -3,19 +3,19 @@ import { exec, execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
 import { dependencies } from '../utils.js';
 
 export function initWallpaper() {
-    if (dependencies(['swww'])) {
-        exec('swww init');
+    if (dependencies(['awww'])) {
+        exec('awww init');
 
         options.desktop.wallpaper.img.connect('changed', wallpaper);
     }
 }
 
 export function wallpaper() {
-    if (!dependencies(['swww']))
+    if (!dependencies(['awww']))
         return;
 
     execAsync([
-        'swww', 'img',
+        'awww', 'img',
         '--transition-type', 'grow',
         '--transition-pos', exec('hyprctl cursorpos').replace(' ', ''),
         options.desktop.wallpaper.img.value,

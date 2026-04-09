@@ -68,7 +68,7 @@ in
     wl-clipboard
     jgmenu
     tofi
-    swww
+    awww
     mpvpaper
     wlogout
     grimblast
@@ -142,19 +142,19 @@ in
           if pgrep "mpvpaper" > /dev/null; then
               killall mpvpaper
           fi
-          # Ensure swww is running
-          if ! pgrep "swww-daemon" > /dev/null; then
-              swww-daemon &
+          # Ensure awww is running
+          if ! pgrep "awww-daemon" > /dev/null; then
+              awww-daemon &
               sleep 0.5
           fi
-          swww img "$STATIC_WALLPAPER" --transition-type none
+          awww img "$STATIC_WALLPAPER" --transition-type none
       }
 
       # Function to set video wallpaper
       set_video() {
           # Video wallpaper disabled by user request (performance)
           # if ! pgrep "mpvpaper" > /dev/null; then
-          #     killall swww-daemon 2>/dev/null
+          #     killall awww-daemon 2>/dev/null
           #     mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
           # fi
           set_static
@@ -491,6 +491,7 @@ in
 
   gtk = {
     enable = true;
+    gtk4.theme = config.gtk.theme;
     theme = {
       name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
