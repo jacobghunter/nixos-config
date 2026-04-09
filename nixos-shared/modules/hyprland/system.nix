@@ -34,8 +34,8 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ 
-      pkgs.xdg-desktop-portal-gtk 
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
     ];
   };
 
@@ -58,10 +58,5 @@
     brightnessctl
     playerctl
     gnome-calendar
-  ];
-
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    material-symbols
   ];
 }

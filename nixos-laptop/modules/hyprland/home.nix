@@ -1,8 +1,8 @@
-{ lib, ... }:
+{ lib, inputs, ... }:
 
 {
   imports = [
-    ../../../nixos-shared/modules/hyprland/home.nix
+    "${inputs.self}/nixos-shared/modules/hyprland/home.nix"
   ];
 
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''

@@ -53,6 +53,15 @@
     wget
     curl
     htop
+    gping
+    hyperfine
+    curlie
+    ffmpeg
+  ];
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    material-symbols
   ];
 
   # Allow unfree packages (like VS Code)

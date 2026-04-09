@@ -1,45 +1,47 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
-  imports = [ ./neovim.nix ];
+  imports = [ "${inputs.self}/nixos-shared/neovim.nix" ];
 
-  # --- SHARED HOME SETUP ---
   home.username = "jacob";
   home.homeDirectory = "/home/jacob";
   home.stateVersion = "24.11";
 
   programs.home-manager.enable = true;
 
-  # --- SHARED ENVIRONMENT VARIABLES ---
   home.sessionVariables = {
     EDITOR = "code --wait";
+    BROWSER = "firefox";
+    DEFAULT_BROWSER = "firefox";
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
     PATH = "$HOME/.npm-global/bin:$PATH";
   };
 
-  # --- SHARED SHELL CONFIGURATION (ZSH) ---
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
+    syntaxHighlighting.enable = false;
     enableCompletion = true;
 
     oh-my-zsh = {
       enable = true;
       plugins = [
         "git"
+        "gitfast"
         "sudo"
       ];
       theme = "robbyrussell";
     };
 
     plugins = [
-      # Your fzf-tab config
       {
         name = "fzf-tab";
         src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
       }
-      # These are sourced directly from nixpkgs for reliability
+      {
+        name = "fast-syntax-highlighting";
+        src = pkgs.zsh-fast-syntax-highlighting.src;
+      }
       {
         name = "you-should-use";
         src = pkgs.zsh-you-should-use.src;
@@ -76,17 +78,27 @@
     '';
   };
 
-  # --- SHARED ALIASES ---
   home.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
-    ll = "ls -l";
+    ll = "eza -l --git";
     gs = "git status";
     ga = "git add";
     gc = "git commit -m";
     gp = "git push";
+    gprune = "git fetch --prune && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d";
+    nf = "fzf -m --preview='bat --color=always {}' --bind 'enter:become(nvim {+})'";
+
+    # Tool replacements
+    cd = "z";
+    cdi = "zi";
+    ls = "eza";
+    grep = "rg";
+    cat = "bat";
+    find = "fd";
+    ps = "procs";
+    fuck = "f";
   };
 
-  # --- SHARED GIT CONFIGURATION ---
   programs.git = {
     enable = true;
     signing.format = "openpgp";
@@ -96,8 +108,35 @@
     };
   };
 
-  # --- SHARED PACKAGES ---
-  # Utilities common to both laptop and server
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+    defaultCommand = "fd --type f";
+  };
+
+  # Replaces cd
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  # Replaces zsh history
+  programs.atuin = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.yazi = {
+		enable = true;
+		enableZshIntegration = true;
+		shellWrapperName = "y";
+  };
+
+  programs.pay-respects = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   home.packages = with pkgs; [
     vim
 
@@ -109,15 +148,30 @@
     gnumake
     gemini-cli
 
-    # Utilities
+    # Tool replacements
+    # grep
     ripgrep
-    jq
-    fzf
+    # ls
+    eza
+    # ps
+    procs
+    # find
+    fd
+    # top
     btop
+    # cat
+    bat
+    # tmux
+    zellij
+    # du
+    dust
+
+
+    # Utilities
+    jq
+    tldr
     zip
     unzip
-    bat
-    zellij
     tree
   ];
 }

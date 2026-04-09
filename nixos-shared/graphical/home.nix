@@ -1,9 +1,12 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports = [
-    ../home.nix
-  ];
+  imports = [ "${inputs.self}/nixos-shared/home.nix" ];
 
   home.username = "jacob";
   home.homeDirectory = "/home/jacob";
@@ -50,6 +53,10 @@
       "x-scheme-handler/https" = "firefox.desktop";
       "x-scheme-handler/about" = "firefox.desktop";
       "x-scheme-handler/unknown" = "firefox.desktop";
+      "application/pdf" = "firefox.desktop";
+      "application/x-extension-pdf" = "firefox.desktop";
+      "application/x-pdf" = "firefox.desktop";
+      "application/vnd.adobe.pdf" = "firefox.desktop";
     };
   };
 }

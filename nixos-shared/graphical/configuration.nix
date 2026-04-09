@@ -1,16 +1,32 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports = [
-    ../system.nix
-  ];
+  imports = [ "${inputs.self}/nixos-shared/system.nix" ];
   # QMK Keyboard Support (Needs root for udev rules)
   hardware.keyboard.qmk.enable = true;
 
-  # Bluetooth (System Service)
-  hardware.bluetooth.enable = true; # <--- Enable the daemon
-  hardware.bluetooth.powerOnBoot = false;
-  hardware.bluetooth.settings.General.ControllerMode = "dual";
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.package = pkgs.bluez;
+  hardware.bluetooth.settings = {
+    General = {
+      ControllerMode = "dual";
+      Experimental = true;
+      KernelExperimental = true;
+      FastConnectable = false;
+      Privacy = "off";
+      JustWorksRepairing = "always";
+    };
+  };
+  systemd.services.bluetooth.serviceConfig.ExecStart = [
+    ""
+    "${pkgs.bluez}/libexec/bluetooth/bluetoothd -E -f /etc/bluetooth/main.conf"
+  ];
   services.blueman.enable = true;
 
   # Firewall & DNS
@@ -68,15 +84,14 @@
     flags = [ "--upgrade" ];
   };
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
-  };
-
   system.stateVersion = "25.05";
 
   fonts.fontconfig.enable = true;
+
+  environment.pathsToLink = [
+    "/share/applications"
+    "/share/xdg-desktop-portal"
+  ];
 
   # --- SYSTEM PACKAGES ---
   # Only tools needed by "root" or for system rescue
@@ -89,7 +104,7 @@
     tree
     usbutils
     util-linux
-    nixfmt-rfc-style
+    nixfmt
     seahorse # GUI for gnome-keyring
     texlive.combined.scheme-full # Latex engine
   ];

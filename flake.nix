@@ -59,9 +59,7 @@
             # Shared configurations
             ./nixos-shared/system.nix
             ./nixos-shared/graphical/configuration.nix
-
-            # Hyprland specific
-            ./nixos-laptop/modules/hyprland/system.nix
+            ./nixos-shared/modules/hyprland/system.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -75,6 +73,7 @@
                   ./nixos-laptop/home.nix
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
+                  ./nixos-shared/modules/kitty/kitty.nix
                   ./nixos-laptop/modules/hyprland/home.nix
                 ];
               };
@@ -135,6 +134,7 @@
                 imports = [
                   ./nixos-wsl/home.nix
                   ./nixos-shared/home.nix
+                  ./nixos-shared/modules/kitty/kitty.nix
                 ];
               };
             }
@@ -154,9 +154,7 @@
             # Shared configurations
             ./nixos-shared/system.nix
             ./nixos-shared/graphical/configuration.nix
-
-            # Hyprland specific
-            ./nixos-pc/modules/hyprland/system.nix
+            ./nixos-shared/modules/hyprland/system.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -170,6 +168,7 @@
                   ./nixos-pc/home.nix
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
+                  ./nixos-shared/modules/kitty/kitty.nix
                   ./nixos-pc/modules/hyprland/home.nix
                 ];
               };

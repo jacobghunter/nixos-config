@@ -10,26 +10,28 @@
 # "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
 
 let
-  primary = "ce00ffcc";
-  secondary = "00dbffcc";
-  special = "fb42b6cc";
+  palette = import "${inputs.self}/nixos-shared/palette.nix" { };
+
+  primary = palette.primary + palette.alpha;
+  secondary = palette.secondary + palette.alpha;
+  special = palette.special + palette.alpha;
   gradientDegrees = "45";
-  inactive = "595959ee";
-  background = "000000b3";
-  text = "cdd6f4ee";
-  shadow = "1a1a1aee";
+  inactive = palette.inactive + palette.alpha-inactive;
+  background = palette.background + palette.alpha-bg;
+  text = palette.text + palette.alpha-inactive;
+  shadow = palette.shadow + palette.alpha-inactive;
 
   # Waybar specific colors
-  waybar-bg = "1e1e2eee";
+  waybar-bg = palette.waybar-bg + palette.alpha-waybar;
   waybar-active = primary;
   waybar-focused = "eba0acee";
   waybar-urgent = "a6e3a1ee";
   waybar-hover = "cdd6f4ee";
-  waybar-dark = "11111bee";
-  waybar-trough = "313244ee";
+  waybar-dark = palette.waybar-dark + palette.alpha-waybar;
+  waybar-trough = palette.waybar-trough + palette.alpha-waybar;
 
-  borderSize = "1";
-  borderRadius = "10";
+  borderSize = palette.borderSize;
+  borderRadius = palette.borderRadius;
 
   #### Hyprland helpers
   toRgbaDef = s: "rgba(" + s + ")";
@@ -40,13 +42,15 @@ let
   addPx = s: s + "px";
 
   # Wallpapers
-  staticWallpaper = "${config.xdg.configHome}/assets/backgrounds/outer-wilds.png";
-  videoWallpaper = "${config.xdg.configHome}/assets/backgrounds/outer-wilds.mp4";
+  staticWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.png";
+  videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
 in
 {
   imports = [
-    ./ags.nix
+    "${inputs.self}/nixos-shared/modules/hyprland/ags.nix"
   ];
+
+  modules.kitty.enable = true;
 
   home.sessionVariables = {
     HYPRCURSOR_THEME = "Bibata-Modern-Classic";
@@ -55,6 +59,8 @@ in
     XCURSOR_SIZE = "24";
     MOZ_ENABLE_WAYLAND = "1";
     NIXOS_OZONE_WL = "1";
+    BROWSER = "firefox";
+    DEFAULT_BROWSER = "firefox";
   };
 
   home.packages = with pkgs; [
@@ -87,7 +93,7 @@ in
           "dunst" # Assumed in PATH
           "firefox"
         ]
-        (builtins.readFile ./hyprland.conf);
+        (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/hyprland.conf");
     settings = {
       env = [
         "HYPRCURSOR_THEME,Bibata-Modern-Classic"
@@ -273,7 +279,7 @@ in
   programs.rofi = {
     enable = true;
     package = pkgs.rofi;
-    theme = ./rofi-theme.rasi;
+    theme = "${inputs.self}/nixos-shared/modules/hyprland/rofi-theme.rasi";
   };
 
   # Tofi Configs
@@ -464,49 +470,14 @@ in
     @define-color waybar-trough ${toRgbHex waybar-trough};
   '';
 
-  programs.kitty = {
-    enable = true;
-    font = {
-      name = "JetBrainsMono Nerd Font";
-      size = 13;
-    };
-    settings = {
-      window_padding_width = 8;
-      italic_font = "auto";
-      bold_italic_font = "auto";
-
-      # Theming based on nix variables
-      foreground = toRgbHex text;
-      background = toRgbHex waybar-bg;
-      selection_foreground = toRgbHex waybar-bg;
-      selection_background = toRgbHex primary;
-
-      cursor = toRgbHex secondary;
-      cursor_text_color = toRgbHex waybar-bg;
-
-      url_color = toRgbHex secondary;
-
-      active_border_color = toRgbHex primary;
-      inactive_border_color = toRgbHex inactive;
-      bell_border_color = toRgbHex special;
-
-      active_tab_foreground = toRgbHex waybar-bg;
-      active_tab_background = toRgbHex primary;
-      inactive_tab_foreground = toRgbHex text;
-      inactive_tab_background = toRgbHex waybar-dark;
-      tab_bar_background = toRgbHex waybar-dark;
-      term = "xterm-256color";
-    };
-  };
-
   programs.waybar = {
     enable = true;
     style = ''
       @import "variables.css";
-      ${builtins.readFile ./waybar.css}
+      ${builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/waybar.css"}
     '';
     settings = {
-      mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
+      mainBar = builtins.fromJSON (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/waybar.jsonc");
     };
   };
 
