@@ -4,6 +4,8 @@
   # Neovim configuration with LazyVim
   programs.neovim = {
     enable = true;
+    withRuby = true;
+    withPython3 = true;
     defaultEditor = false;
     viAlias = true;
     vimAlias = true;

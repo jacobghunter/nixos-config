@@ -27,5 +27,8 @@
     nodejs
   ];
 
+  # For local llms
+  services.ollama.enable = true;
+
   system.stateVersion = "25.05";
 }

@@ -89,6 +89,7 @@
   # --- SHARED GIT CONFIGURATION ---
   programs.git = {
     enable = true;
+    signing.format = "openpgp";
     settings.user = {
       name = "Jacob Hunter";
       email = "jacobguinhunter@gmail.com";
