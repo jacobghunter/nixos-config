@@ -57,6 +57,7 @@
     hyperfine
     curlie
     ffmpeg
+    uv
   ];
 
   fonts.packages = with pkgs; [
