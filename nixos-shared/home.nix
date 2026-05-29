@@ -146,7 +146,7 @@
     python3
     gcc
     gnumake
-    gemini-cli
+    inputs.antigravity-cli.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # Tool replacements
     # grep

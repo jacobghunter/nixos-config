@@ -30,6 +30,8 @@
       url = "github:LazyVim/starter";
       flake = false;
     };
+
+    antigravity-cli.url = "github:xsen/antigravity-cli-nix";
   };
 
   outputs =
@@ -41,6 +43,7 @@
       disko,
       nixos-wsl,
       lazyvim-starter,
+      antigravity-cli,
       ...
     }@inputs:
     {

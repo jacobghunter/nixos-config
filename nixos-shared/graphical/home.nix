@@ -28,6 +28,7 @@
     copyq
     calibre
     spotify
+    pkgs.mpv
 
     # Games
     heroic
@@ -43,6 +44,15 @@
   # --- PROGRAMS CONFIGURATION ---
 
   programs.home-manager.enable = true;
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      wlrobs
+      obs-backgroundremoval
+      obs-pipewire-audio-capture
+    ];
+  };
 
   # --- DEFAULT TO FIREFOX ---
   xdg.mimeApps = {
