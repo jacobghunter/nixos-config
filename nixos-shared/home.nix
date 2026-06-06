@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   imports = [ "${inputs.self}/nixos-shared/neovim.nix" ];
@@ -127,9 +132,9 @@
   };
 
   programs.yazi = {
-		enable = true;
-		enableZshIntegration = true;
-		shellWrapperName = "y";
+    enable = true;
+    enableZshIntegration = true;
+    shellWrapperName = "y";
   };
 
   programs.pay-respects = {
@@ -146,6 +151,7 @@
     python3
     gcc
     gnumake
+    net-tools
     inputs.antigravity-cli.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # Tool replacements
@@ -165,7 +171,6 @@
     zellij
     # du
     dust
-
 
     # Utilities
     jq
