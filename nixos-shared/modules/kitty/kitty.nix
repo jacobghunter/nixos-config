@@ -11,17 +11,39 @@ with lib;
 let
   cfg = config.modules.kitty;
   palette = import "${inputs.self}/nixos-shared/palette.nix" { };
-in {
+in
+{
   options.modules.kitty = {
     enable = mkEnableOption "kitty";
     colors = {
-      text = mkOption { type = types.str; default = palette.text; };
-      background = mkOption { type = types.str; default = palette.waybar-bg; };
-      primary = mkOption { type = types.str; default = palette.primary; };
-      secondary = mkOption { type = types.str; default = palette.secondary; };
-      inactive = mkOption { type = types.str; default = palette.inactive; };
-      special = mkOption { type = types.str; default = palette.special; };
-      dark = mkOption { type = types.str; default = palette.waybar-dark; };
+      text = mkOption {
+        type = types.str;
+        default = palette.text;
+      };
+      background = mkOption {
+        type = types.str;
+        default = palette.waybar-bg;
+      };
+      primary = mkOption {
+        type = types.str;
+        default = palette.primary;
+      };
+      secondary = mkOption {
+        type = types.str;
+        default = palette.secondary;
+      };
+      inactive = mkOption {
+        type = types.str;
+        default = palette.inactive;
+      };
+      special = mkOption {
+        type = types.str;
+        default = palette.special;
+      };
+      dark = mkOption {
+        type = types.str;
+        default = palette.waybar-dark;
+      };
     };
   };
 
@@ -44,6 +66,9 @@ in {
         selection_foreground = "#${cfg.colors.background}";
         selection_background = "#${cfg.colors.primary}";
 
+        tab_bar_style = "powerline";
+        tab_powerline_style = "slanted";
+
         cursor = "#${cfg.colors.secondary}";
         cursor_text_color = "#${cfg.colors.background}";
 
@@ -60,6 +85,34 @@ in {
         tab_bar_background = "#${cfg.colors.dark}";
         term = "xterm-256color";
       };
+      keybindings = {
+        "kitty_mod+h" = "kitty_scrollback_nvim";
+        "kitty_mod+g" = "kitty_scrollback_nvim --config ksb_builtin_last_cmd_output";
+        "kitty_mod+p" = "kitten hints --program @";
+        "kitty_mod+o" = "kitten hints --type path --program @";
+        "kitty_mod+i" = "kitten hints --type word --program @";
+        "kitty_mod+u" = "kitten hints --type hash --program @";
+        "kitty_mod+y" = "kitten hints --type line --program @";
+        "kitty_mod+enter" = "launch --cwd=current --location=hsplit";
+        "kitty_mod+f" = "toggle_layout stack";
+        "kitty_mod+a" = "move_window_forward";
+        "kitty_mod+d" = "move_window_backward";
+        "kitty_mod+shift+q" = "detach_window ask";
+        "backspace" = "send_text all \\x7f";
+        "kitty_mod+1" = "send_text all \\x1b[201~";
+        "kitty_mod+2" = "send_text all \\x1b[202~";
+        "kitty_mod+3" = "send_text all \\x1b[203~";
+        "kitty_mod+4" = "send_text all \\x1b[204~";
+        "kitty_mod+5" = "send_text all \\x1b[205~";
+        "kitty_mod+6" = "send_text all \\x1b[206~";
+        "kitty_mod+7" = "send_text all \\x1b[207~";
+        "kitty_mod+8" = "send_text all \\x1b[208~";
+        "kitty_mod+9" = "send_text all \\x1b[209~";
+      };
+      extraConfig = ''
+        action_alias kitty_scrollback_nvim kitten ${config.home.homeDirectory}/.local/share/nvim/lazy/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py
+        mouse_map kitty_mod+right press ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output
+      '';
     };
   };
 }

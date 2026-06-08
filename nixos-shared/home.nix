@@ -80,6 +80,30 @@
           exec zellij attach -c
         fi
       fi
+
+      # Insert Nth recent command at cursor (invoked by kitty keybindings)
+      insert-nth-recent-command() {
+        local idx
+        if [[ "$KEYS" =~ '20([1-9])~' ]]; then
+          idx="''${match[1]}"
+        else
+          idx=1
+        fi
+        local -a hist_keys
+        hist_keys=(''${(nk)history})
+        local cmd="$history[''${hist_keys[-$idx]}]"
+        LBUFFER+="$cmd"
+      }
+      zle -N insert-nth-recent-command
+      bindkey '\e[201~' insert-nth-recent-command
+      bindkey '\e[202~' insert-nth-recent-command
+      bindkey '\e[203~' insert-nth-recent-command
+      bindkey '\e[204~' insert-nth-recent-command
+      bindkey '\e[205~' insert-nth-recent-command
+      bindkey '\e[206~' insert-nth-recent-command
+      bindkey '\e[207~' insert-nth-recent-command
+      bindkey '\e[208~' insert-nth-recent-command
+      bindkey '\e[209~' insert-nth-recent-command
     '';
   };
 

@@ -31,4 +31,18 @@
     source = inputs.lazyvim-starter;
     recursive = true;
   };
+
+  xdg.configFile."nvim/lua/plugins/kitty-scrollback.lua".text = ''
+    return {
+      {
+        'mikesmithgh/kitty-scrollback.nvim',
+        lazy = true,
+        cmd = { 'KittyScrollbackGenerateKittens', 'KittyScrollbackCheckHealth' },
+        event = { 'User KittyScrollbackLaunch' },
+        config = function()
+          require('kitty-scrollback').setup()
+        end,
+      },
+    }
+  '';
 }
