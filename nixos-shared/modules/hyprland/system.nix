@@ -48,7 +48,6 @@
     # SDDM Theme
     sddm-astronaut
 
-    waybar
     dunst
     kdePackages.dolphin
     hyprpaper

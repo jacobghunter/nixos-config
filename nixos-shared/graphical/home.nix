@@ -26,7 +26,10 @@
     bitwarden-desktop
     remmina
     copyq
+
+    # Books
     calibre
+
     spotify
     pkgs.mpv
 

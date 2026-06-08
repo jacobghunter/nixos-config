@@ -51,6 +51,7 @@ in
   ];
 
   modules.kitty.enable = true;
+  modules.waybar.enable = true;
 
   home.sessionVariables = {
     HYPRCURSOR_THEME = "Bibata-Modern-Classic";
@@ -453,33 +454,6 @@ in
         }
       '';
 
-  xdg.configFile."waybar/variables.css".text = ''
-    @define-color primary ${toRgbHex primary};
-    @define-color secondary ${toRgbHex secondary};
-    @define-color inactive ${toRgbHex inactive};
-    @define-color background ${toRgbHex background};
-    @define-color text ${toRgbHex text};
-
-    /* Waybar specific */
-    @define-color waybar-bg ${toRgbHex waybar-bg};
-    @define-color waybar-active ${toRgbHex waybar-active};
-    @define-color waybar-focused ${toRgbHex waybar-focused};
-    @define-color waybar-urgent ${toRgbHex waybar-urgent};
-    @define-color waybar-hover ${toRgbHex waybar-hover};
-    @define-color waybar-dark ${toRgbHex waybar-dark};
-    @define-color waybar-trough ${toRgbHex waybar-trough};
-  '';
-
-  programs.waybar = {
-    enable = true;
-    style = ''
-      @import "variables.css";
-      ${builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/waybar.css"}
-    '';
-    settings = {
-      mainBar = builtins.fromJSON (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/waybar.jsonc");
-    };
-  };
 
   home.pointerCursor = {
     gtk.enable = true;
