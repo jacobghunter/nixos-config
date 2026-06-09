@@ -51,7 +51,6 @@ in
   ];
 
   modules.kitty.enable = true;
-  modules.waybar.enable = true;
 
   home.sessionVariables = {
     HYPRCURSOR_THEME = "Bibata-Modern-Classic";
@@ -80,19 +79,25 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    configType = "hyprlang";
+    package = pkgs.hyprland;
     systemd.enable = true;
     extraConfig =
+      let
+        barExec = if config.programs.waybar.enable then "waybar" else "wayle";
+      in
       builtins.replaceStrings
         [
           "/usr/lib/polkit-kde-authentication-agent-1"
           "/usr/bin/dunst"
           "thorium-browser"
+          "waybar"
         ]
         [
           "systemctl --user start hyprpolkitagent"
           "dunst" # Assumed in PATH
           "firefox"
+          barExec
         ]
         (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/hyprland.conf");
     settings = {

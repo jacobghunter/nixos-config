@@ -6,10 +6,7 @@
   ...
 }:
 
-with lib;
-
 let
-  cfg = config.modules.waybar;
   palette = import "${inputs.self}/nixos-shared/palette.nix" { };
 
   primary = palette.primary + palette.alpha;
@@ -29,37 +26,31 @@ let
 
   toRgbHex = s: "#" + builtins.substring 0 6 s;
 in {
-  options.modules.waybar = {
-    enable = mkEnableOption "waybar";
-  };
+  xdg.configFile."waybar/variables.css".text = ''
+    @define-color primary ${toRgbHex primary};
+    @define-color secondary ${toRgbHex secondary};
+    @define-color inactive ${toRgbHex inactive};
+    @define-color background ${toRgbHex background};
+    @define-color text ${toRgbHex text};
 
-  config = mkIf cfg.enable {
-    xdg.configFile."waybar/variables.css".text = ''
-      @define-color primary ${toRgbHex primary};
-      @define-color secondary ${toRgbHex secondary};
-      @define-color inactive ${toRgbHex inactive};
-      @define-color background ${toRgbHex background};
-      @define-color text ${toRgbHex text};
+    /* Waybar specific */
+    @define-color waybar-bg ${toRgbHex waybar-bg};
+    @define-color waybar-active ${toRgbHex waybar-active};
+    @define-color waybar-focused ${toRgbHex waybar-focused};
+    @define-color waybar-urgent ${toRgbHex waybar-urgent};
+    @define-color waybar-hover ${toRgbHex waybar-hover};
+    @define-color waybar-dark ${toRgbHex waybar-dark};
+    @define-color waybar-trough ${toRgbHex waybar-trough};
+  '';
 
-      /* Waybar specific */
-      @define-color waybar-bg ${toRgbHex waybar-bg};
-      @define-color waybar-active ${toRgbHex waybar-active};
-      @define-color waybar-focused ${toRgbHex waybar-focused};
-      @define-color waybar-urgent ${toRgbHex waybar-urgent};
-      @define-color waybar-hover ${toRgbHex waybar-hover};
-      @define-color waybar-dark ${toRgbHex waybar-dark};
-      @define-color waybar-trough ${toRgbHex waybar-trough};
+  programs.waybar = {
+    enable = true;
+    style = ''
+      @import "variables.css";
+      ${builtins.readFile ./waybar.css}
     '';
-
-    programs.waybar = {
-      enable = true;
-      style = ''
-        @import "variables.css";
-        ${builtins.readFile ./waybar.css}
-      '';
-      settings = {
-        mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
-      };
+    settings = {
+      mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
     };
   };
 }

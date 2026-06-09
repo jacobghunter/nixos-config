@@ -42,6 +42,7 @@
   services.vscode-server.enable = true;
 
   services.openssh.enable = true;
+  services.upower.enable = true;
 
   # Enable nix-ld for better compatibility with unpatched binaries (helpful for VS Code remote)
   programs.nix-ld.enable = true;
@@ -67,6 +68,9 @@
 
   # Allow unfree packages (like VS Code)
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
 
   # Enable Nix Flakes
   nix.settings = {

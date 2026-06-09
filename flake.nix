@@ -77,7 +77,7 @@
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
                   ./nixos-shared/modules/kitty/kitty.nix
-                  ./nixos-shared/modules/waybar/waybar.nix
+                  ./nixos-shared/modules/wayle/wayle.nix
                   ./nixos-laptop/modules/hyprland/home.nix
                 ];
               };
@@ -173,7 +173,7 @@
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
                   ./nixos-shared/modules/kitty/kitty.nix
-                  ./nixos-shared/modules/waybar/waybar.nix
+                  ./nixos-shared/modules/wayle/wayle.nix
                   ./nixos-pc/modules/hyprland/home.nix
                 ];
               };
