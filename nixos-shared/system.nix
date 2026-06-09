@@ -64,6 +64,7 @@
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     material-symbols
+    inter
   ];
 
   # Allow unfree packages (like VS Code)

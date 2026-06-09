@@ -28,9 +28,9 @@ in
             left = [
               {
                 modules = [
+                  "hyprland-workspaces"
                   "clock"
                   "weather"
-                  "hyprland-workspaces"
                 ];
                 name = "group";
               }
@@ -68,7 +68,55 @@ in
         rounding = "lg";
         scale = 0.9;
       };
+      modules = {
+        battery = {
+          icon-show = false;
+        };
+        clock = {
+          dropdown-show-seconds = true;
+          icon-show = false;
+        };
+        weather = {
+          location = "Tucson";
+          units = "imperial";
+        };
+        hyprland-workspaces = {
+          workspace-map = {
+            "-99" = {
+              label = "Special";
+            };
+            "-98" = {
+              label = "★";
+            };
+          };
+        };
+        volume = {
+          scroll-up = "wayle audio output-volume +5";
+          scroll-down = "wayle audio output-volume -5";
+        };
+        brightness = {
+          scroll-up = "brightnessctl set +5%";
+          scroll-down = "brightnessctl set 5%-";
+        };
+        window-title = {
+          icon-bg-color = "transparent";
+          icon-color = "accent";
+          label-color = "accent";
+        };
+      };
       styling = {
+        palette = {
+          bg = "#11111b";
+          blue = "#74c7ec";
+          elevated = "#1e1e2e";
+          fg = "#cdd6f4";
+          fg-muted = "#bac2de";
+          green = "#a6e3a1";
+          primary = "#${palette.primary}";
+          red = "#f38ba8";
+          surface = "#181825";
+          yellow = "#f9e2af";
+        };
         rounding = "md";
       };
     };

@@ -43,9 +43,9 @@
   ];
 
   # --- POWER MANAGEMENT ---
-  services.power-profiles-daemon.enable = false; # Disable GNOME power profiles to use TLP
+  services.power-profiles-daemon.enable = true;
   services.tlp = {
-    enable = true;
+    enable = false;
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";

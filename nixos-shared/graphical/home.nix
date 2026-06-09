@@ -32,6 +32,8 @@
 
     spotify
     pkgs.mpv
+    cava
+    hyprsunset
 
     # Games
     heroic
