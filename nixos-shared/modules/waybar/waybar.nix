@@ -53,4 +53,9 @@ in {
       mainBar = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
     };
   };
+
+  wayland.windowManager.hyprland.settings.exec-once = [
+    "waybar"
+    "dunst"
+  ];
 }

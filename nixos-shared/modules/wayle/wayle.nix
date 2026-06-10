@@ -20,7 +20,7 @@ in
         button-icon-size = 0.95;
         button-rounding = "lg";
         dropdown-freeze-label = false;
-        dropdown-opacity = 85;
+        dropdown-opacity = 95;
         inset-ends = 0.5;
         layout = [
           {
@@ -103,6 +103,9 @@ in
           icon-color = "accent";
           label-color = "accent";
         };
+        dashboard = {
+          dropdown-logout-command = "hyprctl dispatch exit";
+        };
       };
       styling = {
         palette = {
@@ -121,4 +124,6 @@ in
       };
     };
   };
+
+  wayland.windowManager.hyprland.settings.exec-once = [ "wayle shell" ];
 }
