@@ -64,6 +64,8 @@
   services.udisks2.enable = true;
   services.udev.packages = [ pkgs.calibre ];
   services.gnome.gnome-keyring.enable = true;
+  services.gnome.evolution-data-server.enable = true;
+  services.gnome.gnome-online-accounts.enable = true;
 
   services.printing.enable = true; # CUPS
   virtualisation.docker.enable = true;

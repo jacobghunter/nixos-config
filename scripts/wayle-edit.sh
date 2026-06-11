@@ -24,9 +24,9 @@ echo "-> Converting TOML configuration to Nix format..."
 if [ -d "$WAYLE_DIR" ]; then
     cd "$WAYLE_DIR" || exit 1
     if [ -f "runtime.toml" ]; then
-        NIX_CONFIG=$(nix-instantiate --eval --expr '(builtins.fromTOML (builtins.readFile ./config.toml)) // (builtins.fromTOML (builtins.readFile ./runtime.toml))' 2>/dev/null | nixfmt)
+        NIX_CONFIG=$(nix-instantiate --eval --expr '(builtins.fromTOML (builtins.readFile ./config.toml)) // (builtins.fromTOML (builtins.readFile ./runtime.toml))' 2>/dev/null | nixfmt -)
     else
-        NIX_CONFIG=$(nix-instantiate --eval --expr 'builtins.fromTOML (builtins.readFile ./config.toml)' 2>/dev/null | nixfmt)
+        NIX_CONFIG=$(nix-instantiate --eval --expr 'builtins.fromTOML (builtins.readFile ./config.toml)' 2>/dev/null | nixfmt -)
     fi
     cd - >/dev/null || exit 1
 fi

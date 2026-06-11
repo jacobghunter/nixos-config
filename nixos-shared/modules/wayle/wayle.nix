@@ -22,6 +22,7 @@ in
         dropdown-freeze-label = false;
         dropdown-opacity = 95;
         inset-ends = 0.5;
+        button-group-background = "bg-surface-elevated";
         layout = [
           {
             center = [ "window-title" ];
@@ -32,7 +33,7 @@ in
                   "clock"
                   "weather"
                 ];
-                name = "group";
+                name = "meta";
               }
             ];
             monitor = "*";
@@ -57,7 +58,7 @@ in
                   "battery"
                   "dashboard"
                 ];
-                name = "group";
+                name = "sys";
               }
             ];
             show = true;
@@ -71,14 +72,20 @@ in
       modules = {
         battery = {
           icon-show = false;
+          icon-bg-color = "accent";
+          label-color = "accent";
+        };
+        brightness = {
+          right-click = "pgrep -x hyprsunset >/dev/null && pkill -x hyprsunset || hyprsunset -t 4500 &";
         };
         clock = {
           dropdown-show-seconds = true;
           icon-show = false;
         };
-        weather = {
-          location = "Tucson";
-          units = "imperial";
+        dashboard = {
+          border-color = "accent";
+          icon-bg-color = "accent";
+          dropdown-logout-command = "hyprctl dispatch exit";
         };
         hyprland-workspaces = {
           workspace-map = {
@@ -89,6 +96,7 @@ in
               label = "★";
             };
           };
+          show-special = false;
         };
         volume = {
           scroll-up = "wayle audio output-volume +5";
@@ -98,13 +106,22 @@ in
           scroll-up = "brightnessctl set +5%";
           scroll-down = "brightnessctl set 5%-";
         };
+        network = {
+          border-color = "green";
+          icon-bg-color = "green";
+          label-color = "green";
+        };
         window-title = {
           icon-bg-color = "transparent";
           icon-color = "accent";
           label-color = "accent";
         };
-        dashboard = {
-          dropdown-logout-command = "hyprctl dispatch exit";
+        weather = {
+          location = "Tucson";
+          units = "imperial";
+          border-color = "green";
+          icon-bg-color = "green";
+          label-color = "green";
         };
       };
       styling = {
