@@ -8,12 +8,15 @@
 
 let
   palette = import "${inputs.self}/nixos-shared/palette.nix" { };
+  autohide = false; # Set to true for auto-hide mode, false for default mode
+  dropdownMaxY = 550; # Height threshold (in pixels) for the dropdown zone
 in
 {
   services.wayle = {
     enable = true;
     settings = {
       bar = {
+        exclusive = !autohide;
         bg = "transparent";
         button-border-location = "none";
         button-group-rounding = "lg";
@@ -142,5 +145,68 @@ in
     };
   };
 
-  wayland.windowManager.hyprland.settings.exec-once = [ "wayle shell" ];
+  # Autohide script configuration
+  xdg.configFile."hypr/scripts/wayle_autohide.sh" = lib.mkIf autohide {
+    text = ''
+      #!/usr/bin/env bash
+      HYPRCTL="${config.wayland.windowManager.hyprland.package}/bin/hyprctl"
+      WAYLE="wayle"
+
+      visible=true
+      # Start by showing the bar
+      $WAYLE panel show 2>/dev/null
+
+      hide_timer=0
+      prev_pos=""
+
+      while true; do
+          pos=$($HYPRCTL cursorpos)
+          y="''${pos##*, }"
+
+          if [ "$y" -le 3 ]; then
+              if [ "$visible" = false ]; then
+                  $WAYLE panel show 2>/dev/null
+                  visible=true
+              fi
+              hide_timer=0
+          elif [ "$y" -le 60 ]; then
+              # Hovering the bar itself
+              hide_timer=0
+          else
+              # Y > 60 (below the bar)
+              if [ "$visible" = true ]; then
+                  if [ "$y" -gt ${toString dropdownMaxY} ]; then
+                      # Mouse is way below (returned to active workspace area), hide immediately
+                      $WAYLE panel hide 2>/dev/null
+                      visible=false
+                      hide_timer=0
+                  else
+                      # 60 < Y <= dropdownMaxY: potential dropdown zone
+                      if [ "$pos" != "$prev_pos" ]; then
+                          # Mouse is moving/interacting in the dropdown, reset timer
+                          hide_timer=0
+                      else
+                          hide_timer=$((hide_timer + 1))
+                      fi
+
+                      # Hide after ~1.2s of no movement in the dropdown zone
+                      if [ "$hide_timer" -ge 8 ]; then
+                          $WAYLE panel hide 2>/dev/null
+                          visible=false
+                          hide_timer=0
+                      fi
+                  fi
+              fi
+          fi
+
+          prev_pos="$pos"
+          sleep 0.15
+      done
+    '';
+    executable = true;
+  };
+
+  wayland.windowManager.hyprland.settings.exec-once = lib.optionals autohide [
+    "~/.config/hypr/scripts/wayle_autohide.sh &"
+  ];
 }
