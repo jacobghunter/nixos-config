@@ -55,6 +55,7 @@ in
         size = 13;
       };
       settings = {
+        auto_reload_config = "no";
         window_padding_width = 8;
         italic_font = "auto";
         bold_italic_font = "auto";
