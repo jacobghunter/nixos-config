@@ -24,6 +24,7 @@
   '';
 
   networking.hostName = "nixos-wsl";
+  networking.resolvconf.enable = false;
 
   system.stateVersion = "24.11";
 }
