@@ -6,6 +6,9 @@
   boot.loader.grub.enable = false;
   boot.loader.systemd-boot.editor = false;
 
+  boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
+  boot.loader.efi.efiSysMountPoint = "/efi";
+
   # Set windows as default via sudo bootctl set-default auto-windows
 
   boot.loader.efi.canTouchEfiVariables = true;
