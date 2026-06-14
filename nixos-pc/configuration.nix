@@ -17,8 +17,6 @@
   # Pass audio codec model to the kernel for Realtek ALC897
   boot.kernelParams = [ "snd_hda_intel.model=auto" ];
 
-  # Set windows to default boot via sudo bootctl set-default auto-windows
-
   time.hardwareClockInLocalTime = true;
 
   services.xserver.videoDrivers = [ "amdgpu" ];
@@ -66,25 +64,27 @@
   # --- AUDIO & SERVICES ---
   # Some already defined in graphical/configration.nix
   services.pipewire = {
-    jack.enable = true; # It seems you had this enabled before, so I'm keeping it.
+    jack.enable = true;
     wireplumber.enable = true;
-    wireplumber.extraConfig = {
-      main."50-subwoofer-fix" = ''
-        alsa_monitor.rules = {
-          {
-            matches = {
-              {
-                -- Matches the Ryzen HD Audio Controller by its device name
-                { "device.name", "equals", "alsa_card.pci-0000_10_00.6" }
-              }
-            },
-            apply_properties = {
-              ["audio.channels"] = 6,
-              ["audio.position"] = "FL,FR,LFE,FC,SL,SR"
-            }
-          }
-        }
-      '';
-    };
+
   };
+  # wireplumber.extraConfig = {
+  #     "50-subwoofer-fix" = {
+  #       "monitor.alsa.rules" = [
+  #         {
+  #           matches = [
+  #             {
+  #               "device.name" = "alsa_card.pci-0000_10_00.6";
+  #             }
+  #           ];
+  #           actions = {
+  #             update-props = {
+  #               "audio.channels" = 6;
+  #               "audio.position" = "FL,FR,LFE,FC,SL,SR";
+  #             };
+  #           };
+  #         }
+  #       ];
+  #     };
+  #   };
 }
