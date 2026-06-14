@@ -41,7 +41,7 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-partuuid/0950b473-ea3d-43f1-9814-26bc3263b8e4";
+    device = "/dev/disk/by-partuuid/83fd02c3-bb29-442f-abe9-13d9e3ca1a20";
     fsType = "vfat";
     options = [
       "fmask=0077"
