@@ -5,7 +5,8 @@
     "${inputs.self}/nixos-shared/modules/hyprland/home.nix"
   ];
 
-  modules.hyprland.enableVideoWallpaper = true;
+  modules.hyprland.enableWallpaperEngine = true;
+  modules.hyprland.wallpaperEngineId = "1081733658";
 
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
     # PC monitor configuration (simplified for debugging)

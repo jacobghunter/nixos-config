@@ -55,10 +55,33 @@ in
       default = false;
       description = "Whether to enable video wallpaper (mpvpaper).";
     };
+    enableWallpaperEngine = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to enable Wallpaper Engine (linux-wallpaperengine).";
+    };
+    wallpaperEngineId = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "The Steam Workshop ID of the Wallpaper Engine wallpaper to run.";
+    };
+    wallpaperEngineMap = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = {};
+      description = "Map of monitor names to Wallpaper Engine IDs (takes precedence over wallpaperEngineId).";
+    };
+    wallpaperEngineFps = lib.mkOption {
+      type = lib.types.int;
+      default = 60;
+      description = "Max frame rate for Wallpaper Engine.";
+    };
   };
 
   imports = [
     "${inputs.self}/nixos-shared/modules/hyprland/ags.nix"
+    ./wallpaper.nix
+    ./workspaces.nix
+    ./menus.nix
   ];
 
   config = {
@@ -83,6 +106,8 @@ in
     tofi
     awww
     mpvpaper
+    linux-wallpaperengine
+    jq
     wlogout
     grimblast
     hyprpicker
@@ -115,157 +140,7 @@ in
     };
   };
 
-  # 0. Scripts
-  xdg.configFile."hypr/scripts/toggle_special.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      JQ=${pkgs.jq}/bin/jq
-      HYPRCTL=${config.wayland.windowManager.hyprland.package}/bin/hyprctl
-
-      # Get current window info
-      WINDOW_INFO=$($HYPRCTL activewindow -j)
-      WORKSPACE=$(echo "$WINDOW_INFO" | $JQ -r '.workspace.name')
-
-      if [ "$WORKSPACE" == "special:magic" ]; then
-          # Move OUT to the active workspace of the current monitor
-          MONITOR_ID=$(echo "$WINDOW_INFO" | $JQ -r '.monitor')
-          TARGET=$( $HYPRCTL monitors -j | $JQ -r --argjson m "$MONITOR_ID" '.[] | select(.id == $m) | .activeWorkspace.name' )
-          $HYPRCTL dispatch movetoworkspace "name:$TARGET"
-      else
-          # Move IN to special workspace
-          $HYPRCTL dispatch movetoworkspace "special:magic"
-      fi
-    '';
-    executable = true;
-  };
-
-  xdg.configFile."hypr/scripts/toggle_workspace_special.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      set -euo pipefail
-
-      ACTION="''${1:-toggle}"
-      JQ="${pkgs.jq}/bin/jq"
-      HYPRCTL="${config.wayland.windowManager.hyprland.package}/bin/hyprctl"
-
-      # Get active workspace info
-      ACTIVE_WORKSPACE=$($HYPRCTL activeworkspace -j | $JQ -r '.name')
-      MONITOR_ID=$($HYPRCTL activeworkspace -j | $JQ -r '.monitorID')
-
-      move_to_special() {
-          if [[ "$ACTIVE_WORKSPACE" == special:* ]]; then
-              return
-          fi
-          WINDOW_ADDRESSES=$($HYPRCTL clients -j | $JQ -r --arg ws "$ACTIVE_WORKSPACE" '.[] | select(.workspace.name == $ws) | .address')
-          for addr in $WINDOW_ADDRESSES; do
-              $HYPRCTL dispatch movetoworkspacesilent "special:magic,address:$addr"
-          done
-          # Open the special workspace to follow the windows
-          $HYPRCTL dispatch togglespecialworkspace magic
-      }
-
-      move_from_special() {
-          local was_in_special=false
-          if [[ "$ACTIVE_WORKSPACE" == special:* ]]; then
-              was_in_special=true
-              TARGET_WORKSPACE=$($HYPRCTL monitors -j | $JQ -r --argjson m "$MONITOR_ID" '.[] | select(.id == $m) | .activeWorkspace.name')
-          else
-              TARGET_WORKSPACE="$ACTIVE_WORKSPACE"
-          fi
-          WINDOW_ADDRESSES=$($HYPRCTL clients -j | $JQ -r '.[] | select(.workspace.name == "special:magic") | .address')
-          for addr in $WINDOW_ADDRESSES; do
-              $HYPRCTL dispatch movetoworkspacesilent "$TARGET_WORKSPACE,address:$addr"
-          done
-          # If we were inside the special workspace, close it to return to the normal workspace
-          if [ "$was_in_special" = true ]; then
-              $HYPRCTL dispatch togglespecialworkspace magic
-          fi
-      }
-
-      if [ "$ACTION" = "to" ]; then
-          move_to_special
-      elif [ "$ACTION" = "from" ]; then
-          move_from_special
-      else
-          if [[ "$ACTIVE_WORKSPACE" == special:magic ]]; then
-              move_from_special
-          else
-              WINDOW_COUNT=$($HYPRCTL clients -j | $JQ -r --arg ws "$ACTIVE_WORKSPACE" '[.[] | select(.workspace.name == $ws)] | length')
-              if [ "$WINDOW_COUNT" -gt 0 ]; then
-                  move_to_special
-              else
-                  move_from_special
-              fi
-          fi
-      fi
-    '';
-    executable = true;
-  };
-
-  xdg.configFile."hypr/scripts/power_monitor.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-
-      # Paths injected from nix
-      STATIC_WALLPAPER="${staticWallpaper}"
-      VIDEO_WALLPAPER="${videoWallpaper}"
-
-      # Function to set static wallpaper
-      set_static() {
-          if pgrep "mpvpaper" > /dev/null; then
-              killall mpvpaper
-          fi
-          # Ensure awww is running
-          if ! pgrep "awww-daemon" > /dev/null; then
-              awww-daemon &
-              sleep 0.5
-          fi
-          awww img "$STATIC_WALLPAPER" --transition-type none
-      }
-
-      # Function to set video wallpaper
-      set_video() {
-          ${if cfg.enableVideoWallpaper then ''
-              if ! pgrep "mpvpaper" > /dev/null; then
-                  killall awww-daemon 2>/dev/null
-                  mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
-              fi
-          '' else ''
-              set_static
-          ''}
-      }
-
-      # Check power state function
-      check_power() {
-          # Common names are AC, AC0, ADP0, ADP1. We'll search for one starting with A.
-          AC_SUPPLY=$(ls /sys/class/power_supply/ | grep -E "^(AC|ADP)" | head -n 1)
-
-          if [ -z "$AC_SUPPLY" ]; then
-              set_video
-              return
-          fi
-
-          STATUS=$(cat /sys/class/power_supply/$AC_SUPPLY/online)
-
-          if [ "$STATUS" = "1" ]; then
-              set_video
-          else
-              set_static
-          fi
-      }
-
-      # Initial check
-      check_power
-
-      # Event loop using upower
-      upower --monitor | while read -r line; do
-          # We only care if the line-power changed or battery state changed significantly
-          # But simpler to just re-check on any upower event.
-          check_power
-      done
-    '';
-    executable = true;
-  };
+  # Scripts are now factored out and imported via ./workspaces.nix and ./wallpaper.nix
 
   xdg.configFile."jgmenu/jgmenurc".text = ''
     tint2_look = 0
@@ -291,37 +166,7 @@ in
     sub_hover_action = 1
   '';
 
-  xdg.configFile."hypr/scripts/wifi_jgmenu.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-
-      # Generate menu content
-      {
-          echo "<b>Wi-Fi Networks</b>,^sep()"
-          
-          # Use cached results (remove --rescan yes) for instant rendering
-          nmcli -t -f SSID,SECURITY,BARS,ACTIVE device wifi list | awk -F: '!seen[$1]++' | while IFS=: read -r ssid security bars active; do
-              if [[ -z "$ssid" ]]; then continue; fi
-              
-              display_text="$ssid"
-              if [[ "$active" == "yes" ]]; then
-                  display_text="<b>* $ssid</b>"
-              fi
-              
-              # Escape quotes in SSID for the command
-              safe_ssid=$(echo "$ssid" | sed 's/"/\\"/g')
-              
-              # jgmenu format: Label, command
-              echo "$display_text  <small>($bars)</small>,nmcli device wifi connect \"$safe_ssid\" && notify-send \"Connected to $safe_ssid\""
-          done
-
-          echo "^sep()"
-          echo "  Rescan Networks,notify-send 'Scanning...' && nmcli device wifi list --rescan yes && notify-send 'Scan Complete' 'Re-open menu to see new networks'"
-          echo "Open Connection Editor,nm-connection-editor"
-      } | jgmenu --simple --at-pointer
-    '';
-    executable = true;
-  };
+  # wifi_jgmenu.sh script is now factored out and imported via ./menus.nix
 
   # 1. Generate Hyprland Variables
   xdg.configFile."hypr/variables.conf".text = ''
