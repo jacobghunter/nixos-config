@@ -155,6 +155,13 @@ in
       };
     };
 
+    systemd.user.services.wayle = {
+      Unit = {
+        After = [ "pipewire.service" "pipewire-pulse.service" "wireplumber.service" ];
+        Wants = [ "pipewire.service" "pipewire-pulse.service" "wireplumber.service" ];
+      };
+    };
+
     # Autohide script configuration
     xdg.configFile."hypr/scripts/wayle_autohide.sh" = lib.mkIf autohide {
       text = ''
