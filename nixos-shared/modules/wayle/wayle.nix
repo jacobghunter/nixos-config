@@ -48,6 +48,7 @@ in
                   ];
                   name = "meta";
                 }
+                "media"
               ];
               monitor = "*";
               right = [
@@ -68,7 +69,9 @@ in
                 {
                   modules = [
                     "systray"
-                  ] ++ lib.optional cfg.showBattery "battery" ++ [
+                  ]
+                  ++ lib.optional cfg.showBattery "battery"
+                  ++ [
                     "dashboard"
                   ];
                   name = "sys";
@@ -157,8 +160,16 @@ in
 
     systemd.user.services.wayle = {
       Unit = {
-        After = [ "pipewire.service" "pipewire-pulse.service" "wireplumber.service" ];
-        Wants = [ "pipewire.service" "pipewire-pulse.service" "wireplumber.service" ];
+        After = [
+          "pipewire.service"
+          "pipewire-pulse.service"
+          "wireplumber.service"
+        ];
+        Wants = [
+          "pipewire.service"
+          "pipewire-pulse.service"
+          "wireplumber.service"
+        ];
       };
     };
 
