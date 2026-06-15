@@ -2,6 +2,7 @@
   pkgs,
   config,
   inputs,
+  lib,
   ...
 }:
 # battery format without percentage number in icon
@@ -44,11 +45,23 @@ let
   # Wallpapers
   staticWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.png";
   videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
+
+  cfg = config.modules.hyprland;
 in
 {
+  options.modules.hyprland = {
+    enableVideoWallpaper = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to enable video wallpaper (mpvpaper).";
+    };
+  };
+
   imports = [
     "${inputs.self}/nixos-shared/modules/hyprland/ags.nix"
   ];
+
+  config = {
 
   modules.kitty.enable = true;
 
@@ -212,12 +225,14 @@ in
 
       # Function to set video wallpaper
       set_video() {
-          # Video wallpaper disabled by user request (performance)
-          # if ! pgrep "mpvpaper" > /dev/null; then
-          #     killall awww-daemon 2>/dev/null
-          #     mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
-          # fi
-          set_static
+          ${if cfg.enableVideoWallpaper then ''
+              if ! pgrep "mpvpaper" > /dev/null; then
+                  killall awww-daemon 2>/dev/null
+                  mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
+              fi
+          '' else ''
+              set_static
+          ''}
       }
 
       # Check power state function
@@ -226,7 +241,7 @@ in
           AC_SUPPLY=$(ls /sys/class/power_supply/ | grep -E "^(AC|ADP)" | head -n 1)
 
           if [ -z "$AC_SUPPLY" ]; then
-              set_static
+              set_video
               return
           fi
 
@@ -611,5 +626,6 @@ in
         }
       ];
     };
+  };
   };
 }
