@@ -11,20 +11,19 @@
   #   trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
   # };
 
-  services.displayManager.sddm = {
+  services.greetd = {
     enable = true;
-    package = pkgs.kdePackages.sddm;
-    wayland.enable = false;
-    theme = "sddm-astronaut-theme";
-    extraPackages = with pkgs; [
-      sddm-astronaut
-      kdePackages.qtmultimedia
-      kdePackages.qtsvg
-      kdePackages.qt5compat
-    ];
+    settings = {
+      initial_session = {
+        command = "${pkgs.hyprland}/bin/Hyprland";
+        user = "jacob";
+      };
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
+        user = "greeter";
+      };
+    };
   };
-
-  services.displayManager.defaultSession = "hyprland";
 
   programs.hyprland = {
     enable = true;

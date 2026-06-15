@@ -61,6 +61,24 @@
 
   services.easyeffects.enable = true;
 
+  xdg.configFile."wireplumber/wireplumber.conf.d/51-set-profile.conf".text = ''
+    monitor.alsa.rules = [
+      {
+        matches = [
+          {
+            device.name = "alsa_card.usb-Samson_Technologies_Samson_Q2U_Microphone-00"
+          }
+        ]
+        actions = {
+          update-props = {
+            device.profile = "output:analog-stereo+input:analog-stereo"
+          }
+        }
+      }
+    ]
+  '';
+
+
 
   # --- DEFAULT TO FIREFOX ---
   xdg.mimeApps = {
