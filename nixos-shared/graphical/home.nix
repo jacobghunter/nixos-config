@@ -59,6 +59,9 @@
     ];
   };
 
+  services.easyeffects.enable = true;
+
+
   # --- DEFAULT TO FIREFOX ---
   xdg.mimeApps = {
     enable = true;

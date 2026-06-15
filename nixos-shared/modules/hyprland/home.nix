@@ -126,6 +126,69 @@ in
     executable = true;
   };
 
+  xdg.configFile."hypr/scripts/toggle_workspace_special.sh" = {
+    text = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      ACTION="''${1:-toggle}"
+      JQ="${pkgs.jq}/bin/jq"
+      HYPRCTL="${config.wayland.windowManager.hyprland.package}/bin/hyprctl"
+
+      # Get active workspace info
+      ACTIVE_WORKSPACE=$($HYPRCTL activeworkspace -j | $JQ -r '.name')
+      MONITOR_ID=$($HYPRCTL activeworkspace -j | $JQ -r '.monitorID')
+
+      move_to_special() {
+          if [[ "$ACTIVE_WORKSPACE" == special:* ]]; then
+              return
+          fi
+          WINDOW_ADDRESSES=$($HYPRCTL clients -j | $JQ -r --arg ws "$ACTIVE_WORKSPACE" '.[] | select(.workspace.name == $ws) | .address')
+          for addr in $WINDOW_ADDRESSES; do
+              $HYPRCTL dispatch movetoworkspacesilent "special:magic,address:$addr"
+          done
+          # Open the special workspace to follow the windows
+          $HYPRCTL dispatch togglespecialworkspace magic
+      }
+
+      move_from_special() {
+          local was_in_special=false
+          if [[ "$ACTIVE_WORKSPACE" == special:* ]]; then
+              was_in_special=true
+              TARGET_WORKSPACE=$($HYPRCTL monitors -j | $JQ -r --argjson m "$MONITOR_ID" '.[] | select(.id == $m) | .activeWorkspace.name')
+          else
+              TARGET_WORKSPACE="$ACTIVE_WORKSPACE"
+          fi
+          WINDOW_ADDRESSES=$($HYPRCTL clients -j | $JQ -r '.[] | select(.workspace.name == "special:magic") | .address')
+          for addr in $WINDOW_ADDRESSES; do
+              $HYPRCTL dispatch movetoworkspacesilent "$TARGET_WORKSPACE,address:$addr"
+          done
+          # If we were inside the special workspace, close it to return to the normal workspace
+          if [ "$was_in_special" = true ]; then
+              $HYPRCTL dispatch togglespecialworkspace magic
+          fi
+      }
+
+      if [ "$ACTION" = "to" ]; then
+          move_to_special
+      elif [ "$ACTION" = "from" ]; then
+          move_from_special
+      else
+          if [[ "$ACTIVE_WORKSPACE" == special:magic ]]; then
+              move_from_special
+          else
+              WINDOW_COUNT=$($HYPRCTL clients -j | $JQ -r --arg ws "$ACTIVE_WORKSPACE" '[.[] | select(.workspace.name == $ws)] | length')
+              if [ "$WINDOW_COUNT" -gt 0 ]; then
+                  move_to_special
+              else
+                  move_from_special
+              fi
+          fi
+      fi
+    '';
+    executable = true;
+  };
+
   xdg.configFile."hypr/scripts/power_monitor.sh" = {
     text = ''
       #!/usr/bin/env bash
