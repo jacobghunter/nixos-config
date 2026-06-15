@@ -68,6 +68,11 @@
     wireplumber.enable = true;
 
   };
+
+  # Force AMDGPU to high performance level to prevent mixed-refresh-rate flickering
+  services.udev.extraRules = ''
+    ACTION=="add|change", SUBSYSTEM=="drm", DRIVERS=="amdgpu", ATTR{device/power_dpm_force_performance_level}="high"
+  '';
   # wireplumber.extraConfig = {
   #     "50-subwoofer-fix" = {
   #       "monitor.alsa.rules" = [
