@@ -7,7 +7,7 @@
 
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
     # PC monitor configuration (simplified for debugging)
-    monitor=HDMI-A-1,2560x1440@59.97300,0x0,1
+    monitor=HDMI-A-1,2560x1440@59.95,0x0,1
 
     monitorv2 {
         output = DP-1
