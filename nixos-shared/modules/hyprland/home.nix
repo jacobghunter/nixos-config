@@ -44,17 +44,17 @@ let
 
   # Wallpapers
   staticWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.png";
-  videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
+  # videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
 
   cfg = config.modules.hyprland;
 in
 {
   options.modules.hyprland = {
-    enableVideoWallpaper = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to enable video wallpaper (mpvpaper).";
-    };
+    # enableVideoWallpaper = lib.mkOption {
+    #   type = lib.types.bool;
+    #   default = false;
+    #   description = "Whether to enable video wallpaper (mpvpaper).";
+    # };
     enableWallpaperEngine = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -105,7 +105,7 @@ in
     jgmenu
     tofi
     awww
-    mpvpaper
+    # mpvpaper
     linux-wallpaperengine
     jq
     wlogout

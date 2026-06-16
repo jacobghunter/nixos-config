@@ -6,7 +6,10 @@
   ];
 
   modules.hyprland.enableWallpaperEngine = true;
-  modules.hyprland.wallpaperEngineId = "1081733658";
+  modules.hyprland.wallpaperEngineMap = {
+    "DP-1" = "2557395646"; # First monitor
+    "HDMI-A-1" = "2286109162"; # Second monitor
+  };
 
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
     # PC monitor configuration (simplified for debugging)

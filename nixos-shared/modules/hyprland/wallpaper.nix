@@ -3,7 +3,7 @@
 let
   cfg = config.modules.hyprland;
   staticWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.png";
-  videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
+  # videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
 in
 {
   home.packages = [
@@ -17,14 +17,13 @@ in
 
       # Paths injected from nix
       STATIC_WALLPAPER="${staticWallpaper}"
-      VIDEO_WALLPAPER="${videoWallpaper}"
       WORKSHOP_DIR="$HOME/.steam/steam/steamapps/workshop/content/431960"
 
       # Function to set static wallpaper
       set_static() {
-          if pgrep "mpvpaper" > /dev/null; then
-              killall mpvpaper
-          fi
+          # if pgrep "mpvpaper" > /dev/null; then
+          #     killall mpvpaper
+          # fi
           if pgrep "linux-wallpaperengine" > /dev/null; then
               killall linux-wallpaperengine
           fi
@@ -41,9 +40,9 @@ in
           ${if cfg.enableWallpaperEngine then ''
               if [ -d "$WORKSHOP_DIR" ]; then
                   if ! pgrep "linux-wallpaperengine" > /dev/null; then
-                      killall awww-daemon mpvpaper 2>/dev/null
+                      killall awww-daemon 2>/dev/null
                       ${if cfg.wallpaperEngineMap != {} then ''
-                          linux-wallpaperengine --fps ${toString cfg.wallpaperEngineFps} --scaling stretch ${
+                          linux-wallpaperengine --silent --fps ${toString cfg.wallpaperEngineFps} --scaling stretch ${
                             lib.concatStringsSep " " (
                               lib.mapAttrsToList (monitor: id: "--screen-root ${monitor} --bg \"$WORKSHOP_DIR/${id}\"") cfg.wallpaperEngineMap
                             )
@@ -54,7 +53,7 @@ in
                               for monitor in $(hyprctl monitors -j | jq -r '.[] | .name'); do
                                   ARGS="$ARGS --screen-root $monitor --bg $WORKSHOP_DIR/${cfg.wallpaperEngineId}"
                               done
-                              linux-wallpaperengine --fps ${toString cfg.wallpaperEngineFps} --scaling stretch $ARGS > /dev/null 2>&1 &
+                              linux-wallpaperengine --silent --fps ${toString cfg.wallpaperEngineFps} --scaling stretch $ARGS > /dev/null 2>&1 &
                           else
                               set_static
                           fi
@@ -62,11 +61,6 @@ in
                   fi
               else
                   set_static
-              fi
-          '' else if cfg.enableVideoWallpaper then ''
-              if ! pgrep "mpvpaper" > /dev/null; then
-                  killall awww-daemon linux-wallpaperengine 2>/dev/null
-                  mpvpaper -o "no-audio loop" '*' "$VIDEO_WALLPAPER" > /dev/null 2>&1 &
               fi
           '' else ''
               set_static

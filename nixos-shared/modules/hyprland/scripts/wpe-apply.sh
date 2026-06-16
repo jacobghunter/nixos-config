@@ -25,12 +25,12 @@ if [ -n "$monitor_num" ]; then
     echo "Applying wallpaper $id to monitor $monitor_name (Monitor $monitor_num)..."
     pkill -f "linux-wallpaperengine --screen-root $monitor_name" 2>/dev/null
     sleep 0.2
-    linux-wallpaperengine --screen-root "$monitor_name" --scaling stretch "$WORKSHOP_DIR/$id" > /dev/null 2>&1 &
+    linux-wallpaperengine --silent --screen-root "$monitor_name" --scaling stretch "$WORKSHOP_DIR/$id" > /dev/null 2>&1 &
 else
     echo "Applying wallpaper $id to all monitors..."
     killall linux-wallpaperengine 2>/dev/null
     sleep 0.3
     for monitor in $(hyprctl monitors -j | jq -r '.[] | .name'); do
-        linux-wallpaperengine --screen-root "$monitor" --scaling stretch "$WORKSHOP_DIR/$id" > /dev/null 2>&1 &
+        linux-wallpaperengine --silent --screen-root "$monitor" --scaling stretch "$WORKSHOP_DIR/$id" > /dev/null 2>&1 &
     done
 fi
