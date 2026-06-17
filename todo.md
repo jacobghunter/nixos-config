@@ -5,3 +5,8 @@
 - set up server as binary cache
   - have laptop send things to be built there?
   - let PC build its own stuff
+
+# PC
+
+- disable some audio devices
+- compiling vulkan shaders on all games

@@ -22,8 +22,8 @@
         scale = 1
         bitdepth = 10
         cm = hdr
-        sdrbrightness = 1.8
-        sdrsaturation = 1.25
+        sdrbrightness = 2
+        sdrsaturation = 1.1
         sdr_min_luminance = 0.005
         vrr = 2
     }
