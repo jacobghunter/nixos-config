@@ -102,7 +102,6 @@
     wget
     git
     htop
-    btop
     tree
     usbutils
     util-linux

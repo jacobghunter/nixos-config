@@ -2,17 +2,27 @@
   config,
   pkgs,
   inputs,
+  lib,
   ...
 }:
 
 {
   imports = [ "${inputs.self}/nixos-shared/neovim.nix" ];
 
-  home.username = "jacob";
-  home.homeDirectory = "/home/jacob";
-  home.stateVersion = "24.11";
+  options = {
+    modules.btop.package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.btop;
+      description = "The btop package to install.";
+    };
+  };
 
-  programs.home-manager.enable = true;
+  config = {
+    home.username = "jacob";
+    home.homeDirectory = "/home/jacob";
+    home.stateVersion = "24.11";
+
+    programs.home-manager.enable = true;
 
   home.sessionVariables = {
     EDITOR = "code --wait";
@@ -188,7 +198,7 @@
     # find
     fd
     # top
-    btop
+    config.modules.btop.package
     # cat
     bat
     # tmux
@@ -203,4 +213,5 @@
     unzip
     tree
   ];
+};
 }
