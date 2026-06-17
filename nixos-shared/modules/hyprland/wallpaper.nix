@@ -98,4 +98,9 @@ in
     '';
     executable = true;
   };
+
+  xdg.configFile."hypr/scripts/doom-eternal-wrapper.sh" = {
+    source = ./scripts/doom-eternal-wrapper.sh;
+    executable = true;
+  };
 }
