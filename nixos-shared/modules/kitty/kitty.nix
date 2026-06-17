@@ -60,6 +60,7 @@ in
         italic_font = "auto";
         bold_italic_font = "auto";
         disable_ligatures = "always";
+        enabled_layouts = "tall,stack";
 
         # Theming based on options
         foreground = "#${cfg.colors.text}";
