@@ -9,6 +9,19 @@
   # Enable ZSH
   programs.zsh.enable = true;
 
+  programs.gamemode.enable = true;
+
+  services.ananicy = {
+    enable = true;
+    package = pkgs.ananicy-cpp;
+    rulesProvider = pkgs.ananicy-rules-cachyos;
+  };
+
+  # CachyOS-inspired performance and stability tweaks
+  zramSwap.enable = true;
+  services.dbus.implementation = "broker";
+  services.irqbalance.enable = true;
+
   services.avahi = {
     enable = true;
     nssmdns4 = true;
