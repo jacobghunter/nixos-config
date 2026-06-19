@@ -78,8 +78,6 @@
     ]
   '';
 
-
-
   # --- DEFAULT TO FIREFOX ---
   xdg.mimeApps = {
     enable = true;

@@ -62,6 +62,12 @@ in
         disable_ligatures = "always";
         enabled_layouts = "tall,stack";
 
+        # Resizing settings for hyprland
+        resize_debounce_time = 0;
+        placement_strategy = "top-left";
+        resize_draw_strategy = "scale";
+        linux_display_server = "wayland";
+
         # Theming based on options
         foreground = "#${cfg.colors.text}";
         background = "#${cfg.colors.background}";
