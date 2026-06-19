@@ -115,6 +115,11 @@
       bindkey '\e[207~' insert-nth-recent-command
       bindkey '\e[208~' insert-nth-recent-command
       bindkey '\e[209~' insert-nth-recent-command
+
+      # Wrapper for mangoplot with python dependencies
+      mangoplot() {
+        nix-shell -p "python3.withPackages (ps: with ps; [ numpy matplotlib ])" --run "mangoplot $*"
+      }
     '';
   };
 

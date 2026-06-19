@@ -16,6 +16,20 @@
   programs.mangohud = {
     enable = true;
     enableSessionWide = true;
+    settings = {
+      legacy_layout = false;
+      cpu_stats = true;
+      gpu_stats = true;
+      ram = true;
+      vram = true;
+      fps = true;
+      frame_timing = true;
+      frametime = true;
+      
+      # Logging hotkey and directory
+      toggle_logging = "Shift_L+F2";
+      output_folder = "/home/jacob/.local/share/mangohud";
+    };
   };
 
   xdg.configFile."wireplumber/wireplumber.conf.d/52-disable-devices.conf".text = ''

@@ -4,8 +4,16 @@
   # Zen Kernel for low-latency desktop/gaming scheduling
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  # Enable GPU recovery for AMD driver hangs
-  boot.kernelParams = [ "amdgpu.gpu_recovery=1" ];
+  # Enable GPU recovery for AMD driver hangs and enable active AMD P-State driver
+  boot.kernelParams = [
+    "amdgpu.gpu_recovery=1"
+    "amd_pstate=active"
+  ];
+
+  # Disable CFS autogroup scheduler to prevent game thread throttling
+  boot.kernel.sysctl = {
+    "kernel.sched_autogroup_enabled" = 0;
+  };
 
   # Force AMDGPU to high performance level to prevent mixed-refresh-rate flickering
   services.udev.extraRules = ''
