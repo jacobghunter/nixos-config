@@ -13,6 +13,19 @@
     nvtopPackages.amd
   ];
 
+  programs.mangohud = {
+    enable = true;
+    enableSessionCommands = true;
+  };
+
+  programs.gamemode.enable = true;
+
+  services.ananicy = {
+    enable = true;
+    package = pkgs.ananicy-cpp;
+    rulesProvider = pkgs.ananicy-rules-cachyos;
+  };
+
   xdg.configFile."wireplumber/wireplumber.conf.d/52-disable-devices.conf".text = ''
     monitor.alsa.rules = [
       # 1. Disable Samson Q2U headphone/output node (leaves mic input active)

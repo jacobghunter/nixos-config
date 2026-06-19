@@ -2,6 +2,7 @@
 
 {
   # --- BOOT & HARDWARE ---
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.loader.systemd-boot.enable = true;
   boot.loader.grub.enable = false;
   boot.loader.systemd-boot.editor = false;
@@ -14,8 +15,15 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 10;
 
-  # Pass audio codec model to the kernel for Realtek ALC897
-  boot.kernelParams = [ "snd_hda_intel.model=auto" ];
+  # Pass audio codec model to the kernel for Realtek ALC897 + gaming tweaks
+  boot.kernelParams = [
+    "snd_hda_intel.model=auto"
+    "amdgpu.gpu_recovery=1"
+  ];
+
+  boot.kernel.sysctl = {
+    "vm.max_map_count" = 2147483642;
+  };
 
   time.hardwareClockInLocalTime = true;
 
@@ -73,6 +81,20 @@
   services.pipewire = {
     jack.enable = true;
     wireplumber.enable = true;
+    extraConfig.pipewire."92-low-latency" = {
+      "context.properties" = {
+        "default.clock.rate" = 48000;
+        "default.clock.quantum" = 512;
+        "default.clock.min-quantum" = 512;
+        "default.clock.max-quantum" = 512;
+      };
+    };
+  };
+
+  # SCX (sched-ext) userspace scheduler
+  services.scx = {
+    enable = true;
+    scheduler = "scx_lavd";
   };
 
   programs.gamescope = {
