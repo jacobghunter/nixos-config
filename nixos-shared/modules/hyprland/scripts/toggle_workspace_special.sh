@@ -11,7 +11,8 @@ move_to_special() {
     if [[ "$ACTIVE_WORKSPACE" == special:* ]]; then
         return
     fi
-    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r --arg ws "$ACTIVE_WORKSPACE" '.[] | select(.workspace.name == $ws) | .address')
+    # Sort windows spatially by Y-coordinate, then X-coordinate
+    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r --arg ws "$ACTIVE_WORKSPACE" '[.[] | select(.workspace.name == $ws)] | sort_by([.at[1], .at[0]]) | .[].address')
     for addr in $WINDOW_ADDRESSES; do
         hyprctl dispatch movetoworkspacesilent "special:magic,address:$addr"
     done
@@ -27,7 +28,8 @@ move_from_special() {
     else
         TARGET_WORKSPACE="$ACTIVE_WORKSPACE"
     fi
-    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r '.[] | select(.workspace.name == "special:magic") | .address')
+    # Sort windows spatially by Y-coordinate, then X-coordinate
+    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r '[.[] | select(.workspace.name == "special:magic")] | sort_by([.at[1], .at[0]]) | .[].address')
     for addr in $WINDOW_ADDRESSES; do
         hyprctl dispatch movetoworkspacesilent "$TARGET_WORKSPACE,address:$addr"
     done
