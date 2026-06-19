@@ -176,6 +176,11 @@
     enableZshIntegration = true;
   };
 
+  programs.nix-index = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   home.packages = with pkgs; [
     vim
 

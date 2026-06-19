@@ -37,9 +37,10 @@
   programs.steam = {
     enable = true;
     package = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [
-        gamescope
-      ];
+      extraPkgs =
+        pkgs: with pkgs; [
+          gamescope
+        ];
     };
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
@@ -82,23 +83,4 @@
   services.udev.extraRules = ''
     ACTION=="add|change", SUBSYSTEM=="drm", DRIVERS=="amdgpu", ATTR{device/power_dpm_force_performance_level}="high"
   '';
-  # wireplumber.extraConfig = {
-  #     "50-subwoofer-fix" = {
-  #       "monitor.alsa.rules" = [
-  #         {
-  #           matches = [
-  #             {
-  #               "device.name" = "alsa_card.pci-0000_10_00.6";
-  #             }
-  #           ];
-  #           actions = {
-  #             update-props = {
-  #               "audio.channels" = 6;
-  #               "audio.position" = "FL,FR,LFE,FC,SL,SR";
-  #             };
-  #           };
-  #         }
-  #       ];
-  #     };
-  #   };
 }
