@@ -6,7 +6,10 @@
 }:
 
 {
-  imports = [ "${inputs.self}/nixos-shared/home.nix" ];
+  imports = [
+    "${inputs.self}/nixos-shared/home.nix"
+    ./modules/firefox/firefox.nix
+  ];
 
   home.username = "jacob";
   home.homeDirectory = "/home/jacob";
@@ -18,7 +21,6 @@
 
   home.packages = with pkgs; [
     # Applications
-    firefox
     vscode
     brave
     discord

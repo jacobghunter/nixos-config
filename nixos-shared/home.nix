@@ -30,6 +30,7 @@
     DEFAULT_BROWSER = "firefox";
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
     PATH = "$HOME/.npm-global/bin:$PATH";
+    GTK_THEME = "Adwaita:dark"; # Force dark mode for GTK/Electron/Chrome applications
   };
 
   programs.zsh = {

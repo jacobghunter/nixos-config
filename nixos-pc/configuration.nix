@@ -25,6 +25,7 @@
   # Hardware Acceleration (Video)
   hardware.graphics = {
     enable = true;
+    enable32Bit = true; # Required for 32-bit game libraries and Steam Overlay
     extraPackages = with pkgs; [ intel-media-driver ];
   };
 
