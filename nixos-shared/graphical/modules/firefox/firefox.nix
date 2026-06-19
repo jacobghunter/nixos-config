@@ -40,11 +40,13 @@
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "ui.systemUsesDarkTheme" = 1; # Force dark mode for Firefox UI and pages
 
-        # Experimental HDR and Color Management on Wayland
-        "gfx.wayland.hdr" = true;
-        "gfx.color_management.hdr" = true;
+        # Experimental HDR and Color Management on Wayland (Commented out: colors are currently washed out)
+        # "gfx.wayland.hdr" = true;
+        # "gfx.color_management.hdr" = true;
+        # "gfx.color_management.mode" = 1;
+        # "gfx.color_management.enablev4" = true;
 
-        # Hardware video acceleration (VA-API) for efficient 10-bit video decoding
+        # Hardware video acceleration (VA-API) for efficient video decoding
         "media.ffmpeg.vaapi.enabled" = true;
       };
       search = {
