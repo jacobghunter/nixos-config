@@ -11,6 +11,9 @@
     "HDMI-A-1" = "2286109162"; # Second monitor
   };
 
+  modules.hyprland.idleTimeout = 600; # 10 minutes
+  modules.hyprland.dpmsTimeout = 900; # 15 minutes
+
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
     # PC monitor configuration (simplified for debugging)
     monitor=HDMI-A-1,2560x1440@59.95,0x0,1

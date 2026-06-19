@@ -79,6 +79,16 @@ in
       default = 60;
       description = "Max frame rate for Wallpaper Engine.";
     };
+    idleTimeout = lib.mkOption {
+      type = lib.types.int;
+      default = 150;
+      description = "Idle timeout in seconds before locking the screen.";
+    };
+    dpmsTimeout = lib.mkOption {
+      type = lib.types.int;
+      default = 300;
+      description = "Idle timeout in seconds before turning off the screen.";
+    };
   };
 
   imports = [
@@ -461,11 +471,11 @@ in
 
         listener = [
           {
-            timeout = 150;
+            timeout = cfg.idleTimeout;
             on-timeout = "hyprlock";
           }
           {
-            timeout = 300;
+            timeout = cfg.dpmsTimeout;
             on-timeout = "hyprctl dispatch dpms off";
             on-resume = "hyprctl dispatch dpms on && brightnessctl -r";
           }
