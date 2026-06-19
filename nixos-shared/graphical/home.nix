@@ -9,6 +9,7 @@
   imports = [
     "${inputs.self}/nixos-shared/home.nix"
     ./modules/firefox/firefox.nix
+    inputs.spicetify-nix.homeManagerModules.default
   ];
 
   home.username = "jacob";
@@ -32,7 +33,6 @@
     # Books
     calibre
 
-    spotify
     pkgs.mpv
     cava
     hyprsunset
@@ -95,4 +95,19 @@
       "application/vnd.adobe.pdf" = "firefox.desktop";
     };
   };
+
+  programs.spicetify =
+    let
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+    in
+    {
+      enable = true;
+      theme = spicePkgs.themes.starryNight;
+      colorScheme = "Base";
+    };
+  # {
+  #   enable = true;
+  #   theme = spicePkgs.themes.dribbblish;
+  #   colorScheme = "dracula";
+  # };
 }
