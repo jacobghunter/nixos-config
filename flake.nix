@@ -37,6 +37,11 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-gaming = {
+      url = "github:fufexan/nix-gaming";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -49,6 +54,7 @@
       nixos-wsl,
       lazyvim-starter,
       antigravity-cli,
+      nix-gaming,
       ...
     }@inputs:
     {
@@ -164,6 +170,8 @@
             ./nixos-shared/system.nix
             ./nixos-shared/graphical/configuration.nix
             ./nixos-shared/modules/hyprland/system.nix
+            inputs.nix-gaming.nixosModules.platformOptimizations
+            inputs.nix-gaming.nixosModules.pipewireLowLatency
 
             # Home Manager
             home-manager.nixosModules.home-manager
