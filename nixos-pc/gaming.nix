@@ -6,9 +6,11 @@
 
   # Enable GPU recovery for AMD driver hangs and enable active AMD P-State driver
   # (amdgpu.ppfeaturemask is commented out as it can cause instability on RDNA3 GPUs)
+  # (vsyscall=emulate is required for games like THE FINALS / Easy Anti-Cheat to run under Proton)
   boot.kernelParams = [
     "amdgpu.gpu_recovery=1"
     "amd_pstate=active"
+    "vsyscall=emulate"
     # "amdgpu.ppfeaturemask=0xffff7fff"
   ];
 
