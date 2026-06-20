@@ -51,6 +51,12 @@ let
   cursorPackage = pkgs.bibata-cursors;
 
   cfg = config.modules.hyprland;
+
+  hdrFixPlugin =
+    pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprland-fix-hdr-screenshare.nix"
+      {
+        hyprlandPackage = pkgs.hyprland;
+      };
 in
 {
   options.modules.hyprland = {
@@ -151,6 +157,10 @@ in
           "GTK_THEME,Adwaita:dark"
         ];
       };
+      plugins = [
+        hdrFixPlugin
+        # any plugins you already had
+      ];
     };
 
     # Scripts are now factored out and imported via ./workspaces.nix and ./wallpaper.nix
@@ -477,6 +487,10 @@ in
             timeout = cfg.dpmsTimeout;
             on-timeout = "hyprctl dispatch dpms off";
             on-resume = "hyprctl dispatch dpms on && brightnessctl -r";
+          }
+          {
+            timeout = cfg.dpmsTimeout + 900;
+            on-timeout = "systemctl suspend";
           }
         ];
       };

@@ -5,6 +5,10 @@
   - have laptop send things to be built there?
   - let PC build its own stuff
 
+# Shell
+
+- copy last command output?
+
 # Repo management
 
 - move all the shared/modules to shared/graphical/modules and put neovim in its own modules folder
@@ -15,6 +19,7 @@
 
 # PC
 
+- kitty split focus follows mouse
 - compiling vulkan shaders on all games
 - vim keys as arrows for hyprland?
 - wayle transparent background?

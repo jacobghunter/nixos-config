@@ -103,4 +103,19 @@ in
     source = ./scripts/doom-eternal-wrapper.sh;
     executable = true;
   };
+
+  systemd.user.services.power-monitor = {
+    Unit = {
+      Description = "Power Monitor Wallpaper Service";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${config.xdg.configHome}/hypr/scripts/power_monitor.sh";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
 }

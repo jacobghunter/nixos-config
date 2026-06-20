@@ -55,6 +55,9 @@ in
         size = 13;
       };
       settings = {
+        background_opacity = "0.5";
+        dynamic_background_opacity = "yes";
+
         auto_reload_config = -1;
         window_padding_width = 8;
         italic_font = "auto";
@@ -70,7 +73,8 @@ in
 
         # Theming based on options
         foreground = "#${cfg.colors.text}";
-        background = "#${cfg.colors.background}";
+        background = "#000000";
+        # background = "#${cfg.colors.background}";
         selection_foreground = "#${cfg.colors.background}";
         selection_background = "#${cfg.colors.primary}";
 
@@ -90,7 +94,8 @@ in
         active_tab_background = "#${cfg.colors.primary}";
         inactive_tab_foreground = "#${cfg.colors.text}";
         inactive_tab_background = "#${cfg.colors.dark}";
-        tab_bar_background = "#${cfg.colors.dark}";
+        tab_bar_background = "#000000";
+        # tab_bar_background = "#${cfg.colors.dark}";
         term = "xterm-256color";
       };
       keybindings = {

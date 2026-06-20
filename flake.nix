@@ -1,18 +1,27 @@
 {
   description = "Jacob's NixOS Monorepo";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-gaming.cachix.org"
+      "https://hyprland.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    hyprland.url = "github:hyprwm/Hyprland";
+    # Update this to point to master at some point, its this way to build the hdr plugin to fix screenshare/blur
+    hyprland.url = "github:hyprwm/Hyprland/v0.55.2";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
-    astal.url = "github:aylur/astal";
-    ags.url = "github:aylur/ags";
-    ags.inputs.astal.follows = "astal";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
