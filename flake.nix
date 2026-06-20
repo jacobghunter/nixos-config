@@ -62,7 +62,7 @@
         # LAPTOP CONFIG
         nixos-laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs self; };
           modules = [
             # Host-specific configurations
             ./nixos-laptop/configuration.nix
@@ -80,7 +80,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs self; };
               home-manager.backupFileExtension = "backup";
               home-manager.users.jacob = {
                 imports = [
@@ -99,7 +99,7 @@
         # SERVER CONFIG
         nixos-server = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs self; };
           modules = [
             # Host-specific configurations
             disko.nixosModules.disko
@@ -116,7 +116,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs self; };
               home-manager.users.jacob = {
                 imports = [
                   ./nixos-server/home.nix
@@ -130,7 +130,7 @@
         # WSL CONFIG
         nixos-wsl = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs self; };
           modules = [
             # Host-specific configurations
             inputs.vscode-server.nixosModules.default
@@ -144,7 +144,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs self; };
               home-manager.users.jacob = {
                 imports = [
                   ./nixos-wsl/home.nix
@@ -159,7 +159,7 @@
         # PC CONFIG
         nixos-pc = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs self; };
           modules = [
             # Host-specific configurations
             ./nixos-pc/configuration.nix
@@ -178,7 +178,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs self; };
               home-manager.backupFileExtension = "backup";
               home-manager.users.jacob = {
                 imports = [
