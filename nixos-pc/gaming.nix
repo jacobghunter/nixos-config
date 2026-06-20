@@ -14,6 +14,13 @@
     # "amdgpu.ppfeaturemask=0xffff7fff"
   ];
 
+  environment.systemPackages = [
+    pkgs.protonup-qt
+  ];
+
+  # Enable low-latency PipeWire configuration from nix-gaming
+  services.pipewire.lowLatency.enable = true;
+
   # Force AMDGPU to high performance level to prevent mixed-refresh-rate flickering
   # services.udev.extraRules = ''
   #   ACTION=="add|change", SUBSYSTEM=="drm", DRIVERS=="amdgpu", ATTR{device/power_dpm_force_performance_level}="high"
