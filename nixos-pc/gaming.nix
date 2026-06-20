@@ -12,13 +12,6 @@
     # "amdgpu.ppfeaturemask=0xffff7fff"
   ];
 
-  environment.systemPackages = [
-    pkgs.lact
-  ];
-
-  systemd.packages = [ pkgs.lact ];
-  systemd.services.lactd.wantedBy = [ "multi-user.target" ];
-
   # Force AMDGPU to high performance level to prevent mixed-refresh-rate flickering
   # services.udev.extraRules = ''
   #   ACTION=="add|change", SUBSYSTEM=="drm", DRIVERS=="amdgpu", ATTR{device/power_dpm_force_performance_level}="high"
