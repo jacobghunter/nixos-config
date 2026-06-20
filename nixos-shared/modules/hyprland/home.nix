@@ -92,7 +92,6 @@ in
   };
 
   imports = [
-    "${inputs.self}/nixos-shared/modules/hyprland/ags.nix"
     ./wallpaper.nix
     ./workspaces.nix
     ./menus.nix
