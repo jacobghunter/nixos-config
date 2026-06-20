@@ -55,7 +55,7 @@ in
         size = 13;
       };
       settings = {
-        background_opacity = "0.5";
+        background_opacity = "0.0";
         dynamic_background_opacity = "yes";
 
         auto_reload_config = -1;
