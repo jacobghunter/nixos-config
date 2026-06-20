@@ -51,12 +51,6 @@
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
 
-  # Weylus / Streaming Ports (Must be system-level firewall)
-  programs.weylus = {
-    enable = true;
-    openFirewall = true;
-    users = [ "jacob" ];
-  };
   networking.firewall.allowedTCPPorts = [
     7236
     7250
