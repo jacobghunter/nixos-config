@@ -5,6 +5,10 @@
   - have laptop send things to be built there?
   - let PC build its own stuff
 
+# Repo management
+
+- move all the shared/modules to shared/graphical/modules and put neovim in its own modules folder
+
 # Apps
 
 - Ghostty? Resizes better than kitty
@@ -24,6 +28,7 @@
 - fix super+esc menu
 
 monitor:
+
 ```
 To match the brightness of an aging/dimming HDR OLED monitor ( DP-1 ) with a secondary SDR monitor ( HDMI-A-1 ), you want to use a combination of physical hardware
   adjustments on the SDR monitor and software SDR-to-HDR scaling on the OLED.
@@ -36,7 +41,7 @@ To match the brightness of an aging/dimming HDR OLED monitor ( DP-1 ) with a sec
   changing the monitor's physical hardware brightness controls will degrade the tone-mapping accuracy for games and videos.
   • SDR Monitor (HDMI-A-1): Treat this as your physical baseline. You will adjust this monitor's hardware brightness (via its OSD buttons or  ddcutil ) to match the
   comfortable screen luminance of your OLED.
-  • Hyprland  sdrbrightness : This multiplier controls how bright standard SDR content (like browsers, terminals, text editors) is rendered inside the HDR space on  
+  • Hyprland  sdrbrightness : This multiplier controls how bright standard SDR content (like browsers, terminals, text editors) is rendered inside the HDR space on
   DP-1 . You tweak this so a white browser window on the OLED matches the same white window on the SDR monitor.
   ──────
   ### 2. Tweak Steps
