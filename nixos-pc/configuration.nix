@@ -25,13 +25,12 @@
   time.hardwareClockInLocalTime = true;
 
   services.xserver.videoDrivers = [ "amdgpu" ];
-  boot.initrd.kernelModules = [ "i915" ];
 
   # Hardware Acceleration (Video)
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # Required for 32-bit game libraries and Steam Overlay
-    extraPackages = with pkgs; [ intel-media-driver ];
+    extraPackages = with pkgs; [ libva-vdpau-driver ];
   };
 
   # --- NETWORKING ---
@@ -39,7 +38,6 @@
   networking.networkmanager.enable = true;
   networking.enableIPv6 = false;
 
-  # Steam
   programs.steam = {
     enable = true;
     package = pkgs.steam.override {
