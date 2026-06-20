@@ -4,11 +4,12 @@
   # Zen Kernel for low-latency desktop/gaming scheduling
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  # Enable GPU recovery for AMD driver hangs, enable active AMD P-State driver, and allow overclocking
+  # Enable GPU recovery for AMD driver hangs and enable active AMD P-State driver
+  # (amdgpu.ppfeaturemask is commented out as it can cause instability on RDNA3 GPUs)
   boot.kernelParams = [
     "amdgpu.gpu_recovery=1"
     "amd_pstate=active"
-    "amdgpu.ppfeaturemask=0xffff7fff"
+    # "amdgpu.ppfeaturemask=0xffff7fff"
   ];
 
   environment.systemPackages = [
@@ -16,7 +17,7 @@
   ];
 
   systemd.packages = [ pkgs.lact ];
-  systemd.services.lact.wantedBy = [ "multi-user.target" ];
+  systemd.services.lactd.wantedBy = [ "multi-user.target" ];
 
   # Force AMDGPU to high performance level to prevent mixed-refresh-rate flickering
   # services.udev.extraRules = ''
