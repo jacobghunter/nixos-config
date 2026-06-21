@@ -56,6 +56,8 @@
 
     antigravity-cli.url = "github:xsen/antigravity-cli-nix";
 
+    nixcord.url = "github:FlameFlag/nixcord";
+
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";

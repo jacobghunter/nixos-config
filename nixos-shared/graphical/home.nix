@@ -9,6 +9,7 @@
   imports = [
     "${inputs.self}/nixos-shared/home.nix"
     ./modules/firefox/firefox.nix
+    inputs.nixcord.homeModules.nixcord
     inputs.spicetify-nix.homeManagerModules.default
   ];
 
@@ -24,7 +25,6 @@
     # Applications
     vscode
     brave
-    discord
     obsidian
     bitwarden-desktop
     remmina
@@ -93,6 +93,37 @@
       "application/x-extension-pdf" = "firefox.desktop";
       "application/x-pdf" = "firefox.desktop";
       "application/vnd.adobe.pdf" = "firefox.desktop";
+    };
+  };
+
+  programs.nixcord = {
+    enable = true;
+    discord = {
+      vencord.enable = false;
+      equicord.enable = true;
+    };
+    config = {
+      useQuickCss = true;
+      themeLinks = [
+        "https://discordstyles.github.io/DarkMatter/DarkMatter.theme.css"
+      ];
+      plugins = {
+        # QoL
+        fixSpotifyEmbeds.enable = true;
+        messageLogger.enable = true;
+        showHiddenChannels.enable = true;
+        musicControls.enable = true;
+        silentTyping.enable = true;
+        betterRoleContext.enable = true;
+        copyEmojiMarkdown.enable = true;
+        permissionsViewer.enable = true;
+        platformIndicators.enable = true;
+        previewMessage.enable = true;
+        readAllNotificationsButton.enable = true;
+        reverseImageSearch.enable = true;
+        translate.enable = true;
+        viewIcons.enable = true;
+      };
     };
   };
 

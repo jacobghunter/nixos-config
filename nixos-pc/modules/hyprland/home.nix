@@ -8,7 +8,7 @@
   modules.hyprland.enableWallpaperEngine = true;
   modules.hyprland.wallpaperEngineMap = {
     "DP-1" = "2557395646"; # First monitor
-    "HDMI-A-1" = "2984500160"; # Second monitor
+    "HDMI-A-1" = "2286109162"; # Second monitor
   };
 
   modules.hyprland.idleTimeout = 600; # 10 minutes
