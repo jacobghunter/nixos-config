@@ -27,7 +27,7 @@ start_or_resume_video() {
     fi
 
     if [ -d "$WORKSHOP_DIR" ]; then
-        linux-wallpaperengine --silent --fps 60 --scaling stretch \
+        linux-wallpaperengine --silent --fps 30 --scaling stretch \
             --screen-root DP-1 --bg "$WORKSHOP_DIR/2557395646" \
             --screen-root HDMI-A-1 --bg "$WORKSHOP_DIR/2984500160" > /dev/null 2>&1 &
     fi
