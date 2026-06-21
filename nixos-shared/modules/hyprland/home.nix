@@ -130,6 +130,7 @@ in
       wlogout
       grimblast
       hyprpicker
+      hyprshot
       cliphist
       nautilus
     ];
@@ -139,6 +140,12 @@ in
       configType = "hyprlang";
       package = pkgs.hyprland;
       systemd.enable = true;
+      plugins = [
+        hdrFixPlugin
+        inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
+        inputs.split-monitor-workspaces.packages.${pkgs.stdenv.hostPlatform.system}.split-monitor-workspaces
+        inputs.hyprland-easymotion.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-easymotion
+      ];
       extraConfig =
         builtins.replaceStrings
           [
@@ -150,17 +157,9 @@ in
           (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/hyprland.conf");
       settings = {
         env = [
-          "HYPRCURSOR_THEME,rose-pine-hyprcursor"
-          "HYPRCURSOR_SIZE,24"
-          "XCURSOR_THEME,rose-pine-hyprcursor"
-          "XCURSOR_SIZE,24"
           "GTK_THEME,Adwaita:dark"
         ];
       };
-      plugins = [
-        hdrFixPlugin
-        # any plugins you already had
-      ];
     };
 
     # Scripts are now factored out and imported via ./workspaces.nix and ./wallpaper.nix
