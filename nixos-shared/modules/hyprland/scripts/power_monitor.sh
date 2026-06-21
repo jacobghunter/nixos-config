@@ -8,23 +8,28 @@ WORKSHOP_DIR="$HOME/.steam/steam/steamapps/workshop/content/431960"
 CURRENT_STATE="unknown"
 
 start_or_resume_video() {
-    # If we are already in video mode, do absolutely nothing
     if [ "$CURRENT_STATE" = "video" ]; then return; fi
 
-    # Kill static wallpaper daemon if running
     killall awww-daemon 2>/dev/null
 
-    # Check if engine is running but paused
     if pgrep "linux-wallpaperengine" > /dev/null; then
-        # Resume it instantly (SIGCONT) - No cold boot, no black flash
-        killall -CONT linux-wallpaperengine
-    else
-        # Start it for the very first time
-        if [ -d "$WORKSHOP_DIR" ]; then
-            linux-wallpaperengine --silent --fps 60 --scaling stretch \
-                --screen-root DP-1 --bg "$WORKSHOP_DIR/2557395646" \
-                --screen-root HDMI-A-1 --bg "$WORKSHOP_DIR/2984500160" > /dev/null 2>&1 &
+        # Don't trust a partially-alive process — verify it's actually bound
+        # to both outputs before resuming. If not, kill and relaunch clean.
+        if ! pgrep -af "linux-wallpaperengine" | grep -q "DP-1" || \
+           ! pgrep -af "linux-wallpaperengine" | grep -q "HDMI-A-1"; then
+            killall linux-wallpaperengine 2>/dev/null
+            sleep 0.5
+        else
+            killall -CONT linux-wallpaperengine
+            CURRENT_STATE="video"
+            return
         fi
+    fi
+
+    if [ -d "$WORKSHOP_DIR" ]; then
+        linux-wallpaperengine --silent --fps 60 --scaling stretch \
+            --screen-root DP-1 --bg "$WORKSHOP_DIR/2557395646" \
+            --screen-root HDMI-A-1 --bg "$WORKSHOP_DIR/2984500160" > /dev/null 2>&1 &
     fi
 
     CURRENT_STATE="video"
