@@ -485,7 +485,7 @@ in
       settings = {
         general = {
           before_sleep_cmd = "loginctl lock-session";
-          after_sleep_cmd = "hyprctl dispatch dpms on && brightnessctl -r && systemctl --user restart wayle.service";
+          after_sleep_cmd = "hyprctl dispatch dpms on && (sleep 8 && systemctl --user restart wayle.service &)";
           ignore_dbus_inhibit = false;
           lock_cmd = "pidof hyprlock || hyprlock";
         };
