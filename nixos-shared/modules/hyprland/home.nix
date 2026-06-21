@@ -135,6 +135,13 @@ in
       nautilus
     ];
 
+    xdg.configFile."hypr/plugins/split-monitor-workspaces".source = pkgs.fetchFromGitHub {
+      owner = "zjeffer";
+      repo = "split-monitor-workspaces";
+      rev = "main"; # Or pin to a specific commit hash for stability
+      sha256 = "sha256-ZmZt7BXXUWXULoaOKjDZB6Rql4Gapowv5aF4YgS8fSo=";
+    };
+
     wayland.windowManager.hyprland = {
       enable = true;
       configType = "hyprlang";
@@ -142,9 +149,8 @@ in
       systemd.enable = true;
       plugins = [
         hdrFixPlugin
-        inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
-        inputs.split-monitor-workspaces.packages.${pkgs.stdenv.hostPlatform.system}.split-monitor-workspaces
-        inputs.hyprland-easymotion.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-easymotion
+        # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
+        # inputs.hyprland-easymotion.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-easymotion
       ];
       extraConfig =
         builtins.replaceStrings
@@ -158,6 +164,13 @@ in
       settings = {
         env = [
           "GTK_THEME,Adwaita:dark"
+        ];
+        # For hyprspace
+        # bind = [
+        #   "$mainMod, TAB, overview:toggle"
+        # ];
+        exec-once = [
+          "hyprctl plugin load ~/.config/hypr/plugins/split-monitor-workspaces/init.lua"
         ];
       };
     };

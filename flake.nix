@@ -26,18 +26,15 @@
       inputs.hyprland.follows = "hyprland";
     };
     # hyprland plugins
-    hyprspace = {
-      url = "github:KZDKM/Hyprspace";
-      inputs.hyprland.follows = "hyprland";
-    };
-    split-monitor-workspaces = {
-      url = "github:Duckonaut/split-monitor-workspaces";
-      inputs.hyprland.follows = "hyprland";
-    };
-    hyprland-easymotion = {
-      url = "github:zakk4223/hyprland-easymotion";
-      inputs.hyprland.follows = "hyprland";
-    };
+    # hyprspace = {
+    #   url = "github:KZDKM/Hyprspace";
+    #   inputs.hyprland.follows = "hyprland";
+    # };
+    # Re-enable when updated for hyprland 55
+    # hyprland-easymotion = {
+    #   url = "github:zakk4223/hyprland-easymotion";
+    #   inputs.hyprland.follows = "hyprland";
+    # };
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
