@@ -31,9 +31,16 @@
   #   ACTION=="add|change", SUBSYSTEM=="drm", DRIVERS=="amdgpu", ATTR{device/power_dpm_force_performance_level}="high"
   # '';
 
-  # Disable CFS autogroup scheduler to prevent game thread throttling
+  # Performance sysctl tweaks
   boot.kernel.sysctl = {
+    # Disable CFS autogroup scheduler to prevent game thread throttling
     "kernel.sched_autogroup_enabled" = 0;
+
+    # Prevent background writeback flushing from stalling disk I/O and causing game stutter.
+    # On systems with high RAM, percentages (default) allow gigabytes of dirty pages to build up
+    # before a massive flush stalls the drive. Forcing low byte thresholds writes to disk continuously in background.
+    "vm.dirty_background_bytes" = 67108864; # 64MB
+    "vm.dirty_bytes" = 268435456; # 256MB
   };
 
   # SCX (sched-ext) userspace scheduler (scx_lavd) (commented out to use zen's scheduler)
@@ -69,4 +76,10 @@
   zramSwap.enable = true;
   services.dbus.implementation = "broker";
   services.irqbalance.enable = true;
+
+  # Increase Mesa shader cache size to prevent shader compilation stuttering over time.
+  # Default is 1GB, raising to 5GB lets more games cache their compiled pipelines.
+  environment.sessionVariables = {
+    MESA_SHADER_CACHE_MAX_SIZE = "5G";
+  };
 }
