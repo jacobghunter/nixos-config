@@ -31,6 +31,7 @@
 - discord screenshare weirdness (new screenshare client?)
 - nautilus (gtk) theming as dark mode
 - fix super+esc menu
+- wayle special workspace highlight + swap on click
 
 monitor:
 
