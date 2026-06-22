@@ -19,7 +19,12 @@
   ];
 
   # Enable low-latency PipeWire configuration from nix-gaming
-  services.pipewire.lowLatency.enable = true;
+  # Default quantum is 64 (1.3ms), which causes crackling/popping under heavy gaming load.
+  # Raising it to 256 (5.3ms) ensures audio stability while keeping latency imperceptible.
+  services.pipewire.lowLatency = {
+    enable = true;
+    quantum = 256;
+  };
 
   # Force AMDGPU to high performance level to prevent mixed-refresh-rate flickering
   # services.udev.extraRules = ''
