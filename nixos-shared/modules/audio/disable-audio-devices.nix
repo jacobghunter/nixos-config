@@ -3,13 +3,21 @@ let
   cfg = config.modules.audioDeviceDisable;
 
   mkNodeRule = name: {
-    matches = [ { node.name = name; } ];
-    actions.update-props.node.disabled = true;
+    matches = [ { "node.name" = name; } ];
+    actions = {
+      update-props = {
+        "node.disabled" = true;
+      };
+    };
   };
 
   mkDeviceRule = name: {
-    matches = [ { device.name = name; } ];
-    actions.update-props.device.disabled = true;
+    matches = [ { "device.name" = name; } ];
+    actions = {
+      update-props = {
+        "device.disabled" = true;
+      };
+    };
   };
 in
 {
@@ -34,8 +42,8 @@ in
       let
         rules = (map mkNodeRule cfg.nodeNames) ++ (map mkDeviceRule cfg.deviceNames);
       in
-      ''
-        monitor.alsa.rules = ${builtins.toJSON rules}
-      '';
+      builtins.toJSON {
+        "monitor.alsa.rules" = rules;
+      };
   };
 }
