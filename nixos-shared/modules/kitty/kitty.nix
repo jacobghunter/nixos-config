@@ -58,6 +58,8 @@ in
         background_opacity = "0.0";
         dynamic_background_opacity = "yes";
 
+        allow_remote_control = "yes";
+
         auto_reload_config = -1;
         window_padding_width = 8;
         italic_font = "auto";
@@ -81,6 +83,7 @@ in
         tab_bar_style = "powerline";
         tab_powerline_style = "slanted";
 
+        focus_follows_mouse = "yes";
         cursor = "#${cfg.colors.secondary}";
         cursor_text_color = "#${cfg.colors.background}";
 
