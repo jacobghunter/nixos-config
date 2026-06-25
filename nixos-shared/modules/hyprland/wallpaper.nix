@@ -27,7 +27,7 @@ in
     executable = true;
   };
 
-  systemd.user.services.power-monitor = {
+  systemd.user.services.wallpaper-engine = {
     Unit = {
       Description = "Power Monitor Wallpaper Service";
       After = [ "graphical-session.target" ];
