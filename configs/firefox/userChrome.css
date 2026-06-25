@@ -46,3 +46,115 @@
     max-width: 260px !important;
     width: 260px !important;
 }
+
+/* ==========================================================================
+   4. Autohide Navigation Bar (Overlay Style)
+   ========================================================================== */
+
+:root {
+    --uc-navbar-transform: -40px;
+    /* Adjust if your navbar is taller/shorter */
+    --uc-autohide-duration: 0.15s;
+    --uc-autohide-delay: 0.05s;
+    --tabs-navbar-shadow-size: 0px !important;
+    /* Remove shadow line */
+}
+
+/* For compact layout density */
+:root[uidensity="compact"] {
+    --uc-navbar-transform: -34px;
+}
+
+/* Shift the webpage content up to cover the hidden navbar */
+#browser {
+    margin-top: var(--uc-navbar-transform) !important;
+    transition: margin-top var(--uc-autohide-duration) ease-out !important;
+}
+
+/* Except on the New Tab page to avoid covering new tab elements */
+#main-window:has(.tabbrowser-tab[selected][label="New Tab" i]) #browser,
+#main-window:has(.tabbrowser-tab[selected][label="Firefox Home" i]) #browser {
+    margin-top: 0px !important;
+}
+
+/* Transitions for sidebar elements so they slide down smoothly */
+#sidebar-box,
+#sidebar-splitter {
+    transition: margin-top var(--uc-autohide-duration) ease-out !important;
+}
+
+/* Shift the sidebar and splitter down when the navbar is open */
+#navigator-toolbox:is(:hover, :focus-within)~#browser> :is(#sidebar-box, #sidebar-splitter) {
+    margin-top: calc(var(--uc-navbar-transform) * -1) !important;
+}
+
+/* Reset sidebar margin on New Tab page */
+#main-window:has(.tabbrowser-tab[selected][label="New Tab" i]) #browser> :is(#sidebar-box, #sidebar-splitter),
+#main-window:has(.tabbrowser-tab[selected][label="Firefox Home" i]) #browser> :is(#sidebar-box, #sidebar-splitter) {
+    margin-top: 0px !important;
+}
+
+/* Initially hide the navigation bar by translating it upwards and fading it out */
+#nav-bar {
+    opacity: 0 !important;
+    transform: translateY(var(--uc-navbar-transform)) !important;
+    transition: transform var(--uc-autohide-duration) ease var(--uc-autohide-delay),
+        opacity var(--uc-autohide-duration) ease var(--uc-autohide-delay) !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    pointer-events: none !important;
+    background-color: var(--toolbar-bgcolor, var(--lwt-accent-color, inherit)) !important;
+    box-shadow: none !important;
+    /* Remove box-shadow */
+    border: none !important;
+    /* Remove borders */
+}
+
+/* Ensure the toolbox doesn't capture mouse events when hidden */
+#navigator-toolbox {
+    z-index: 1000 !important;
+    border: none !important;
+    /* Remove top/bottom borders */
+}
+
+#navigator-toolbox::after {
+    display: none !important;
+    /* Hide separator line under the toolbox */
+}
+
+/* Show the navigation bar when:
+   1. Hovering the toolbox (top edge of the screen)
+   2. Focusing inside the toolbox (like clicking the URL bar)
+   3. On a New Tab page
+*/
+#navigator-toolbox:hover #nav-bar,
+#navigator-toolbox:focus-within #nav-bar,
+#main-window:has(.tabbrowser-tab[selected][label="New Tab" i]) #nav-bar,
+#main-window:has(.tabbrowser-tab[selected][label="Firefox Home" i]) #nav-bar {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+    transition-delay: 0s !important;
+}
+
+/* Fast fade-out when leaving focus/hover */
+#navigator-toolbox:not(:hover):not(:focus-within) #nav-bar {
+    transition-delay: var(--uc-autohide-delay) !important;
+}
+
+/* Explicitly hide/fade the urlbar when the navbar is hidden (fixes breakout/popover rendering issues) */
+#urlbar {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity var(--uc-autohide-duration) ease var(--uc-autohide-delay) !important;
+}
+
+/* Show the urlbar when the navbar is open */
+#navigator-toolbox:hover #urlbar,
+#navigator-toolbox:focus-within #urlbar,
+#main-window:has(.tabbrowser-tab[selected][label="New Tab" i]) #urlbar,
+#main-window:has(.tabbrowser-tab[selected][label="Firefox Home" i]) #urlbar {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transition-delay: 0s !important;
+}
