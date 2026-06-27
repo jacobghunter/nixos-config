@@ -10,17 +10,17 @@ CURRENT_STATE="unknown"
 start_or_resume_video() {
     if [ "$CURRENT_STATE" = "video" ]; then return; fi
 
-    killall awww-daemon 2>/dev/null
+    pkill -f awww-daemon 2>/dev/null
 
-    if pgrep "linux-wallpaperengine" > /dev/null; then
+    if pgrep -f "linux-wallpaperengine" > /dev/null; then
         # Don't trust a partially-alive process — verify it's actually bound
         # to both outputs before resuming. If not, kill and relaunch clean.
         if ! pgrep -af "linux-wallpaperengine" | grep -q "DP-1" || \
            ! pgrep -af "linux-wallpaperengine" | grep -q "HDMI-A-1"; then
-            killall linux-wallpaperengine 2>/dev/null
+            pkill -f linux-wallpaperengine 2>/dev/null
             sleep 0.5
         else
-            killall -CONT linux-wallpaperengine
+            pkill -CONT -f linux-wallpaperengine
             CURRENT_STATE="video"
             return
         fi
@@ -41,12 +41,12 @@ start_static() {
 
     # Pause the video engine (SIGSTOP) instead of killing it. 
     # This drops its CPU/GPU usage to 0% but keeps it in RAM for an instant wake-up.
-    if pgrep "linux-wallpaperengine" > /dev/null; then
-        killall -STOP linux-wallpaperengine
+    if pgrep -f "linux-wallpaperengine" > /dev/null; then
+        pkill -STOP -f linux-wallpaperengine
     fi
 
     # Ensure awww is running and set the image over the paused engine
-    if ! pgrep "awww-daemon" > /dev/null; then
+    if ! pgrep -f "awww-daemon" > /dev/null; then
         awww-daemon &
         sleep 0.5
     fi
@@ -56,6 +56,16 @@ start_static() {
 }
 
 check_power() {
+    # Auto-recover if the wallpaper engine crashed in the background
+    if [ "$CURRENT_STATE" = "video" ] && ! pgrep -f "linux-wallpaperengine" > /dev/null; then
+        CURRENT_STATE="unknown"
+    fi
+
+    # Auto-recover if the static wallpaper daemon crashed in the background
+    if [ "$CURRENT_STATE" = "static" ] && ! pgrep -f "awww-daemon" > /dev/null; then
+        CURRENT_STATE="unknown"
+    fi
+
     AC_SUPPLY=$(ls /sys/class/power_supply/ 2>/dev/null | grep -E "^(AC|ADP)" | head -n 1)
 
     if [ -z "$AC_SUPPLY" ]; then
@@ -72,13 +82,8 @@ check_power() {
     fi
 }
 
-# Initial check
-check_power
-
-# Event loop
-upower --monitor | while read -r line; do
+# Main event loop: poll every 3 seconds to check power state and auto-recover crashes
+while true; do
     check_power
+    sleep 3
 done
-
-# If upower crashes and the loop breaks, exit 1 so systemd knows to restart the script
-exit 1
