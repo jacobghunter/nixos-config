@@ -47,4 +47,19 @@
       "alsa_card.pci-0000_10_00.1" # GPU Radeon HD audio
     ];
   };
+
+  systemd.user.services.wayle = {
+    Service = {
+      # Wait up to 5 seconds for a default audio sink to be discovered by wireplumber
+      # before starting wayle, to prevent the audio module from failing to initialize.
+      ExecStartPre = pkgs.writeShellScript "wait-for-audio" ''
+        for i in {1..25}; do
+          if ${pkgs.wireplumber}/bin/wpctl inspect @DEFAULT_AUDIO_SINK@ >/dev/null 2>&1; then
+            exit 0
+          fi
+          sleep 0.2
+        done
+      '';
+    };
+  };
 }

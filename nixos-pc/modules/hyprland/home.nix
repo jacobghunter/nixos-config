@@ -30,5 +30,9 @@
         sdr_min_luminance = 0.005
         vrr = 2
     }
+
+    render {
+        direct_scanout = false
+    }
   '';
 }
