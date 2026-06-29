@@ -149,9 +149,19 @@ in
       systemd.enable = true;
       plugins = [
         hdrFixPlugin
+        inputs.hyprsplit.packages.${pkgs.stdenv.hostPlatform.system}.hyprsplit
         # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
         # inputs.hyprland-easymotion.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-easymotion
       ];
+      extraLuaFiles = {
+        "hyprsplit/init" = {
+          autoLoad = false;
+          # Point directly to the flake input
+          content = builtins.readFile "${
+            inputs.hyprsplit.packages.${pkgs.stdenv.hostPlatform.system}.hyprsplitlua
+          }/share/hyprsplit/init.lua";
+        };
+      };
     };
 
     xdg.configFile."hypr/hyprland.lua".text = builtins.readFile ./hyprland.lua;
@@ -184,7 +194,6 @@ in
 
     # wifi_jgmenu.sh script is now factored out and imported via ./menus.nix
 
-    # 1. Generate Hyprland Variables
     # 1. Generate Hyprland Variables
     xdg.configFile."hypr/variables.lua".text = ''
       activeBorder = { colors = { "${toRgbaDef primary}", "${toRgbaDef secondary}" }, angle = ${gradientDegrees} }

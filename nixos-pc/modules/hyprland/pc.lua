@@ -1,3 +1,6 @@
+local hs = require("hyprsplit")
+hs.monitor_priority({"DP-1", "HDMI-A-1"})
+
 hl.monitor({
     output = "HDMI-A-1",
     mode = "2560x1440@59.95",

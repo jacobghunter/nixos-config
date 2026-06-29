@@ -35,6 +35,7 @@
     #   url = "github:zakk4223/hyprland-easymotion";
     #   inputs.hyprland.follows = "hyprland";
     # };
+    hyprsplit.url = "github:shezdy/hyprsplit";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";

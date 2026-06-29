@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Get current window info
-WINDOW_INFO=$(hyprctl activewindow -j)
-WORKSPACE=$(echo "$WINDOW_INFO" | jq -r '.workspace.name')
+set -euo pipefail
+
+# Get info for the currently focused monitor
+MONITOR_JSON=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true)')
+WORKSPACE=$(echo "$MONITOR_JSON" | jq -r '.activeWorkspace.name')
 
 if [[ "$WORKSPACE" == "special:magic" ]]; then
-    # Move OUT to the active workspace of the current monitor
-    MONITOR_ID=$(echo "$WINDOW_INFO" | jq -r '.monitor')
-    TARGET=$(hyprctl monitors -j | jq -r --argjson m "$MONITOR_ID" '.[] | select(.id == $m) | .activeWorkspace.name')
-    hyprctl dispatch movetoworkspace "name:$TARGET"
+    # We are in special, move OUT
+    hyprctl dispatch movetoworkspace "name:$WORKSPACE" # Hyprsplit handles the mapping
 else
-    # Move IN to special workspace
+    # We are in normal, move IN
     hyprctl dispatch movetoworkspace "special:magic"
 fi

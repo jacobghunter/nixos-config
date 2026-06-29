@@ -125,6 +125,7 @@
 
     home.shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config";
+      rebuild-boot = "sudo nixos-rebuild boot --flake ~/nixos-config";
       ll = "eza -l --git";
       gs = "git status";
       ga = "git add";
@@ -193,6 +194,7 @@
 
       # Dev Tools
       nodejs
+      lua
       pnpm
       python3
       gcc

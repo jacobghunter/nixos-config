@@ -9,6 +9,25 @@
 
 require("variables")
 
+--################
+--## FILE VARS ###
+--################
+
+local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local hs = require("hyprsplit")
+
+
+-- Hyprsplit config
+hs.config({
+    num_workspaces = 10,
+})
+
+hl.bind(mainMod .. " + SHIFT + G", hs.dsp.grab_rogue_windows())
+
+-- Jump focus between monitors (cycle through them)
+hl.bind(mainMod .. " + TAB", hl.dsp.focus({ monitor = "+1" }))
+hl.bind(mainMod .. " + SHIFT + TAB", hl.dsp.focus({ monitor = "-1" }))
+
 --##################
 --## MY PROGRAMS ###
 --##################
@@ -126,29 +145,86 @@ hl.gesture({
     action = "workspace",
 })
 
-local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+-- Define the helper functions
+local function focus_ws(ws_num)
+    return function()
+        local monitors = hl.get_monitors()
+        local monitor_count = #monitors
+        if monitor_count > 1 then
+            if ws_num <= 5 then
+                local monitor = monitors[1]
+                if monitor then
+                    hl.dispatch(hl.dsp.focus({ monitor = monitor.name }))
+                    hl.dispatch(hs.dsp.focus({ workspace = ws_num }))
+                end
+            else
+                local monitor = monitors[2]
+                if monitor then
+                    hl.dispatch(hl.dsp.focus({ monitor = monitor.name }))
+                    hl.dispatch(hs.dsp.focus({ workspace = ws_num - 5 }))
+                end
+            end
+        else
+            hl.dispatch(hs.dsp.focus({ workspace = ws_num }))
+        end
+    end
+end
 
-hl.bind(mainMod .. " + 1", hl.dsp.focus({ workspace = 1 }))
-hl.bind(mainMod .. " + 2", hl.dsp.focus({ workspace = 2 }))
-hl.bind(mainMod .. " + 3", hl.dsp.focus({ workspace = 3 }))
-hl.bind(mainMod .. " + 4", hl.dsp.focus({ workspace = 4 }))
-hl.bind(mainMod .. " + 5", hl.dsp.focus({ workspace = 5 }))
-hl.bind(mainMod .. " + 6", hl.dsp.focus({ workspace = 6 }))
-hl.bind(mainMod .. " + 7", hl.dsp.focus({ workspace = 7 }))
-hl.bind(mainMod .. " + 8", hl.dsp.focus({ workspace = 8 }))
-hl.bind(mainMod .. " + 9", hl.dsp.focus({ workspace = 9 }))
-hl.bind(mainMod .. " + 0", hl.dsp.focus({ workspace = 10 }))
+local function move_ws(ws_num)
+    return function()
+        local monitors = hl.get_monitors()
+        local monitor_count = #monitors
+        if monitor_count > 1 then
+            if ws_num <= 5 then
+                local monitor = monitors[1]
+                if monitor then
+                    hl.dispatch(hl.dsp.window.move({ monitor = monitor.name }))
+                    hl.dispatch(hs.dsp.window.move({ workspace = ws_num }))
+                end
+            else
+                local monitor = monitors[2]
+                if monitor then
+                    hl.dispatch(hl.dsp.window.move({ monitor = monitor.name }))
+                    hl.dispatch(hs.dsp.window.move({ workspace = ws_num - 5 }))
+                end
+            end
+        else
+            hl.dispatch(hs.dsp.window.move({ workspace = ws_num }))
+        end
+    end
+end
 
-hl.bind(mainMod .. " + SHIFT + 1", hl.dsp.window.move({ workspace = 1 }))
-hl.bind(mainMod .. " + SHIFT + 2", hl.dsp.window.move({ workspace = 2 }))
-hl.bind(mainMod .. " + SHIFT + 3", hl.dsp.window.move({ workspace = 3 }))
-hl.bind(mainMod .. " + SHIFT + 4", hl.dsp.window.move({ workspace = 4 }))
-hl.bind(mainMod .. " + SHIFT + 5", hl.dsp.window.move({ workspace = 5 }))
-hl.bind(mainMod .. " + SHIFT + 6", hl.dsp.window.move({ workspace = 6 }))
-hl.bind(mainMod .. " + SHIFT + 7", hl.dsp.window.move({ workspace = 7 }))
-hl.bind(mainMod .. " + SHIFT + 8", hl.dsp.window.move({ workspace = 8 }))
-hl.bind(mainMod .. " + SHIFT + 9", hl.dsp.window.move({ workspace = 9 }))
-hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
+-- Create a function that builds the binds based on current hardware
+local function setup_workspace_binds()
+    local monitors = hl.get_monitors()
+    local monitor_count = #monitors
+
+    -- 1-5 Binds
+    for i = 1, 5 do
+        local n = tostring(i)
+        hl.bind(mainMod .. " + " .. n, focus_ws(i))
+        hl.bind(mainMod .. " + SHIFT + " .. n, move_ws(i))
+    end
+
+    -- 6-0 Binds (Only if multi-monitor)
+    if monitor_count > 1 then
+        for i = 6, 10 do
+            local n = (i == 10) and "0" or tostring(i)
+            hl.bind(mainMod .. " + " .. n, focus_ws(i))
+            hl.bind(mainMod .. " + SHIFT + " .. n, move_ws(i))
+        end
+    end
+end
+
+setup_workspace_binds()
+
+-- Scroll through existing workspaces with mainMod + scroll
+hl.bind(mainMod .. " + mouse_down", hs.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + mouse_up", hs.dsp.focus({ workspace = "e-1" }))
+
+-- Switch workspaces with mainMod + mouse side buttons (back/forward)
+hl.bind(mainMod .. " + mouse:275", hs.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + mouse:276", hs.dsp.focus({ workspace = "e+1" }))
 
 --  Row 2 (Q W E R T Y U I O P) 
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
@@ -193,14 +269,6 @@ hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.move({ direction = "l" }))
 hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "r" }))
 hl.bind(mainMod .. " + SHIFT + up", hl.dsp.window.move({ direction = "u" }))
 hl.bind(mainMod .. " + SHIFT + down", hl.dsp.window.move({ direction = "d" }))
-
--- Scroll through existing workspaces with mainMod + scroll
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
-
--- Switch workspaces with mainMod + mouse side buttons (back/forward)
-hl.bind(mainMod .. " + mouse:275", hl.dsp.focus({ workspace = "e-1" }))
-hl.bind(mainMod .. " + mouse:276", hl.dsp.focus({ workspace = "e+1" }))
 
 -- Move/resize windows with mainMod + LMB/RMB and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag())
@@ -341,7 +409,5 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("hyprlock")
-    -- hl.exec_cmd("hyprctl plugin load ~/.config/hypr/plugins/split-monitor-workspaces/init.lua")
-
 end)
 

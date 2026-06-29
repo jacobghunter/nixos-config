@@ -4,7 +4,7 @@ set -euo pipefail
 ACTION="${1:-toggle}"
 
 # Get active workspace info
-ACTIVE_WORKSPACE=$(hyprctl activeworkspace -j | jq -r '.name')
+ACTIVE_WORKSPACE=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.name')
 MONITOR_ID=$(hyprctl activeworkspace -j | jq -r '.monitorID')
 
 move_to_special() {
