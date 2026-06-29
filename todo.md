@@ -17,6 +17,10 @@
 
 - Ghostty? Resizes better than kitty
 
+# Hyprland
+
+- Fix mouse forward and back to stick to the same monitor
+
 # PC
 
 - obsidian and vscode configs

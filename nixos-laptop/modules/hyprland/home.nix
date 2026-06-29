@@ -8,7 +8,11 @@
   modules.hyprland.idleTimeout = 150; # 2.5 minutes
   modules.hyprland.dpmsTimeout = 300; # 5 minutes
 
-  wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
-    monitor=,preferred,auto,1,mirror,DP-1
+  xdg.configFile."hypr/laptop.lua".source = ./laptop.lua;
+
+  # Append the pcall requirement directly to the main lua file
+  xdg.configFile."hypr/hyprland.lua".text = lib.mkAfter ''
+    -- Laptop configuration
+    require("laptop")
   '';
 }

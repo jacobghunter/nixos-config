@@ -18,7 +18,7 @@
   home.stateVersion = "24.11";
 
   home.shellAliases = {
-    hyprbinds = "cat ~/.config/hypr/hyprland.conf | grep bind";
+    hyprbinds = "hyprctl binds";
   };
 
   home.packages = with pkgs; [

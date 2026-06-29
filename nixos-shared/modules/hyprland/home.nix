@@ -144,7 +144,7 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      configType = "hyprlang";
+      configType = "lua";
       package = pkgs.hyprland;
       systemd.enable = true;
       plugins = [
@@ -152,28 +152,9 @@ in
         # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
         # inputs.hyprland-easymotion.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-easymotion
       ];
-      extraConfig =
-        builtins.replaceStrings
-          [
-            "/usr/lib/polkit-kde-authentication-agent-1"
-          ]
-          [
-            "systemctl --user start hyprpolkitagent"
-          ]
-          (builtins.readFile "${inputs.self}/nixos-shared/modules/hyprland/hyprland.conf");
-      settings = {
-        env = [
-          "GTK_THEME,Adwaita:dark"
-        ];
-        # For hyprspace
-        # bind = [
-        #   "$mainMod, TAB, overview:toggle"
-        # ];
-        exec-once = [
-          "hyprctl plugin load ~/.config/hypr/plugins/split-monitor-workspaces/init.lua"
-        ];
-      };
     };
+
+    xdg.configFile."hypr/hyprland.lua".text = builtins.readFile ./hyprland.lua;
 
     # Scripts are now factored out and imported via ./workspaces.nix and ./wallpaper.nix
 
@@ -204,15 +185,17 @@ in
     # wifi_jgmenu.sh script is now factored out and imported via ./menus.nix
 
     # 1. Generate Hyprland Variables
-    xdg.configFile."hypr/variables.conf".text = ''
-      # Hyprland gets the raw rgba values and the gradient logic
-      $activeBorder = ${toRgbaDef primary} ${toRgbaDef secondary} ${toDegrees gradientDegrees}
-      $specialBorder = ${toRgbaDef primary} ${toRgbaDef special} ${toDegrees gradientDegrees}
-      $inactiveBorder = ${toRgbaDef inactive}
+    # 1. Generate Hyprland Variables
+    xdg.configFile."hypr/variables.lua".text = ''
+      activeBorder = { colors = { "${toRgbaDef primary}", "${toRgbaDef secondary}" }, angle = ${gradientDegrees} }
+      specialBorder = { colors = { "${toRgbaDef primary}", "${toRgbaDef special}" }, angle = ${gradientDegrees} }
 
-      $shadow = ${toRgbaDef shadow}
-      $borderSize = ${borderSize}
-      $rounding = ${borderRadius}
+      -- Single colors can still be passed as standard strings
+      inactiveBorder = "${toRgbaDef inactive}"
+      shadow = "${toRgbaDef shadow}"
+
+      borderSize = ${borderSize}
+      rounding = ${borderRadius}
     '';
 
     # 2. Generate Rofi Colors/Vars
