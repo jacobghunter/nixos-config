@@ -84,7 +84,7 @@
 }
 
 /* Shift the sidebar and splitter down when the navbar is open */
-#navigator-toolbox:is(:hover, :focus-within)~#browser> :is(#sidebar-box, #sidebar-splitter) {
+#navigator-toolbox:is(:hover, :focus-within, :has([open]), :has([breakout-extend]))~#browser> :is(#sidebar-box, #sidebar-splitter) {
     margin-top: calc(var(--uc-navbar-transform) * -1) !important;
 }
 
@@ -110,11 +110,25 @@
     /* Remove borders */
 }
 
-/* Ensure the toolbox doesn't capture mouse events when hidden */
+/* Ensure the toolbox doesn't capture mouse events when hidden (so you can click webpage content underneath) */
 #navigator-toolbox {
     z-index: 1000 !important;
     border: none !important;
     /* Remove top/bottom borders */
+    pointer-events: none !important;
+}
+
+/* Thin hover trigger zone at the very top edge of the screen */
+#navigator-toolbox::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 10px;
+    /* Set to 2px for a precise, hard-to-trigger hover area. Increase to 3px or 4px if too narrow. */
+    z-index: 1000;
+    pointer-events: auto !important;
 }
 
 #navigator-toolbox::after {
@@ -125,10 +139,13 @@
 /* Show the navigation bar when:
    1. Hovering the toolbox (top edge of the screen)
    2. Focusing inside the toolbox (like clicking the URL bar)
-   3. On a New Tab page
+   3. A menu popup, extension panel, or address bar suggestions are open
+   4. On a New Tab page
 */
 #navigator-toolbox:hover #nav-bar,
 #navigator-toolbox:focus-within #nav-bar,
+#navigator-toolbox:has([open]) #nav-bar,
+#navigator-toolbox:has([breakout-extend]) #nav-bar,
 #main-window:has(.tabbrowser-tab[selected][label="New Tab" i]) #nav-bar,
 #main-window:has(.tabbrowser-tab[selected][label="Firefox Home" i]) #nav-bar {
     opacity: 1 !important;
@@ -137,8 +154,8 @@
     transition-delay: 0s !important;
 }
 
-/* Fast fade-out when leaving focus/hover */
-#navigator-toolbox:not(:hover):not(:focus-within) #nav-bar {
+/* Fast fade-out when leaving focus/hover/open menu */
+#navigator-toolbox:not(:hover):not(:focus-within):not(:has([open])):not(:has([breakout-extend])) #nav-bar {
     transition-delay: var(--uc-autohide-delay) !important;
 }
 
@@ -152,6 +169,8 @@
 /* Show the urlbar when the navbar is open */
 #navigator-toolbox:hover #urlbar,
 #navigator-toolbox:focus-within #urlbar,
+#navigator-toolbox:has([open]) #urlbar,
+#navigator-toolbox:has([breakout-extend]) #urlbar,
 #main-window:has(.tabbrowser-tab[selected][label="New Tab" i]) #urlbar,
 #main-window:has(.tabbrowser-tab[selected][label="Firefox Home" i]) #urlbar {
     opacity: 1 !important;
