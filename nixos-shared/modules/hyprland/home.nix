@@ -293,7 +293,7 @@ in
       }
       {
           "label" : "logout",
-          "action" : "hyprctl dispatch exit",
+          "action" : "hyprctl dispatch 'hl.dsp.exit()'",
           "text" : "Logout",
           "keybind" : "e"
       }
@@ -477,7 +477,7 @@ in
       settings = {
         general = {
           before_sleep_cmd = "loginctl lock-session";
-          after_sleep_cmd = "hyprctl dispatch dpms on && (sleep 8 && systemctl --user restart wayle.service &)";
+          after_sleep_cmd = "hyprctl dispatch 'hl.dsp.dpms({ action = \"on\" })' && (sleep 8 && systemctl --user restart wayle.service &)";
           ignore_dbus_inhibit = false;
           lock_cmd = "pidof hyprlock || hyprlock";
         };
@@ -489,8 +489,8 @@ in
           }
           {
             timeout = cfg.dpmsTimeout;
-            on-timeout = "hyprctl dispatch dpms off";
-            on-resume = "hyprctl dispatch dpms on && brightnessctl -r";
+            on-timeout = "hyprctl dispatch 'hl.dsp.dpms({ action = \"off\" })'";
+            on-resume = "hyprctl dispatch 'hl.dsp.dpms({ action = \"on\" })' && brightnessctl -r";
           }
           {
             timeout = cfg.dpmsTimeout + 900;

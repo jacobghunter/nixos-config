@@ -57,7 +57,7 @@
     "format": "{:%A %b-%d-%Y %I:%M %p}",
     "interval": 1,
     "rotate": 0,
-    "on-click": "hyprctl dispatch exec \"[float; size 60% 60%; center] gnome-calendar\"",
+    "on-click": "hyprctl dispatch 'hl.dsp.exec_cmd(\"[float; size 60% 60%; center] gnome-calendar\")'",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {
       "mode": "month",
@@ -161,7 +161,7 @@
   "network": {
     "tooltip": true,
     "on-click": "ags -t quicksettings",
-    "on-click-right": "hyprctl dispatch exec \"[float; size 40% 50%; center] nm-connection-editor\"",
+    "on-click-right": "hyprctl dispatch 'hl.dsp.exec_cmd(\"[float; size 40% 50%; center] nm-connection-editor\")'",
     "format-wifi": "  {essid}",
     "format-ethernet": "󰈀 ",
     "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>\n\nDownload: <b>{bandwidthDownBytes}</b>\nUpload: <b>{bandwidthUpBytes}</b>",

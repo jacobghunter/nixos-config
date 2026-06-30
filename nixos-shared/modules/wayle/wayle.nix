@@ -101,7 +101,7 @@ in
           dashboard = {
             border-color = "accent";
             icon-bg-color = "accent";
-            dropdown-logout-command = "hyprctl dispatch exit";
+            dropdown-logout-command = "hyprctl dispatch 'hl.dsp.exit()'";
           };
           hyprland-workspaces = {
             workspace-map = {

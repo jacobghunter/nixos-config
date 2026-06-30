@@ -4,38 +4,37 @@ set -euo pipefail
 ACTION="${1:-toggle}"
 
 # Get active workspace info
-ACTIVE_WORKSPACE=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.name')
-MONITOR_ID=$(hyprctl activeworkspace -j | jq -r '.monitorID')
+ACTIVE_WORKSPACE=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | if .specialWorkspace.name != "" then .specialWorkspace.name else .activeWorkspace.name end')
 
 move_to_special() {
     if [[ "$ACTIVE_WORKSPACE" == special:* ]]; then
         return
     fi
-    # Sort windows spatially by Y-coordinate, then X-coordinate
-    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r --arg ws "$ACTIVE_WORKSPACE" '[.[] | select(.workspace.name == $ws)] | sort_by([.at[1], .at[0]]) | .[].address')
+    # Sort windows spatially by Y-coordinate, then X-coordinate (reversed to preserve layout when moving silently)
+    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r --arg ws "$ACTIVE_WORKSPACE" '[.[] | select(.workspace.name == $ws)] | sort_by([.at[1], .at[0]]) | reverse | .[].address')
     for addr in $WINDOW_ADDRESSES; do
-        hyprctl dispatch movetoworkspacesilent "special:magic,address:$addr"
+        hyprctl dispatch "hl.dsp.window.move({ workspace = 'special:magic', follow = false, window = 'address:$addr' })"
     done
     # Open the special workspace to follow the windows
-    hyprctl dispatch togglespecialworkspace magic
+    hyprctl dispatch 'hl.dsp.workspace.toggle_special("magic")'
 }
 
 move_from_special() {
     local was_in_special=false
     if [[ "$ACTIVE_WORKSPACE" == special:* ]]; then
         was_in_special=true
-        TARGET_WORKSPACE=$(hyprctl monitors -j | jq -r --argjson m "$MONITOR_ID" '.[] | select(.id == $m) | .activeWorkspace.name')
+        TARGET_WORKSPACE=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.name')
     else
         TARGET_WORKSPACE="$ACTIVE_WORKSPACE"
     fi
-    # Sort windows spatially by Y-coordinate, then X-coordinate
-    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r '[.[] | select(.workspace.name == "special:magic")] | sort_by([.at[1], .at[0]]) | .[].address')
+    # Sort windows spatially by Y-coordinate, then X-coordinate (reversed to preserve layout when moving silently)
+    WINDOW_ADDRESSES=$(hyprctl clients -j | jq -r '[.[] | select(.workspace.name == "special:magic")] | sort_by([.at[1], .at[0]]) | reverse | .[].address')
     for addr in $WINDOW_ADDRESSES; do
-        hyprctl dispatch movetoworkspacesilent "$TARGET_WORKSPACE,address:$addr"
+        hyprctl dispatch "hl.dsp.window.move({ workspace = '$TARGET_WORKSPACE', follow = false, window = 'address:$addr' })"
     done
     # If we were inside the special workspace, close it to return to the normal workspace
     if [ "$was_in_special" = true ]; then
-        hyprctl dispatch togglespecialworkspace magic
+        hyprctl dispatch 'hl.dsp.workspace.toggle_special("magic")'
     fi
 }
 
