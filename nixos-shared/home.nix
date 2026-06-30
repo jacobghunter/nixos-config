@@ -226,6 +226,7 @@
       zip
       unzip
       tree
+      nil
     ];
   };
 }

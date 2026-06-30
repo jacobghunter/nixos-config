@@ -32,7 +32,7 @@
 - set default apps for pdf, rdp, etc
 - target certain browser windows like bitwarden to open floating?
   - maybe also steam menus?
-- configure vscode with a theme and some base extensions?
+- configure vscode with a theme and some base extensions? (nix linting as well)
 - discord screenshare weirdness (new screenshare client?)
 - nautilus (gtk) theming as dark mode
 - fix super+esc menu

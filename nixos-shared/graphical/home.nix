@@ -50,6 +50,12 @@
 
   # --- PROGRAMS CONFIGURATION ---
 
+  modules.firefox = {
+    enable = true;
+    tabManager = "sideberry";
+    hdr = false;
+  };
+
   programs.home-manager.enable = true;
 
   programs.obs-studio = {
