@@ -17,11 +17,7 @@
   # Allow sudo without password
   security.sudo.wheelNeedsPassword = false;
 
-  # Allow members of the wheel group to be trusted by the Nix daemon
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-  ];
+
 
   environment.systemPackages = with pkgs; [
     nodejs

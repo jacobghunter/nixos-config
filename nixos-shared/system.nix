@@ -80,5 +80,6 @@
       "flakes"
     ];
     download-buffer-size = 134217728;
+    trusted-users = [ "root" "@wheel" ];
   };
 }

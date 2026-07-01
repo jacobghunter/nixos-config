@@ -22,7 +22,7 @@
 - ~~Fix mouse forward and back to stick to the same monitor~~
 - have 1-3 on monitor 1 and 4-6 on monitor 2 instead of 1-5 and 6-10
 - configure it so the laptop config isnt bad
-- calibre backups
+- tweak hyprglass, install more plugins from here: https://github.com/szymon420699/awesome-hyprland-420
 
 # PC
 
@@ -38,6 +38,11 @@
 - nautilus (gtk) theming as dark mode
 - fix super+esc menu
 - wayle special workspace highlight + swap on click
+- KDE connect for easy sending of files/text? for laptop, phone, and pc
+
+# Books
+
+- calibre backups to server and sync for pc/laptop?
 
 kef swap to usb:
 
