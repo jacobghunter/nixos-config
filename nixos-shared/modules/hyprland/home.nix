@@ -62,13 +62,6 @@ let
     hyprlandPackage = pkgs.hyprland;
     src = inputs.hyprglass;
   };
-
-  easymotionPlugin =
-    pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprland-easymotion.nix"
-      {
-        hyprlandPackage = pkgs.hyprland;
-        src = inputs.hyprland-easymotion;
-      };
 in
 {
   options.modules.hyprland = {
@@ -162,7 +155,6 @@ in
       plugins = [
         hdrFixPlugin
         hyprglassPlugin
-        easymotionPlugin
         inputs.hyprsplit.packages.${pkgs.stdenv.hostPlatform.system}.hyprsplit
         # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
       ];

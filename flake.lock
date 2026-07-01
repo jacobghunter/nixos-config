@@ -522,23 +522,6 @@
         "type": "github"
       }
     },
-    "hyprland-easymotion": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1779334090,
-        "narHash": "sha256-RrDVDR3+A12vNOV3FYRtqVNaYQTIjs8TbWp1H1cy/7c=",
-        "owner": "natchapman",
-        "repo": "hyprland-easymotion",
-        "rev": "d73c00f26fa1185f88a2e7d6f03c8c851214f1d8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "natchapman",
-        "ref": "lua_config",
-        "repo": "hyprland-easymotion",
-        "type": "github"
-      }
-    },
     "hyprland-guiutils": {
       "inputs": {
         "aquamarine": [
@@ -1397,7 +1380,6 @@
         "home-manager": "home-manager",
         "hyprglass": "hyprglass",
         "hyprland": "hyprland",
-        "hyprland-easymotion": "hyprland-easymotion",
         "hyprland-plugins": "hyprland-plugins",
         "hyprsplit": "hyprsplit",
         "lazyvim-starter": "lazyvim-starter",

@@ -40,10 +40,6 @@
       url = "github:hyprnux/hyprglass/v0.6.2";
       flake = false;
     };
-    hyprland-easymotion = {
-      url = "github:natchapman/hyprland-easymotion/lua_config";
-      flake = false;
-    };
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
