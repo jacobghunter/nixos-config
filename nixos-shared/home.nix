@@ -62,10 +62,7 @@
           name = "you-should-use";
           src = pkgs.zsh-you-should-use.src;
         }
-        {
-          name = "zsh-z";
-          src = pkgs.zsh-z.src;
-        }
+
         {
           name = "zsh-bat";
           src = pkgs.fetchFromGitHub {
@@ -135,8 +132,7 @@
       nf = "fzf -m --preview='bat --color=always {}' --bind 'enter:become(nvim {+})'";
 
       # Tool replacements
-      cd = "z";
-      cdi = "zi";
+
       ls = "eza";
       grep = "rg";
       cat = "bat";
@@ -165,6 +161,7 @@
     programs.zoxide = {
       enable = true;
       enableZshIntegration = true;
+      options = [ "--cmd cd" ];
     };
 
     # Replaces zsh history
