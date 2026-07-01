@@ -411,6 +411,23 @@
         "type": "github"
       }
     },
+    "hyprglass": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779382003,
+        "narHash": "sha256-6qa0PoeKfGSpXpILgp2yuYfRmrQKjDSQWpy8q27u1uE=",
+        "owner": "hyprnux",
+        "repo": "hyprglass",
+        "rev": "f30a1962b520e4f8471b9e353cd2977713bc0a57",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprnux",
+        "ref": "v0.6.2",
+        "repo": "hyprglass",
+        "type": "github"
+      }
+    },
     "hyprgraphics": {
       "inputs": {
         "hyprutils": [
@@ -1361,6 +1378,7 @@
         "antigravity-cli": "antigravity-cli",
         "disko": "disko",
         "home-manager": "home-manager",
+        "hyprglass": "hyprglass",
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
         "hyprsplit": "hyprsplit",

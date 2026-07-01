@@ -36,6 +36,10 @@
     #   inputs.hyprland.follows = "hyprland";
     # };
     hyprsplit.url = "github:shezdy/hyprsplit";
+    hyprglass = {
+      url = "github:hyprnux/hyprglass/v0.6.2";
+      flake = false;
+    };
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";

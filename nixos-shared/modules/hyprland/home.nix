@@ -57,6 +57,13 @@ let
       {
         hyprlandPackage = pkgs.hyprland;
       };
+
+  hyprglassPlugin =
+    pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprglass.nix"
+      {
+        hyprlandPackage = pkgs.hyprland;
+        src = inputs.hyprglass;
+      };
 in
 {
   options.modules.hyprland = {
@@ -149,6 +156,7 @@ in
       systemd.enable = true;
       plugins = [
         hdrFixPlugin
+        hyprglassPlugin
         inputs.hyprsplit.packages.${pkgs.stdenv.hostPlatform.system}.hyprsplit
         # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
         # inputs.hyprland-easymotion.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-easymotion
