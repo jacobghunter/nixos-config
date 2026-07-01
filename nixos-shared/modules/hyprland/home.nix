@@ -58,11 +58,16 @@ let
         hyprlandPackage = pkgs.hyprland;
       };
 
-  hyprglassPlugin =
-    pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprglass.nix"
+  hyprglassPlugin = pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprglass.nix" {
+    hyprlandPackage = pkgs.hyprland;
+    src = inputs.hyprglass;
+  };
+
+  easymotionPlugin =
+    pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprland-easymotion.nix"
       {
         hyprlandPackage = pkgs.hyprland;
-        src = inputs.hyprglass;
+        src = inputs.hyprland-easymotion;
       };
 in
 {
@@ -157,9 +162,9 @@ in
       plugins = [
         hdrFixPlugin
         hyprglassPlugin
+        easymotionPlugin
         inputs.hyprsplit.packages.${pkgs.stdenv.hostPlatform.system}.hyprsplit
         # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
-        # inputs.hyprland-easymotion.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-easymotion
       ];
       extraLuaFiles = {
         "hyprsplit/init" = {

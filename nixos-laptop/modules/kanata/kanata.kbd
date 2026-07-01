@@ -1,0 +1,89 @@
+(defcfg
+  tap-hold-require-prior-idle 200
+  concurrent-tap-hold yes
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+(defchords combos 18
+  ;; Y + U -> <
+  (y u) S-,
+  ;; U + I -> {
+  (u i) S-[
+  ;; I + O -> [
+  (i o) [
+  ;; O + P -> (
+  (o p) S-9
+
+  ;; H + J -> &angle_macro
+  (h j) @angle_macro
+  ;; J + K -> &brace_macro
+  (j k) @brace_macro
+  ;; K + L -> &brkt_macro
+  (k l) @brkt_macro
+  ;; L + ; -> &paren_macro
+  (l ;) @paren_macro
+
+  ;; N + M -> >
+  (n m) S-.
+  ;; M + , -> }
+  (m ,) S-]
+  ;; , + . -> ]
+  (, .) ]
+  ;; . + / -> )
+  (. /) S-0
+)
+
+(defalias
+  ;; Macros
+  paren_macro (macro S-9 30 S-0 30 left)
+  brkt_macro (macro [ 30 ] 30 left)
+  brace_macro (macro S-[ 30 S-] 30 left)
+  angle_macro (macro S-, 30 S-. 30 left)
+
+  ;; Morph: Esc / Control -> Backtick / Shift -> Tilde
+  esc_ctrl (fork esc grv (lctl rctl))
+  esc_shift_ctrl (fork @esc_ctrl S-grv (lsft rsft))
+
+  ;; Tap-Dance: Shift on single tap/hold, GUI (Super) on double tap
+  td_ss (tap-dance 200 (lsft lmet))
+
+  ;; Home Row Mods (Left Hand)
+  a (tap-hold 200 250 a lctl)
+  s (tap-hold 200 250 s lalt)
+  d (tap-hold 200 250 d lsft)
+  f (tap-hold 200 250 f lmet)
+
+  ;; Chords for standard keys
+  ch_y (chord combos y)
+  ch_u (chord combos u)
+  ch_i (chord combos i)
+  ch_o (chord combos o)
+  ch_p (chord combos p)
+  ch_h (chord combos h)
+  ch_n (chord combos n)
+  ch_m (chord combos m)
+  ch_com (chord combos ,)
+  ch_dot (chord combos .)
+  ch_fsl (chord combos /)
+
+  ;; Home Row Mods + Chords (Right Hand)
+  j (tap-hold 200 250 (chord combos j) rmet)
+  k (tap-hold 200 250 (chord combos k) rsft)
+  l (tap-hold 200 250 (chord combos l) ralt)
+  sem (tap-hold 200 250 (chord combos ;) rctl)
+)
+
+(deflayer base
+  @esc_shift_ctrl  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab              q    w    e    r    t    @ch_y @ch_u @ch_i @ch_o @ch_p [    ]    \
+  @td_ss           @a   @s   @d   @f   g    @ch_h @j   @k   @l   @sem '    ret
+  lsft             z    x    c    v    b    @ch_n @ch_m @ch_com @ch_dot @ch_fsl rsft
+  lctl             lmet lalt           spc            ralt rmet rctl
+)

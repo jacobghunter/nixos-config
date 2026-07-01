@@ -62,4 +62,8 @@
       # STOP_CHARGE_THRESH_BAT0 = 80;
     };
   };
+
+  imports = [
+    ./modules/kanata
+  ];
 }

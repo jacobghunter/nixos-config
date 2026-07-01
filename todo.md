@@ -22,7 +22,8 @@
 - ~~Fix mouse forward and back to stick to the same monitor~~
 - have 1-3 on monitor 1 and 4-6 on monitor 2 instead of 1-5 and 6-10
 - configure it so the laptop config isnt bad
-- tweak hyprglass, install more plugins from here: https://github.com/szymon420699/awesome-hyprland-420
+- tweak hyprglass
+- install more plugins from here: https://github.com/szymon420699/awesome-hyprland-420
 
 # PC
 

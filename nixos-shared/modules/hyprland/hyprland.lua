@@ -48,6 +48,13 @@ hl.bind(mainMod .. " + SHIFT + G", hs.dsp.grab_rogue_windows())
 hl.bind(mainMod .. " + TAB", hl.dsp.focus({ monitor = "+1" }))
 hl.bind(mainMod .. " + SHIFT + TAB", hl.dsp.focus({ monitor = "-1" }))
 
+-- Hints-like binds
+hl.bind(mainMod .. " + I", function()
+    if hl.dsp.easymotion then
+        hl.dispatch(hl.dsp.easymotion("action:hyprctl dispatch focuswindow address:{}"))
+    end
+end)
+
 --##################
 --## MY PROGRAMS ###
 --##################
@@ -418,6 +425,29 @@ hl.config({
         },
     },
 })
+
+-- Easymotion configuration (dynamic based on whether plugin is loaded yet)
+if hl.dsp.easymotion then
+    hl.config({
+        ["plugin:easymotion:textsize"] = 15,
+        ["plugin:easymotion:textcolor"] = 0xffffffff,
+        ["plugin:easymotion:bgcolor"] = 0x000000c0,
+        ["plugin:easymotion:textfont"] = "Sans",
+        ["plugin:easymotion:textpadding"] = "0",
+        ["plugin:easymotion:bordersize"] = 0,
+        ["plugin:easymotion:blur"] = 0,
+    })
+else
+    hl.on("hyprland.start", function()
+        hl.exec_cmd("hyprctl keyword plugin:easymotion:textsize 15")
+        hl.exec_cmd("hyprctl keyword plugin:easymotion:textcolor rgba(ffffffff)")
+        hl.exec_cmd("hyprctl keyword plugin:easymotion:bgcolor rgba(000000c0)")
+        hl.exec_cmd("hyprctl keyword plugin:easymotion:textfont Sans")
+        hl.exec_cmd("hyprctl keyword plugin:easymotion:textpadding 0")
+        hl.exec_cmd("hyprctl keyword plugin:easymotion:bordersize 0")
+        hl.exec_cmd("hyprctl keyword plugin:easymotion:blur 0")
+    end)
+end
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
