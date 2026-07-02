@@ -23,7 +23,6 @@
 
   home.packages = with pkgs; [
     # Applications
-    vscode
     brave
     obsidian
     bitwarden-desktop
@@ -147,4 +146,28 @@
   #   theme = spicePkgs.themes.dribbblish;
   #   colorScheme = "dracula";
   # };
+
+  programs.vscode = {
+    enable = true;
+    profiles.default = {
+      extensions = with pkgs.vscode-extensions; [
+        jnoortheen.nix-ide
+        sumneko.lua
+      ];
+      userSettings = {
+        "editor.formatOnSave" = true;
+        "git.autofetch" = true;
+        "[nix]" = {
+          "editor.defaultFormatter" = "jnoortheen.nix-ide";
+        };
+        "nix.serverPath" = "nil";
+        "Lua.workspace.library" = [
+          "/run/current-system/sw/share/hypr/stubs"
+        ];
+        "Lua.diagnostics.globals" = [
+          "hl"
+        ];
+      };
+    };
+  };
 }
