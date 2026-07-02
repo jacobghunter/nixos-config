@@ -1,3 +1,4 @@
+;; Can exit via LCTRL, SPACE, ESC
 (defcfg
   tap-hold-require-prior-idle 200
   concurrent-tap-hold yes
@@ -65,8 +66,8 @@
   angle_macro (macro S-, 30 S-. 30 left)
 
   ;; Morph: Esc / Control -> Backtick / Shift -> Tilde
-  esc_ctrl (fork esc grv (lctl rctl))
-  esc_shift_ctrl (fork @esc_ctrl S-grv (lsft rsft))
+  ;; esc_ctrl (fork esc grv (lctl rctl))
+  ;; esc_shift_ctrl (fork @esc_ctrl S-grv (lsft rsft))
 
   ;; Tap-Dance: Shift on single tap/hold, GUI (Super) on double tap
   td_ss (tap-dance 200 (lsft lmet))
@@ -95,12 +96,24 @@
   k (tap-hold 200 250 (chord combos k) rsft)
   l (tap-hold 200 250 (chord combos l) ralt)
   sem (tap-hold 200 250 (chord combos ;) rctl)
+
+  ;; Upper Layer Toggle and Mods
+  lalt_upper (layer-toggle upper)
+  end_mod (tap-hold 200 250 end lmet)
 )
 
 (deflayer base
-  @esc_shift_ctrl  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab              q    w    e    r    t    @ch_y @ch_u @ch_i @ch_o @ch_p [    ]    \
-  @td_ss           @a   @s   @d   @f   g    @ch_h @j   @k   @l   @sem '    ret
-  lsft             z    x    c    v    b    @ch_n @ch_m @ch_com @ch_dot @ch_fsl rsft
-  lctl             lmet lalt           spc            ralt rmet rctl
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    @ch_y @ch_u @ch_i @ch_o @ch_p [    ]    \
+  @td_ss @a   @s   @d   @f   g    @ch_h @j   @k   @l   @sem '    ret
+  lsft z    x    c    v    b    @ch_n @ch_m @ch_com @ch_dot @ch_fsl rsft
+  lctl lmet @lalt_upper    spc            ret  rmet del
+)
+
+(deflayer upper
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    pgup up   pgdn home _    _    _    _    _    _    _    _    _
+  _    left down rght @end_mod bspc _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
 )
