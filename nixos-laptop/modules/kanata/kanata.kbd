@@ -12,6 +12,23 @@
 )
 
 (defchords combos 18
+  ;; Single key fallbacks (required for keys used in chords)
+  (y) y
+  (u) u
+  (i) i
+  (o) o
+  (p) p
+  (h) h
+  (j) j
+  (k) k
+  (l) l
+  (;) ;
+  (n) n
+  (m) m
+  (,) ,
+  (.) .
+  (/) /
+
   ;; Y + U -> <
   (y u) S-,
   ;; U + I -> {
