@@ -2,9 +2,13 @@
   config,
   pkgs,
   inputs,
+  osConfig ? null,
   ...
 }:
 
+let
+  hostname = if osConfig != null then osConfig.networking.hostName else "nixos-laptop";
+in
 {
   imports = [
     "${inputs.self}/nixos-shared/home.nix"
@@ -42,6 +46,7 @@
 
     # Dev Tools
     cmake
+    nixd
 
     # Electronics / Hardware
     kicad-small
@@ -160,7 +165,20 @@
         "[nix]" = {
           "editor.defaultFormatter" = "jnoortheen.nix-ide";
         };
-        "nix.serverPath" = "nil";
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "nixd";
+        "nix.serverSettings" = {
+          "nixd" = {
+            "nixpkgs" = {
+              "expr" = "import <nixpkgs> { }";
+            };
+            "options" = {
+              "nixos" = {
+                "expr" = "(builtins.getFlake \"/home/jacob/nixos-config\").nixosConfigurations.${hostname}.options";
+              };
+            };
+          };
+        };
         "Lua.workspace.library" = [
           "/run/current-system/sw/share/hypr/stubs"
         ];
