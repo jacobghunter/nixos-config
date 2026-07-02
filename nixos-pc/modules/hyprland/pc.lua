@@ -1,5 +1,5 @@
 local hs = require("hyprsplit")
-hs.monitor_priority({"DP-1", "HDMI-A-1"})
+hs.monitor_priority({ "DP-1", "HDMI-A-1" })
 
 hl.monitor({
     output = "HDMI-A-1",
@@ -27,3 +27,27 @@ hl.config({
     },
 })
 
+-- Native workspace rules to set default layouts per monitor
+hl.workspace_rule({
+    workspace = "m[DP-1]",
+    layout = "dwindle",
+})
+
+hl.workspace_rule({
+    workspace = "m[HDMI-A-1]",
+    layout = "dwindle",
+})
+
+hl.config({
+    scrolling = {
+        -- direction = "up",
+        wrap_focus = true,
+        wrap_swapcol = true,
+        column_width = 0.33,
+        fullscreen_on_one_column = false,
+    },
+    master = {
+        orientation = "center",
+        mfact = 0.33,
+    }
+})

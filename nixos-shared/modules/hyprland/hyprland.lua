@@ -239,14 +239,18 @@ end
 setup_workspace_binds()
 
 -- Scroll through existing workspaces with mainMod + scroll
-hl.bind(mainMod .. " + mouse_down", hs.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up", hs.dsp.focus({ workspace = "e-1" }))
+-- hl.bind(mainMod .. " + mouse_down", hs.dsp.focus({ workspace = "e+1" }))
+-- hl.bind(mainMod .. " + mouse_up", hs.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + mouse_down", hl.dsp.layout("move +col"))
+hl.bind(mainMod .. " + mouse_up", hl.dsp.layout("move -col"))
+hl.bind(mainMod .. " + SHIFT + mouse_down", hl.dsp.layout("swapcol r"))
+hl.bind(mainMod .. " + SHIFT + mouse_up", hl.dsp.layout("swapcol l"))
 
 -- Switch workspaces with mainMod + mouse side buttons (back/forward)
 hl.bind(mainMod .. " + mouse:275", hs.dsp.focus({ workspace = "e-1" }))
 hl.bind(mainMod .. " + mouse:276", hs.dsp.focus({ workspace = "e+1" }))
 
---  Row 2 (Q W E R T Y U I O P) 
+--  Row 2 (Q W E R T Y U I O P)
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + W", hl.dsp.window.close())
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(browser))
@@ -255,7 +259,7 @@ hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(notes))
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(colorPicker .. " | wl-copy"))
 
---  Row 3 (A S D F G H J K L) 
+--  Row 3 (A S D F G H J K L)
 hl.bind(mainMod .. " + A", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd("/home/jacob/.config/hypr/scripts/toggle_special.sh"))
 hl.bind(mainMod .. " + CTRL + A", hl.dsp.exec_cmd("/home/jacob/.config/hypr/scripts/toggle_workspace_special.sh"))
@@ -264,15 +268,48 @@ hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized", action
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mainMod .. " + G", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
+
+local function toggle_layout()
+    -- 1. Get the current active workspace information
+    local active_ws = hl.get_active_workspace()
+    if not active_ws or not active_ws.name then
+        return
+    end
+
+    local ws_name = active_ws.name
+
+    -- 2. Determine the current layout of this specific workspace.
+    -- If it hasn't been overridden yet, fall back to checking the global default.
+    local current = hl.get_config("general:layout")
+
+    -- Note: If your Lua wrapper doesn't track per-workspace overrides natively via get_config,
+    -- we can track the state internally using a Lua table.
+    toggle_layout.states = toggle_layout.states or {}
+    local current_ws_layout = toggle_layout.states[ws_name] or current
+
+    if current_ws_layout == "dwindle" then
+        -- Apply master exclusively to the current workspace
+        hl.dispatch("keyword", "workspace " .. ws_name .. ", layout:master")
+        toggle_layout.states[ws_name] = "master"
+        hl.notification.create({ text = "Workspace [" .. ws_name .. "] -> Master", duration = 2000 })
+    else
+        -- Revert back to dwindle for this workspace
+        hl.dispatch("keyword", "workspace " .. ws_name .. ", layout:dwindle")
+        toggle_layout.states[ws_name] = "dwindle"
+        hl.notification.create({ text = "Workspace [" .. ws_name .. "] -> Dwindle", duration = 2000 })
+    end
+end
+
+hl.bind(mainMod .. " + H", toggle_layout)
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("systemd-run --user systemctl suspend"))
 
---  Row 4 (Z X C V B N M) 
+--  Row 4 (Z X C V B N M)
 hl.bind(mainMod .. " + Z", hl.dsp.window.drag())
 hl.bind(mainMod .. " + X", hl.dsp.window.resize())
 hl.bind("SUPER + V", hl.dsp.exec_cmd("cliphist list | tofi -c ~/.config/tofi/configV | cliphist decode | wl-copy"))
 hl.bind(mainMod .. " + M", hl.dsp.exit())
 
---  Special Keys & Mouse 
+--  Special Keys & Mouse
 hl.bind("SUPER + ESCAPE", hl.dsp.exec_cmd("wlogout"))
 hl.bind("CTRL + Escape", hl.dsp.exec_cmd("killall waybar || waybar"))
 hl.bind(mainMod .. " + space", hl.dsp.window.float({ action = "toggle" }))
@@ -313,10 +350,14 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"))
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
 
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), { locked = true, repeating = true })
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true, repeating = true })
-hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),
+    { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
+    { locked = true, repeating = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
+    { locked = true, repeating = true })
+hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),
+    { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
 
@@ -334,19 +375,19 @@ hl.config({
         gaps_in = 2.5,
         gaps_out = 5,
         border_size = borderSize,
-        
+
         -- https://wiki.hypr.land/Configuring/Basics/Variables/ for info about colors
         ["col.active_border"] = activeBorder,
         ["col.inactive_border"] = inactiveBorder,
-        
+
         -- Set to true enable resizing windows by clicking and dragging on borders and gaps
         resize_on_border = true,
-        
+
         -- Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
         allow_tearing = false,
         layout = "dwindle",
     },
-    
+
     -- https://wiki.hypr.land/Configuring/Variables/#decoration
     decoration = {
         rounding = rounding,
@@ -365,28 +406,28 @@ hl.config({
             xray = true,
         },
     },
-    
+
     -- https://wiki.hypr.land/Configuring/Variables/#animations
     animations = {
         enabled = true,
     },
-    
+
     -- Ref https://wiki.hypr.land/Configuring/Workspace-Rules/
     dwindle = {
         -- pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below (removed in Hyprland v0.55)
         preserve_split = true, -- You probably want this
     },
-    
+
     -- See https://wiki.hypr.land/Configuring/Master-Layout/ for more
     master = {
-        --  OLD CONFIG 
+        --  OLD CONFIG
         -- new_status = master
     },
-    
+
     -- https://wiki.hypr.land/Configuring/Variables/#misc
-    --  NEW CONFIG 
+    --  NEW CONFIG
     misc = {
-        force_default_wallpaper = 0, -- Set to 0 or 1 to disable the anime mascot wallpapers
+        force_default_wallpaper = 0,  -- Set to 0 or 1 to disable the anime mascot wallpapers
         disable_hyprland_logo = true, -- If true disables the random hyprland logo / anime girl background. :(
         disable_splash_rendering = true,
         vrr = 0,
@@ -410,9 +451,9 @@ hl.config({
 
         follow_mouse = 1,
         -- force_no_accel = 1
-        
+
         sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
-        
+
         touchpad = {
             natural_scroll = true,
         },
@@ -430,4 +471,3 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hypridle")
     hl.exec_cmd("hyprlock")
 end)
-
