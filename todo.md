@@ -28,6 +28,8 @@
 - install more plugins from here: https://github.com/szymon420699/awesome-hyprland-420
 - hy3 for 3 column dwindle on ultrawide
 - factor out config stuff
+- workspace/setup binds?
+   - like one for zmk with a dev flake, one for website, etc. could combine hyprland layout with nix development flakes
 
 # PC
 
