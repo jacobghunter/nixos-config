@@ -4,3 +4,4 @@ usbipd
 .direnv/
 nested.generated.lua
 .qmlls.ini
+result

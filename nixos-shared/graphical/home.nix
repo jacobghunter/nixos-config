@@ -182,9 +182,14 @@ in
         "git.autofetch" = true;
         "qt-qml.qmlls.useQmlImportPathEnvVar" = true;
         "qt-qml.qmlls.customExePath" = "${pkgs.qt6.qtdeclarative}/bin/qmlls";
-        "qt-qml.qmlls.additionalImportPaths" = [
+        "qt-qml.qmlls.customArgs" = [
+          "-E"
+          "-I"
           "${pkgs.quickshell}/lib/qt-6/qml"
+          "-I"
+          "${pkgs.qt6.qtdeclarative}/lib/qt-6/qml"
         ];
+        "qt-qml.qmlPreviewLaunchEnabled" = false;
         "[nix]" = {
           "editor.defaultFormatter" = "jnoortheen.nix-ide";
         };
