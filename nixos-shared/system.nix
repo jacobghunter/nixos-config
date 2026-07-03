@@ -6,6 +6,10 @@
 }:
 
 {
+  nixpkgs.overlays = [
+    inputs.nix-vscode-extensions.overlays.default
+  ];
+
   # Enable ZSH
   programs.zsh.enable = true;
 
@@ -80,6 +84,9 @@
       "flakes"
     ];
     download-buffer-size = 134217728;
-    trusted-users = [ "root" "@wheel" ];
+    trusted-users = [
+      "root"
+      "@wheel"
+    ];
   };
 }

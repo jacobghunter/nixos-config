@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   inputs,
   osConfig ? null,
   ...
@@ -50,6 +51,8 @@ in
 
     # Electronics / Hardware
     kicad-small
+
+    qt6.qtdeclarative # ships qmlls, needed on every machine, not just inside a dev shell
   ];
 
   # --- PROGRAMS CONFIGURATION ---
@@ -152,16 +155,36 @@ in
   #   colorScheme = "dracula";
   # };
 
+  qt.enable = true;
+
+  home.activation.quickshellLspInit = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    QMLLS_INI="${config.home.homeDirectory}/nixos-config/nixos-shared/modules/quickshell/.qmlls.ini"
+    if [ ! -f "$QMLLS_INI" ]; then
+      $DRY_RUN_CMD touch "$QMLLS_INI"
+    fi
+  '';
+
   programs.vscode = {
     enable = true;
     profiles.default = {
-      extensions = with pkgs.vscode-extensions; [
-        jnoortheen.nix-ide
-        sumneko.lua
-      ];
+      extensions =
+        with pkgs.vscode-extensions;
+        [
+          jnoortheen.nix-ide
+          sumneko.lua
+        ]
+        ++ (with pkgs.nix-vscode-extensions.vscode-marketplace; [
+          theqtcompany.qt-qml
+          theqtcompany.qt-core
+        ]);
       userSettings = {
         "editor.formatOnSave" = true;
         "git.autofetch" = true;
+        "qt-qml.qmlls.useQmlImportPathEnvVar" = true;
+        "qt-qml.qmlls.customExePath" = "${pkgs.qt6.qtdeclarative}/bin/qmlls";
+        "qt-qml.qmlls.additionalImportPaths" = [
+          "${pkgs.quickshell}/lib/qt-6/qml"
+        ];
         "[nix]" = {
           "editor.defaultFormatter" = "jnoortheen.nix-ide";
         };

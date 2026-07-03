@@ -45,6 +45,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     vscode-server.url = "github:msteen/nixos-vscode-server";
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 
     # Server specific
     disko.url = "github:nix-community/disko";

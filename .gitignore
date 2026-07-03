@@ -2,4 +2,5 @@ simple-hyperland/
 orca-sync-log.txt
 usbipd
 .direnv/
-nested.lua.generated
+nested.generated.lua
+.qmlls.ini
