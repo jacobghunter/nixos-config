@@ -1,6 +1,10 @@
 {
   description = "Quickshell development environment";
-
+  # Inspo repos:
+  # git clone https://github.com/ilyamiro/nixos-configuration.git
+  # at /config/sessions/hyprland/scripts/quickshell
+  # git clone https://github.com/caelestia-dots/shell.git
+  # at /modules
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -18,22 +22,41 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         runNested = pkgs.writeShellScriptBin "run-nested" ''
+          set -euo pipefail
+
+          PROJECT_DIR="$PWD"
+          TEMPLATE="$PROJECT_DIR/nested.lua.template"
+          GENERATED="$PROJECT_DIR/nested.generated.lua"
+
+          if [ ! -f "$TEMPLATE" ]; then
+            echo "Error: nested.lua.template not found in $PROJECT_DIR"
+            echo "Run run-nested from your quickshell project directory."
+            exit 1
+          fi
+
           echo "Starting nested Hyprland with Quickshell..."
-          # Run the system's Hyprland binary (from PATH) rather than the flake's version.
-          # This prevents plugin version mismatch errors and matches your host setup.
-          Hyprland -c ./nested.lua
+
+          sed \
+            -e "s|QUICKSHELL_BIN|${pkgs.quickshell}/bin/quickshell|g" \
+            -e "s|QML_PATH|$HOME/nixos-config/nixos-shared/modules/quickshell/shell.qml|g" \
+            "$TEMPLATE" > "$GENERATED"
+
+          env -u LD_LIBRARY_PATH -u QT_PLUGIN_PATH -u QML2_IMPORT_PATH \
+            Hyprland -c "$GENERATED"
         '';
 
         serveDocs = pkgs.writeShellScriptBin "serve-docs" ''
           DOCS_DIR="$HOME/.cache/quickshell-docs"
-          SITE_DIR="$DOCS_DIR/quickshell.outfoxxed.me"
+          SITE_DIR="$DOCS_DIR/quickshell.org"
 
           if [ ! -d "$SITE_DIR" ]; then
             echo "No local copy found — mirroring Quickshell docs (needs network, one-time)..."
             mkdir -p "$DOCS_DIR"
             ${pkgs.wget}/bin/wget --mirror --convert-links --adjust-extension \
-              --page-requisites --no-parent -P "$DOCS_DIR" \
-              https://quickshell.outfoxxed.me/
+              --page-requisites --no-parent \
+              --domains=quickshell.org \
+              -P "$DOCS_DIR" \
+              https://quickshell.org/docs/v0.3.0/
           fi
 
           echo "Serving Quickshell docs at http://localhost:8420"

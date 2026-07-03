@@ -9,6 +9,7 @@ ShellRoot {
             id: barWindow
             property var modelData: modelData
             screen: modelData
+            color: "transparent"
 
             anchors {
                 top: true
