@@ -18,7 +18,10 @@ in
   ];
 
   xdg.configFile."hypr/scripts/power_monitor.sh" = {
-    source = ./scripts/power_monitor.sh;
+    text = builtins.replaceStrings 
+      [ "STATIC_WALLPAPER=\"/nix/store/qi3biyjb3f8xw8rnjn03w8yqjik8cx9s-source/assets/backgrounds/outer-wilds.png\"" ]
+      [ "STATIC_WALLPAPER=\"${staticWallpaper}\"" ]
+      (builtins.readFile ./scripts/power_monitor.sh);
     executable = true;
   };
 

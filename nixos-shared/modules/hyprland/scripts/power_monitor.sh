@@ -54,7 +54,6 @@ start_static() {
 
     CURRENT_STATE="static"
 }
-
 check_power() {
     # Auto-recover if the wallpaper engine crashed in the background
     if [ "$CURRENT_STATE" = "video" ] && ! pgrep -f "linux-wallpaperengine" > /dev/null; then
@@ -68,20 +67,29 @@ check_power() {
 
     AC_SUPPLY=$(ls /sys/class/power_supply/ 2>/dev/null | grep -E "^(AC|ADP)" | head -n 1)
 
+    # Check if we are on PC (has DP-1 output) and have video wallpaper dir
+    IS_PC=0
+    if hyprctl monitors 2>/dev/null | grep -q "DP-1" && [ -d "$WORKSHOP_DIR" ]; then
+        IS_PC=1
+    fi
+
     if [ -z "$AC_SUPPLY" ]; then
-        start_or_resume_video
+        if [ "$IS_PC" = "1" ]; then
+            start_or_resume_video
+        else
+            start_static
+        fi
         return
     fi
 
     STATUS=$(cat /sys/class/power_supply/$AC_SUPPLY/online 2>/dev/null)
 
-    if [ "$STATUS" = "1" ]; then
+    if [ "$STATUS" = "1" ] && [ "$IS_PC" = "1" ]; then
         start_or_resume_video
     else
         start_static
     fi
 }
-
 # Main event loop: poll every 3 seconds to check power state and auto-recover crashes
 while true; do
     check_power
