@@ -14,6 +14,11 @@ let
 in
 {
   options.modules.wayle = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to enable the Wayle bar.";
+    };
     showBattery = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -21,7 +26,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     services.wayle = {
       enable = true;
       settings = {

@@ -164,6 +164,13 @@
       options = [ "--cmd cd" ];
     };
 
+    # Environment variable manager for project directories
+    programs.direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true; # Enables the faster, caching Nix integration
+    };
+
     # Replaces zsh history
     programs.atuin = {
       enable = true;

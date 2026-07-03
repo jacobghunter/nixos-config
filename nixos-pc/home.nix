@@ -3,6 +3,7 @@
   config,
   pkgs,
   inputs,
+  lib,
   ...
 }:
 
@@ -48,7 +49,7 @@
     ];
   };
 
-  systemd.user.services.wayle = {
+  systemd.user.services.wayle = lib.mkIf config.modules.wayle.enable {
     Service = {
       # Wait up to 5 seconds for a default audio sink to be discovered by wireplumber
       # before starting wayle, to prevent the audio module from failing to initialize.
