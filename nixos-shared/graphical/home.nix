@@ -172,10 +172,12 @@ in
         [
           jnoortheen.nix-ide
           sumneko.lua
+          mkhl.direnv
         ]
         ++ (with pkgs.nix-vscode-extensions.vscode-marketplace; [
           theqtcompany.qt-qml
           theqtcompany.qt-core
+          rszyma.vscode-kanata
         ]);
       userSettings = {
         "editor.formatOnSave" = true;
