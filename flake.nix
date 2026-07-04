@@ -109,7 +109,7 @@
             # Shared configurations
             ./nixos-shared/system.nix
             ./nixos-shared/graphical/configuration.nix
-            ./nixos-shared/modules/hyprland/system.nix
+            ./nixos-shared/graphical/modules/hyprland/system.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -123,9 +123,9 @@
                   ./nixos-laptop/home.nix
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
-                  ./nixos-shared/modules/kitty/kitty.nix
-                  ./nixos-shared/modules/wayle/wayle.nix
-                  ./nixos-shared/modules/quickshell/quickshell.nix
+                  ./nixos-shared/graphical/modules/kitty/kitty.nix
+                  ./nixos-shared/graphical/modules/wayle/wayle.nix
+                  ./nixos-shared/graphical/modules/quickshell/quickshell.nix
                   ./nixos-laptop/modules/hyprland/home.nix
                 ];
               };
@@ -186,7 +186,7 @@
                 imports = [
                   ./nixos-wsl/home.nix
                   ./nixos-shared/home.nix
-                  ./nixos-shared/modules/kitty/kitty.nix
+                  ./nixos-shared/graphical/modules/kitty/kitty.nix
                 ];
               };
             }
@@ -206,7 +206,7 @@
             # Shared configurations
             ./nixos-shared/system.nix
             ./nixos-shared/graphical/configuration.nix
-            ./nixos-shared/modules/hyprland/system.nix
+            ./nixos-shared/graphical/modules/hyprland/system.nix
             inputs.nix-gaming.nixosModules.platformOptimizations
             inputs.nix-gaming.nixosModules.pipewireLowLatency
 
@@ -222,9 +222,9 @@
                   ./nixos-pc/home.nix
                   ./nixos-shared/home.nix
                   ./nixos-shared/graphical/home.nix
-                  ./nixos-shared/modules/kitty/kitty.nix
-                  ./nixos-shared/modules/wayle/wayle.nix
-                  ./nixos-shared/modules/quickshell/quickshell.nix
+                  ./nixos-shared/graphical/modules/kitty/kitty.nix
+                  ./nixos-shared/graphical/modules/wayle/wayle.nix
+                  ./nixos-shared/graphical/modules/quickshell/quickshell.nix
                   ./nixos-pc/modules/hyprland/home.nix
                 ];
               };

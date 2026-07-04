@@ -2,7 +2,7 @@
 
 {
   imports = [
-    "${inputs.self}/nixos-shared/modules/hyprland/home.nix"
+    "${inputs.self}/nixos-shared/graphical/modules/hyprland/home.nix"
   ];
 
   modules.hyprland.idleTimeout = 150; # 2.5 minutes

@@ -158,7 +158,7 @@ in
   qt.enable = true;
 
   home.activation.quickshellLspInit = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    QMLLS_INI="${config.home.homeDirectory}/nixos-config/nixos-shared/modules/quickshell/.qmlls.ini"
+    QMLLS_INI="${config.home.homeDirectory}/nixos-config/nixos-shared/graphical/modules/quickshell/.qmlls.ini"
     if [ ! -f "$QMLLS_INI" ]; then
       $DRY_RUN_CMD touch "$QMLLS_INI"
     fi

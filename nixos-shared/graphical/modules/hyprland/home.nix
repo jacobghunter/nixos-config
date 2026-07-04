@@ -52,13 +52,11 @@ let
 
   cfg = config.modules.hyprland;
 
-  hdrFixPlugin =
-    pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprland-fix-hdr-screenshare.nix"
-      {
-        hyprlandPackage = pkgs.hyprland;
-      };
+  hdrFixPlugin = pkgs.callPackage ./hyprland-fix-hdr-screenshare.nix {
+    hyprlandPackage = pkgs.hyprland;
+  };
 
-  hyprglassPlugin = pkgs.callPackage "${inputs.self}/nixos-shared/modules/hyprland/hyprglass.nix" {
+  hyprglassPlugin = pkgs.callPackage ./hyprglass.nix {
     hyprlandPackage = pkgs.hyprland;
     src = inputs.hyprglass;
   };
@@ -231,7 +229,7 @@ in
     programs.rofi = {
       enable = true;
       package = pkgs.rofi;
-      theme = "${inputs.self}/nixos-shared/modules/hyprland/rofi-theme.rasi";
+      theme = "./rofi-theme.rasi";
     };
 
     # Tofi Configs
