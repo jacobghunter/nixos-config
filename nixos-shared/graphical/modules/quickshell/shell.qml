@@ -1,13 +1,15 @@
+// shell.qml
 import Quickshell
 import QtQuick
+import "./components" as Components // Import your local directory
 
 ShellRoot {
     Variants {
         model: Quickshell.screens
 
-        PanelWindow {
+        delegate: PanelWindow {
             id: barWindow
-            property var modelData: modelData
+            required property var modelData
             screen: modelData
             color: "transparent"
 
@@ -17,13 +19,12 @@ ShellRoot {
                 right: true
             }
 
+            implicitHeight: 44
             exclusionMode: ExclusionMode.Auto
 
-            Loader {
+            Components.Bar {
                 anchors.fill: parent
                 anchors.margins: 6
-                height: 38
-                source: "./Bar.qml"
             }
         }
     }
