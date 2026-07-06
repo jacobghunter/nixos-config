@@ -34,12 +34,24 @@
             exit 1
           fi
 
+          # Backup current host environment variables to restore them on exit
+          HOST_WAYLAND_DISPLAY="''${WAYLAND_DISPLAY:-wayland-1}"
+          HOST_HYPRLAND_SIGNATURE="''${HYPRLAND_INSTANCE_SIGNATURE:-}"
+
           echo "Starting nested Hyprland with Quickshell..."
 
           sed \
             -e "s|QUICKSHELL_BIN|env QT_PLUGIN_PATH='$QT_PLUGIN_PATH' QML2_IMPORT_PATH='$QML2_IMPORT_PATH' ${pkgs.quickshell}/bin/quickshell|g" \
             -e "s|QML_PATH|$PROJECT_DIR/shell.qml|g" \
             "$TEMPLATE" > "$GENERATED"
+
+          cleanup() {
+            echo "Restoring host session variables in systemd/dbus environment..."
+            dbus-update-activation-environment --systemd \
+              WAYLAND_DISPLAY="$HOST_WAYLAND_DISPLAY" \
+              HYPRLAND_INSTANCE_SIGNATURE="$HOST_HYPRLAND_SIGNATURE"
+          }
+          trap cleanup EXIT
 
           env -u LD_LIBRARY_PATH -u QT_PLUGIN_PATH -u QML2_IMPORT_PATH -u HYPRLAND_INSTANCE_SIGNATURE \
             Hyprland -c "$GENERATED"
