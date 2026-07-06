@@ -52,12 +52,14 @@ let
 
   cfg = config.modules.hyprland;
 
+  hyprlandFlakePackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+
   hdrFixPlugin = pkgs.callPackage ./hyprland-fix-hdr-screenshare.nix {
-    hyprlandPackage = pkgs.hyprland;
+    hyprlandPackage = hyprlandFlakePackage;
   };
 
   hyprglassPlugin = pkgs.callPackage ./hyprglass.nix {
-    hyprlandPackage = pkgs.hyprland;
+    hyprlandPackage = hyprlandFlakePackage;
     src = inputs.hyprglass;
   };
 in
@@ -148,12 +150,11 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
       configType = "lua";
-      package = pkgs.hyprland;
+      package = hyprlandFlakePackage;
       systemd.enable = true;
       plugins = [
         hdrFixPlugin
         hyprglassPlugin
-        inputs.hyprsplit.packages.${pkgs.stdenv.hostPlatform.system}.hyprsplit
         # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
       ];
       extraLuaFiles = {

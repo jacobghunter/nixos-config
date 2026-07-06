@@ -35,7 +35,10 @@
     #   url = "github:zakk4223/hyprland-easymotion";
     #   inputs.hyprland.follows = "hyprland";
     # };
-    hyprsplit.url = "github:shezdy/hyprsplit";
+    hyprsplit = {
+      url = "github:shezdy/hyprsplit";
+      inputs.hyprland.follows = "hyprland";
+    };
     hyprglass = {
       url = "github:hyprnux/hyprglass/v0.6.2";
       flake = false;

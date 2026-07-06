@@ -37,11 +37,11 @@
           echo "Starting nested Hyprland with Quickshell..."
 
           sed \
-            -e "s|QUICKSHELL_BIN|${pkgs.quickshell}/bin/quickshell|g" \
-            -e "s|QML_PATH|$HOME/nixos-config/nixos-shared/modules/quickshell/shell.qml|g" \
+            -e "s|QUICKSHELL_BIN|env QT_PLUGIN_PATH='$QT_PLUGIN_PATH' QML2_IMPORT_PATH='$QML2_IMPORT_PATH' ${pkgs.quickshell}/bin/quickshell|g" \
+            -e "s|QML_PATH|$PROJECT_DIR/shell.qml|g" \
             "$TEMPLATE" > "$GENERATED"
 
-          env -u LD_LIBRARY_PATH -u QT_PLUGIN_PATH -u QML2_IMPORT_PATH \
+          env -u LD_LIBRARY_PATH -u QT_PLUGIN_PATH -u QML2_IMPORT_PATH -u HYPRLAND_INSTANCE_SIGNATURE \
             Hyprland -c "$GENERATED"
         '';
 

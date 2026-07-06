@@ -27,36 +27,33 @@ Rectangle {
                 model: Hyprland.workspaces
 
                 Rectangle {
+                    id: workspaceRect
                     required property var modelData
 
                     width: 26
                     height: 26
                     radius: 6
-                    color: modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#b4befe" // Lavender
+                    color: workspaceRect.modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#b4befe" // Lavender
                     : "#1e1e2e" // Surface
 
-                    border.color: modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#b4befe" : "#313244"
+                    border.color: workspaceRect.modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#b4befe" : "#313244"
                     border.width: 1
 
                     Text {
-                        required property var modelData
-
                         anchors.centerIn: parent
-                        text: modelData.id
-                        color: modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#11111b" : "#bac2de"
+                        text: workspaceRect.modelData.id
+                        color: workspaceRect.modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#11111b" : "#bac2de"
                         font.bold: true
                         font.pixelSize: 12
                         font.family: "sans-serif"
                     }
 
                     MouseArea {
-                        required property var modelData
-
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            Hyprland.dispatch("workspace " + modelData.id);
+                            Hyprland.dispatch("workspace " + workspaceRect.modelData.id);
                         }
                     }
                 }
