@@ -18,6 +18,9 @@ Rectangle {
     ClockEngine {
         id: clockService
     }
+    WeatherEngine {
+        id: weatherService
+    }
 
     RowLayout {
         id: mainLayout
@@ -62,6 +65,12 @@ Rectangle {
                     }
                 }
             }
+        }
+
+        Text {
+            Layout.alignment: Qt.AlignVCenter
+            text: `${weatherService.currentForecast} | ${weatherService.currentTemp} ${weatherService.tempUnit}`
+            color: "#b4befe"
         }
 
         Item {
