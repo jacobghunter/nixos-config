@@ -34,27 +34,43 @@
             exit 1
           fi
 
-          # Backup current host environment variables to restore them on exit
-          HOST_WAYLAND_DISPLAY="''${WAYLAND_DISPLAY:-wayland-1}"
-          HOST_HYPRLAND_SIGNATURE="''${HYPRLAND_INSTANCE_SIGNATURE:-}"
+          # Create a temporary sandbox bin directory to stub systemd/dbus calls
+          SANDBOX_DIR="$PROJECT_DIR/.sandbox-bin"
+          mkdir -p "$SANDBOX_DIR"
 
-          echo "Starting nested Hyprland with Quickshell..."
+          cleanup() {
+            rm -rf "$SANDBOX_DIR"
+            echo "Sandbox directory cleaned up."
+          }
+          trap cleanup EXIT
+
+          # Write dummy systemctl stub
+          cat << 'EOF' > "$SANDBOX_DIR/systemctl"
+#!/bin/sh
+# Stub to prevent nested Hyprland from affecting host systemd
+exit 0
+EOF
+          chmod +x "$SANDBOX_DIR/systemctl"
+
+          # Write dummy dbus-update-activation-environment stub
+          cat << 'EOF' > "$SANDBOX_DIR/dbus-update-activation-environment"
+#!/bin/sh
+# Stub to prevent nested Hyprland from affecting host D-Bus environment
+exit 0
+EOF
+          chmod +x "$SANDBOX_DIR/dbus-update-activation-environment"
+
+          echo "Starting nested Hyprland with Quickshell (sandboxed)..."
 
           sed \
             -e "s|QUICKSHELL_BIN|env QT_PLUGIN_PATH='$QT_PLUGIN_PATH' QML2_IMPORT_PATH='$QML2_IMPORT_PATH' ${pkgs.quickshell}/bin/quickshell|g" \
             -e "s|QML_PATH|$PROJECT_DIR/shell.qml|g" \
             "$TEMPLATE" > "$GENERATED"
 
-          cleanup() {
-            echo "Restoring host session variables in systemd/dbus environment..."
-            dbus-update-activation-environment --systemd \
-              WAYLAND_DISPLAY="$HOST_WAYLAND_DISPLAY" \
-              HYPRLAND_INSTANCE_SIGNATURE="$HOST_HYPRLAND_SIGNATURE"
-          }
-          trap cleanup EXIT
-
+          # Prepend sandbox dir to PATH and run nested Hyprland
+          export PATH="$SANDBOX_DIR:$PATH"
           env -u LD_LIBRARY_PATH -u QT_PLUGIN_PATH -u QML2_IMPORT_PATH -u HYPRLAND_INSTANCE_SIGNATURE \
-            Hyprland -c "$GENERATED"
+            ${pkgs.dbus}/bin/dbus-run-session Hyprland -c "$GENERATED"
         '';
 
         serveDocs = pkgs.writeShellScriptBin "serve-docs" ''
@@ -90,6 +106,7 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            dbus
             quickshell
             runNested
             serveDocs
