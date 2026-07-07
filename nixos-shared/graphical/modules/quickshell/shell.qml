@@ -19,10 +19,11 @@ ShellRoot {
                 right: true
             }
 
-            implicitHeight: 44
+            height: mainBar.implicitHeight + 6
             exclusionMode: ExclusionMode.Auto
 
             Components.Bar {
+                id: mainBar
                 anchors.fill: parent
                 anchors.margins: 6
             }

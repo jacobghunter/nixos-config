@@ -6,40 +6,59 @@ import "../modules"
 // FIX: Make the root element the actual visual Rectangle
 Rectangle {
     id: barRoot
+    implicitHeight: mainLayout.implicitHeight
 
     // Caelestia-style transparent crust
-    color: Theme.crust
-    border.color: Theme.borderColor
-    border.width: Theme.borderSize
-    radius: Theme.borderRadius
+    // color: Theme.crust
+    color: "transparent"
+    // border.color: Theme.borderColor
+    // border.width: Theme.borderSize
+    // radius: Theme.borderRadius
 
     ClockEngine {
         id: clockService
     }
 
     RowLayout {
+        id: mainLayout
         anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
+        anchors.leftMargin: Theme.borderRadius / 2
+        anchors.rightMargin: Theme.borderRadius / 2
 
         // Workspace Switcher (Left)
-        Row {
-            Layout.alignment: Qt.AlignVCenter
-            spacing: 6
-            Repeater {
-                model: Hyprland.workspaces
-                Rectangle {
-                    id: wsRect
-                    required property var modelData
-                    width: 26
-                    height: 26
-                    radius: 6
-                    color: wsRect.modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#b4befe" : "#1e1e2e"
+        Rectangle {
+            // 1. Make the background transparent and add a border
+            color: Theme.surfaceTrough
+            radius: Theme.borderRadius * 1.5
 
-                    Text {
-                        anchors.centerIn: parent
-                        text: wsRect.modelData.id
-                        color: wsRect.modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#11111b" : "#bac2de"
+            // 2. Bind size to the inner Row's size + some padding
+            Layout.preferredWidth: workspaceRow.width + 10  // 5px padding on left/right
+            Layout.preferredHeight: workspaceRow.height + 10 // 5px padding on top/bottom
+
+            Row {
+                id: workspaceRow // Added an ID to reference its size above
+
+                // Center the Row inside the border container
+                anchors.centerIn: parent
+
+                Layout.alignment: Qt.AlignVCenter
+                spacing: 1
+
+                Repeater {
+                    model: Hyprland.workspaces
+                    Rectangle {
+                        id: wsRect
+                        required property var modelData
+                        width: 20
+                        height: 20
+                        radius: 20
+                        color: wsRect.modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#b4befe" : "transparent"
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: wsRect.modelData.id
+                            color: wsRect.modelData.id === (Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0) ? "#11111b" : "#bac2de"
+                        }
                     }
                 }
             }

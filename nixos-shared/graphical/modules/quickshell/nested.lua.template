@@ -20,6 +20,11 @@ hl.bind("ALT + Q", hl.dsp.exec_cmd("kitty"))
 hl.bind("ALT + W", hl.dsp.window.close())
 hl.bind("ALT + SHIFT + M", hl.dsp.exec_cmd("hyprctl dispatch exit"))
 
+hl.bind("ALT + 1", hl.dsp.focus({workspace = 1}))
+hl.bind("ALT + 2", hl.dsp.focus({workspace = 2}))
+hl.bind("ALT + 3", hl.dsp.focus({workspace = 3}))
+
+
 hl.on("hyprland.start", function()
     hl.exec_cmd("QUICKSHELL_BIN -p QML_PATH")
 end)

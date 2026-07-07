@@ -23,6 +23,6 @@ QtObject {
 
     // Borders and Layouts
     readonly property int borderSize: 1
-    readonly property int borderRadius: 10
+    readonly property int borderRadius: 8
     readonly property color borderColor: "#26cdd6f4"
 }
