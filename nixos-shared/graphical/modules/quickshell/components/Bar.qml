@@ -73,6 +73,10 @@ Rectangle {
             color: "#b4befe"
         }
 
+        AudioController {
+            Layout.alignment: Qt.AlignVCenter
+        }
+
         Item {
             Layout.fillWidth: true
         }

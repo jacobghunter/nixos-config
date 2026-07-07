@@ -1,3 +1,4 @@
 singleton Theme 1.0 Theme.qml
 ClockEngine 1.0 ClockEngine.qml
 WeatherEngine 1.0 WeatherEngine.qml
+AudioController 1.0 AudioController.qml
