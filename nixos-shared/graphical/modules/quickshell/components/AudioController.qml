@@ -6,7 +6,7 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Services.Pipewire
 import Quickshell.Wayland
-import "../modules"
+import "../services"
 
 Item {
     id: root
@@ -77,14 +77,14 @@ Item {
     // Visual button in the bar
     Rectangle {
         id: barButton
-        height: parent.height
-        width: buttonContent.width + 16
+        height: parent.height - 2
+        width: buttonContent.width + 8
         color: buttonMouseArea.containsMouse ? "#1affffff" : "transparent"
         border.color: buttonMouseArea.containsMouse ? Theme.borderColor : "transparent"
         border.width: Theme.borderSize
         radius: Theme.borderRadius
 
-        Row {
+        RowLayout {
             id: buttonContent
             anchors.centerIn: parent
             spacing: 6

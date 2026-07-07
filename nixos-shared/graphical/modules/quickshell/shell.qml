@@ -1,7 +1,7 @@
 // shell.qml
 import Quickshell
 import QtQuick
-import "./components" as Components // Import your local directory
+import "./layouts" as Layouts
 
 ShellRoot {
     Variants {
@@ -22,7 +22,7 @@ ShellRoot {
             height: mainBar.implicitHeight + 6
             exclusionMode: ExclusionMode.Auto
 
-            Components.Bar {
+            Layouts.Bar {
                 id: mainBar
                 anchors.fill: parent
                 anchors.margins: 6

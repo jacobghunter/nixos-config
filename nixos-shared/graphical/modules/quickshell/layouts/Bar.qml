@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Hyprland
-import "../modules"
+import "../services"
+import "../components"
 
 // FIX: Make the root element the actual visual Rectangle
 Rectangle {
@@ -28,7 +29,6 @@ Rectangle {
         anchors.leftMargin: Theme.borderRadius / 2
         anchors.rightMargin: Theme.borderRadius / 2
 
-        // Workspace Switcher (Left)
         Rectangle {
             // 1. Make the background transparent and add a border
             color: Theme.surfaceTrough
@@ -81,23 +81,21 @@ Rectangle {
             Layout.fillWidth: true
         }
 
-        // Active Title (Center)
+        // Active Title
         Text {
             Layout.alignment: Qt.AlignVCenter
             text: Hyprland.activeToplevel ? Hyprland.activeToplevel.title : "Desktop"
             color: "#cdd6f4"
         }
+    }
 
-        Item {
-            Layout.fillWidth: true
-        }
-
-        // Live Clock Component (Right)
-        Text {
-            Layout.alignment: Qt.AlignVCenter
-            text: clockService.timeString
-            color: "#b4befe"
-            font.bold: true
-        }
+    // Live Clock Component (Right)
+    Text {
+        Layout.alignment: Qt.AlignVCenter
+        anchors.verticalCenterOffset: 4
+        anchors.centerIn: barRoot
+        text: clockService.timeString
+        color: "#b4befe"
+        font.bold: true
     }
 }
