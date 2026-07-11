@@ -17,7 +17,37 @@
 
   home.packages = with pkgs; [
     nvtopPackages.amd
+    (symlinkJoin {
+      name = "orca-slicer";
+      paths = [
+        (appimageTools.wrapType2 {
+          pname = "orca-slicer";
+          version = "2.3.2";
+          src = fetchurl {
+            url = "https://github.com/SoftFever/OrcaSlicer/releases/download/v2.3.2/OrcaSlicer_Linux_AppImage_Ubuntu2404_V2.3.2.AppImage";
+            sha256 = "1n2afc153fl1pxzif65z0921hkhjynmblp37drv43n9pxk73chy6";
+          };
+          extraPkgs = pkgs: with pkgs; [
+            webkitgtk_4_1
+            libsoup_3
+            sqlite
+            libmspack
+            bzip2.out
+          ];
+        })
+      ];
+      nativeBuildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/orca-slicer \
+          --prefix LD_LIBRARY_PATH : "${bzip2.out}/lib"
+      '';
+    })
   ];
+
+  xdg.configFile."OrcaSlicer/user/default" = {
+    source = "${self}/configs/orca";
+    recursive = true;
+  };
 
   programs.mangohud = {
     enable = true;
