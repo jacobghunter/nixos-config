@@ -77,7 +77,7 @@ Item {
     // Visual button in the bar
     Rectangle {
         id: barButton
-        height: parent.height - 2
+        height: parent.height
         width: buttonContent.width + 8
         color: buttonMouseArea.containsMouse ? "#1affffff" : "transparent"
         border.color: buttonMouseArea.containsMouse ? Theme.borderColor : "transparent"
@@ -91,7 +91,7 @@ Item {
 
             Text {
                 font.family: "Iosevka Nerd Font"
-                font.pixelSize: 14
+                font.pixelSize: 12
                 color: root.muted ? "#f38ba8" : "#b4befe"
                 text: {
                     if (root.muted)
