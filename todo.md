@@ -35,6 +35,7 @@
 - workspace/setup binds?
    - like one for zmk with a dev flake, one for website, etc. could combine hyprland layout with nix development flakes
    - gim-like command palette with super+:?
+- super right click to add window rules dynamically?
 
 # PC
 
