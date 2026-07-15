@@ -34,6 +34,28 @@
             exit 1
           fi
 
+          TARGET_QML=""
+          if [ "$#" -gt 0 ]; then
+            INPUT_PATH="$1"
+            if [ -d "$INPUT_PATH" ]; then
+              if [ -f "$INPUT_PATH/shell.qml" ]; then
+                TARGET_QML="$(realpath "$INPUT_PATH/shell.qml")"
+              elif [ -f "$INPUT_PATH/main.qml" ]; then
+                TARGET_QML="$(realpath "$INPUT_PATH/main.qml")"
+              else
+                echo "Error: Directory '$INPUT_PATH' does not contain shell.qml or main.qml"
+                exit 1
+              fi
+            elif [ -f "$INPUT_PATH" ]; then
+              TARGET_QML="$(realpath "$INPUT_PATH")"
+            else
+              echo "Error: '$INPUT_PATH' is not a valid file or directory."
+              exit 1
+            fi
+          else
+            TARGET_QML="$PROJECT_DIR/shell.qml"
+          fi
+
           # Create a temporary sandbox bin directory to stub systemd/dbus calls
           SANDBOX_DIR="$PROJECT_DIR/.sandbox-bin"
           mkdir -p "$SANDBOX_DIR"
@@ -64,7 +86,7 @@ EOF
 
           sed \
             -e "s|QUICKSHELL_BIN|env QT_PLUGIN_PATH='$QT_PLUGIN_PATH' QML2_IMPORT_PATH='$QML2_IMPORT_PATH' ${pkgs.quickshell}/bin/quickshell|g" \
-            -e "s|QML_PATH|$PROJECT_DIR/shell.qml|g" \
+            -e "s|QML_PATH|$TARGET_QML|g" \
             "$TEMPLATE" > "$GENERATED"
 
           # Prepend sandbox dir to PATH and run nested Hyprland
