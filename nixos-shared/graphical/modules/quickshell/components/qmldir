@@ -1,2 +1,3 @@
 AudioController 1.0 AudioController.qml
 HyprWorkspaces 1.0 HyprWorkspaces.qml
+ActiveWindow 1.0 ActiveWindow.qml

@@ -20,6 +20,8 @@
   - allows for a quick search for a package, then launches it as an app or in a terminal
   - github page preview in line (sorta like zen browser page previews?)
 - firefox open new tab as child bind
+- stop firefox password manager from being used at all
+- swap file managers
 
 # Hyprland
 
