@@ -10,11 +10,17 @@ with lib;
 
 let
   cfg = config.modules.kitty;
+  tintyEnabled = config.modules.tinty.enable;
   palette = import "${inputs.self}/nixos-shared/palette.nix" { };
 in
 {
   options.modules.kitty = {
     enable = mkEnableOption "kitty";
+    tintyEnabled = mkOption {
+      type = types.bool;
+      default = config.modules.tinty.enable or false;
+      description = "Whether kitty should source its colors from tinty instead of the static palette.";
+    };
     colors = {
       text = mkOption {
         type = types.str;
@@ -54,53 +60,53 @@ in
         name = "JetBrainsMono NF";
         size = 13;
       };
-      settings = {
-        background_opacity = "0.0";
-        dynamic_background_opacity = "yes";
+      settings =
+        {
+          background_opacity = "0.0";
+          dynamic_background_opacity = "yes";
 
-        allow_remote_control = "yes";
+          allow_remote_control = "yes";
 
-        auto_reload_config = -1;
-        window_padding_width = 8;
-        italic_font = "auto";
-        bold_italic_font = "auto";
-        disable_ligatures = "always";
-        enabled_layouts = "tall,stack";
+          auto_reload_config = -1;
+          window_padding_width = 8;
+          italic_font = "auto";
+          bold_italic_font = "auto";
+          disable_ligatures = "always";
+          enabled_layouts = "tall,stack";
 
-        # Resizing settings for hyprland
-        resize_debounce_time = 0;
-        placement_strategy = "top-left";
-        resize_draw_strategy = "scale";
-        linux_display_server = "wayland";
+          resize_debounce_time = 0;
+          placement_strategy = "top-left";
+          resize_draw_strategy = "scale";
+          linux_display_server = "wayland";
 
-        # Theming based on options
-        foreground = "#${cfg.colors.text}";
-        background = "#000000";
-        # background = "#${cfg.colors.background}";
-        selection_foreground = "#${cfg.colors.background}";
-        selection_background = "#${cfg.colors.primary}";
+          tab_bar_style = "powerline";
+          tab_powerline_style = "slanted";
 
-        tab_bar_style = "powerline";
-        tab_powerline_style = "slanted";
+          focus_follows_mouse = "yes";
 
-        focus_follows_mouse = "yes";
-        cursor = "#${cfg.colors.secondary}";
-        cursor_text_color = "#${cfg.colors.background}";
+          term = "xterm-256color";
+        }
+        // lib.optionalAttrs (!tintyEnabled) {
+          foreground = "#${cfg.colors.text}";
+          background = "#000000";
+          selection_foreground = "#${cfg.colors.background}";
+          selection_background = "#${cfg.colors.primary}";
 
-        url_color = "#${cfg.colors.secondary}";
+          cursor = "#${cfg.colors.secondary}";
+          cursor_text_color = "#${cfg.colors.background}";
 
-        active_border_color = "#${cfg.colors.primary}";
-        inactive_border_color = "#${cfg.colors.inactive}";
-        bell_border_color = "#${cfg.colors.special}";
+          url_color = "#${cfg.colors.secondary}";
 
-        active_tab_foreground = "#${cfg.colors.background}";
-        active_tab_background = "#${cfg.colors.primary}";
-        inactive_tab_foreground = "#${cfg.colors.text}";
-        inactive_tab_background = "#${cfg.colors.dark}";
-        tab_bar_background = "#000000";
-        # tab_bar_background = "#${cfg.colors.dark}";
-        term = "xterm-256color";
-      };
+          active_border_color = "#${cfg.colors.primary}";
+          inactive_border_color = "#${cfg.colors.inactive}";
+          bell_border_color = "#${cfg.colors.special}";
+
+          active_tab_foreground = "#${cfg.colors.background}";
+          active_tab_background = "#${cfg.colors.primary}";
+          inactive_tab_foreground = "#${cfg.colors.text}";
+          inactive_tab_background = "#${cfg.colors.dark}";
+          tab_bar_background = "#000000";
+        };
       keybindings = {
         "kitty_mod+h" = "kitty_scrollback_nvim";
         "kitty_mod+g" = "kitty_scrollback_nvim --config ksb_builtin_last_cmd_output";
@@ -128,6 +134,9 @@ in
       extraConfig = ''
         action_alias kitty_scrollback_nvim kitten ${config.home.homeDirectory}/.local/share/nvim/lazy/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py
         mouse_map kitty_mod+right press ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output
+      ''
+      + lib.optionalString tintyEnabled ''
+        include ${config.home.homeDirectory}/.local/share/tinted-theming/tinty/tinted-terminal-themes-kitty-file.conf
       '';
     };
   };

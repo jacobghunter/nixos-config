@@ -1,0 +1,36 @@
+default-scheme = "base24-dracula"
+
+[[items]]
+name = "tinted-shell"
+path = "https://github.com/tinted-theming/tinted-shell"
+themes-dir = "scripts"
+hook = "source \"$TINTY_THEME_FILE_PATH\""
+supported-systems = ["base16", "base24"]
+
+[[items]]
+path = "https://github.com/tinted-theming/tinted-yazi"
+name = "tinted-yazi"
+themes-dir = "flavors"
+hook = '''
+cp -f "$TINTY_THEME_FILE_PATH" "$HOME/.config/yazi/flavors/tinted-scheme.yazi/flavor.toml"
+'''
+
+[[items]]
+path = "https://github.com/tinted-theming/tinted-terminal"
+name = "tinted-terminal"
+themes-dir = "themes/kitty"
+supported-systems = ["base16", "base24"]
+
+[[items]]
+name = "tinted-nvim"
+path = "https://github.com/tinted-theming/tinted-nvim"
+themes-dir = "colors"
+hook = "echo $TINTY_THEME_NAME > ~/.local/share/tinted-theming/tinty/current_scheme"
+supported-systems = ["base16", "base24"]
+
+[[items]]
+name = "tinted-fzf"
+path = "https://github.com/tinted-theming/tinted-fzf"
+themes-dir = "sh"
+hook = "cp -f \"$TINTY_THEME_FILE_PATH\" ~/.cache/tinted-fzf-theme.sh"
+supported-systems = ["base16", "base24"]
