@@ -22,6 +22,8 @@ in
       executable = true;
     };
 
+    xdg.configFile."quickshell/lib/Theme.qml".source = ./Theme.qml;
+
     programs.zsh.initContent = ''
       [ -f ~/.cache/tinted-fzf-theme.sh ] && source ~/.cache/tinted-fzf-theme.sh
     '';
