@@ -15,6 +15,7 @@ in
     home.packages = with pkgs; [
       tinty
     ];
+
     xdg.configFile."tinted-theming/tinty/config.toml".text = builtins.readFile ./tinty.toml;
 
     xdg.configFile."tinted-theming/tinty/hooks/quickshell-colors.sh" = {

@@ -6,9 +6,10 @@ mkdir -p "$(dirname "$out")"
 
 {
   echo "pragma Singleton"
+  echo "import Quickshell"
   echo "import QtQuick"
   echo ""
-  echo "QtObject {"
+  echo "Singleton {"
   echo "    readonly property string schemeId: \"${TINTY_SCHEME_ID:-}\""
   echo "    readonly property string schemeVariant: \"${TINTY_SCHEME_VARIANT:-}\""
   echo ""
@@ -29,4 +30,4 @@ mkdir -p "$(dirname "$out")"
   done
 
   echo "}"
-} >"$out"
+} >"$out" >"$out"

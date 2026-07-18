@@ -1,4 +1,5 @@
 pragma Singleton
+import Quickshell
 import QtQuick
 import qs.lib
 
@@ -9,7 +10,7 @@ import qs.lib
 // file if you want to change what a role *means* (e.g. remap `primary` to
 // a different slot); the actual color values always come from Colors.qml.
 
-QtObject {
+Singleton {
     // Backgrounds
     readonly property color background: Colors.base00
     readonly property color backgroundAlt: Colors.base01
