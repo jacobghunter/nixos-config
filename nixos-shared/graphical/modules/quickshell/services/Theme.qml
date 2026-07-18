@@ -1,29 +1,54 @@
 pragma Singleton
+import Quickshell
 import QtQuick
-import qs.lib as GlobalTheme
+import qs.lib
 
 QtObject {
-    // Note: QML hex colors require "0x" and an ARGB or RGB format.
-    // We combine your alpha values directly with the base colors for clarity.
+    // From global Theme.qml
+    readonly property color background: Theme.background
+    readonly property color backgroundAlt: Theme.backgroundAlt
+    readonly property color backgroundDark: Theme.backgroundDark
+    readonly property color backgroundDarkest: Theme.backgroundDarkest
+    readonly property color selectionBackground: Theme.selectionBackground
 
-    // Base Colors (dynamically pulled from the global tinty theme)
-    readonly property color primary: GlobalTheme.Theme.primary
-    readonly property color secondary: GlobalTheme.Theme.secondary
-    readonly property color special: GlobalTheme.Theme.accent
-    readonly property color inactive: GlobalTheme.Theme.comment
-    readonly property color background: GlobalTheme.Theme.background
-    readonly property color text: GlobalTheme.Theme.foreground
+    // Foregrounds
+    readonly property color foreground: Theme.foreground
+    readonly property color foregroundMuted: Theme.foregroundMuted
+    readonly property color foregroundBright: Theme.foregroundBright
+    readonly property color foregroundBrightest: Theme.foregroundBrightest
+    readonly property color comment: Theme.comment
+
+    // Semantic accents 
+    readonly property color error: Theme.error
+    readonly property color warning: Theme.warning
+    readonly property color accent: Theme.accent
+    readonly property color success: Theme.success
+    readonly property color info: Theme.info
+    readonly property color primary: Theme.primary
+    readonly property color secondary: Theme.secondary
+    readonly property color deprecated: Theme.deprecated
+
+    // Bright ANSI variants 
+    readonly property color errorBright: Theme.errorBright
+    readonly property color warningBright: Theme.warningBright
+    readonly property color successBright: Theme.successBright
+    readonly property color infoBright: Theme.infoBright
+    readonly property color primaryBright: Theme.primaryBright
+    readonly property color secondaryBright: Theme.secondaryBright
+
+    // ==========================================
+    // --- Custom UI Overrides & Layouts --------
+    // ==========================================
 
     // Translucent UI Elements (Alpha mixed in)
-    // Hex order is #AARRGGBB (Alpha, Red, Green, Blue)
-    readonly property color crust: Qt.rgba(GlobalTheme.Theme.backgroundAlt.r, GlobalTheme.Theme.backgroundAlt.g, GlobalTheme.Theme.backgroundAlt.b, 0.85) // Your bar's current color
-    readonly property color panelBackground: Qt.rgba(GlobalTheme.Theme.background.r, GlobalTheme.Theme.background.g, GlobalTheme.Theme.background.b, 0.8) // background + alpha (cc)
-    readonly property color surfaceDark: Qt.rgba(GlobalTheme.Theme.backgroundDark.r, GlobalTheme.Theme.backgroundDark.g, GlobalTheme.Theme.backgroundDark.b, 0.93) // waybar-dark + alpha-waybar (ee)
-    readonly property color surfaceTrough: GlobalTheme.Theme.selectionBackground
-    readonly property color shadow: GlobalTheme.Theme.backgroundDarkest ?? "#1a1a1a"
+    readonly property color crust: Qt.rgba(backgroundAlt.r, backgroundAlt.g, backgroundAlt.b, 0.85)
+    readonly property color panelBackground: Qt.rgba(background.r, background.g, background.b, 0.8)
+    readonly property color surfaceDark: Qt.rgba(backgroundDark.r, backgroundDark.g, backgroundDark.b, 0.93)
+    readonly property color surfaceTrough: selectionBackground
+    readonly property color shadow: backgroundDarkest ?? "#1a1a1a"
 
     // Borders and Layouts
     readonly property int borderSize: 1
-    readonly property int borderRadius: 8
-    readonly property color borderColor: Qt.rgba(GlobalTheme.Theme.foreground.r, GlobalTheme.Theme.foreground.g, GlobalTheme.Theme.foreground.b, 0.15)
+    readonly property int borderRadius: 12
+    readonly property color borderColor: Qt.rgba(foreground.r, foreground.g, foreground.b, 0.15)
 }

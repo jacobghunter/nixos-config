@@ -9,9 +9,8 @@ mkdir -p "$(dirname "$out")"
   echo "import Quickshell"
   echo "import QtQuick"
   echo ""
-  echo "Singleton {"
+  echo "QtObject {" # Use QtObject as the root, not Singleton
   echo "    readonly property string schemeId: \"${TINTY_SCHEME_ID:-}\""
-  echo "    readonly property string schemeVariant: \"${TINTY_SCHEME_VARIANT:-}\""
   echo ""
 
   # base00-base0F (base16) + base10-base17 (base24 extension)
@@ -24,10 +23,9 @@ mkdir -p "$(dirname "$out")"
     b_val="${!b_var:-}"
 
     if [ -n "$r_val" ] && [ -n "$g_val" ] && [ -n "$b_val" ]; then
-      slot_lower=$(echo "$slot" | tr '[:upper:]' '[:lower:]')
-      echo "    readonly property color base${slot_lower}: \"#${r_val}${g_val}${b_val}\""
+      echo "    readonly property color base${slot}: \"#${r_val}${g_val}${b_val}\""
     fi
   done
 
   echo "}"
-} >"$out" >"$out"
+} >"$out"

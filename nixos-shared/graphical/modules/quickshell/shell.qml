@@ -2,6 +2,7 @@
 import Quickshell
 import QtQuick
 import "./layouts" as Layouts
+import "./services/Theme.qml" as Theme
 
 ShellRoot {
     Variants {

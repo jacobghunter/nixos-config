@@ -60,6 +60,7 @@
             path = "~/.cache/tinted-nvim-current-scheme",
             watch = true,
           },        
+        },
       },
     }
   '';

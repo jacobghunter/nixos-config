@@ -7,10 +7,10 @@ import "../services"
 
 Rectangle {
     id: root
-    color: Theme.surfaceTrough
+    color: Theme.background
     radius: Theme.borderRadius * 1.5
-    border.color: Theme.borderColor
-    border.width: Theme.borderSize
+    // border.color: Theme.borderColor
+    // border.width: Theme.borderSize
 
     Layout.preferredWidth: workspaceRow.width + 16
     Layout.preferredHeight: 30
@@ -107,7 +107,7 @@ Rectangle {
                 height: 10
                 radius: 5
 
-                color: isFocused ? Theme.primary : (isOccupied ? Theme.secondary : Theme.inactive)
+                color: isFocused ? Theme.primary : Theme.comment
 
                 Behavior on width {
                     NumberAnimation {

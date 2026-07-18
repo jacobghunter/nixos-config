@@ -3,6 +3,8 @@ import QtQuick.Layouts
 import Quickshell.Hyprland
 import "../services"
 import "../components"
+import qs.lib as GlobalTheme
+
 
 // FIX: Make the root element the actual visual Rectangle
 Rectangle {

@@ -7,10 +7,8 @@ import "../services"
 
 Rectangle {
     id: root
-    color: Theme.surfaceTrough
+    color: Theme.background
     radius: Theme.borderRadius
-    border.color: Theme.borderColor
-    border.width: Theme.borderSize
     height: 30
 
     // Only show if there is an active window
@@ -90,7 +88,7 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             font.family: "Iosevka Nerd Font"
             font.pixelSize: 11
-            color: Theme.text
+            color: Theme.primary
             text: Hyprland.activeToplevel ? Hyprland.activeToplevel.title : ""
             elide: Text.ElideRight
         }

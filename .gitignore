@@ -7,3 +7,5 @@ nested.generated.lua
 result
 nixos-shared/graphical/modules/quickshell/lib
 nixos-shared/graphical/modules/quickshell/.sandbox-bin/
+*inspo/
+inspo*/

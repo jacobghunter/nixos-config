@@ -1,5 +1,4 @@
 default-scheme = "base24-dracula"
-hooks = ["bash ~/.config/tinted-theming/tinty/hooks/quickshell-colors.sh"]
 
 [[items]]
 name = "tinted-shell"

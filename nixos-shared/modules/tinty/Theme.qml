@@ -2,15 +2,8 @@ pragma Singleton
 import Quickshell
 import QtQuick
 
-
-// Semantic color aliases on top of the standard base16/base24 slots in
-// Colors.qml. This file is static and hand-written — it never needs to be
-// regenerated when the active scheme changes, since every property here is
-// a live binding to Colors.* rather than a hardcoded value. Only edit this
-// file if you want to change what a role *means* (e.g. remap `primary` to
-// a different slot); the actual color values always come from Colors.qml.
-
-Singleton {
+// Use QtObject, not Singleton
+QtObject {
     // Backgrounds
     readonly property color background: Colors.base00
     readonly property color backgroundAlt: Colors.base01
@@ -35,8 +28,7 @@ Singleton {
     readonly property color secondary: Colors.base0E
     readonly property color deprecated: Colors.base0F
 
-    // Bright ANSI variants (base24 only — fall back to the non-bright
-    // version if the active scheme is base16, since those slots won't exist)
+    // Bright ANSI variants
     readonly property color errorBright: Colors.base12 ?? Colors.base08
     readonly property color warningBright: Colors.base13 ?? Colors.base0A
     readonly property color successBright: Colors.base14 ?? Colors.base0B
