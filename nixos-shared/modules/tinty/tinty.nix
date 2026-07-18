@@ -17,7 +17,11 @@ in
     ];
     xdg.configFile."tinted-theming/tinty/config.toml".text = builtins.readFile ./tinty.toml;
 
-    
+    xdg.configFile."tinted-theming/tinty/hooks/quickshell-colors.sh" = {
+      source = ./quickshell-colors.sh;
+      executable = true;
+    };
+
     programs.zsh.initContent = ''
       [ -f ~/.cache/tinted-fzf-theme.sh ] && source ~/.cache/tinted-fzf-theme.sh
     '';

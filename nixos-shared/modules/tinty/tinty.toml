@@ -1,4 +1,5 @@
 default-scheme = "base24-dracula"
+hooks = ["bash ~/.config/tinted-theming/tinty/hooks/quickshell-colors.sh"]
 
 [[items]]
 name = "tinted-shell"
@@ -25,7 +26,7 @@ supported-systems = ["base16", "base24"]
 name = "tinted-nvim"
 path = "https://github.com/tinted-theming/tinted-nvim"
 themes-dir = "colors"
-hook = "echo $TINTY_THEME_NAME > ~/.local/share/tinted-theming/tinty/current_scheme"
+hook = "echo $TINTY_SCHEME_ID > ~/.cache/tinted-nvim-current-scheme"
 supported-systems = ["base16", "base24"]
 
 [[items]]

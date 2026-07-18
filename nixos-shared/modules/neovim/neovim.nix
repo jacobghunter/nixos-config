@@ -57,10 +57,9 @@
           selector = {
             enabled = true,
             mode = "file",
-            path = "~/.local/share/tinted-theming/tinty/current_scheme",
+            path = "~/.cache/tinted-nvim-current-scheme",
             watch = true,
-          },
-        },
+          },        
       },
     }
   '';
