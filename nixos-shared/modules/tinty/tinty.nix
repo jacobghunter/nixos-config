@@ -25,6 +25,12 @@ in
 
     xdg.configFile."quickshell/lib/Theme.qml".source = ./Theme.qml;
 
+    xdg.configFile."quickshell/lib/qmldir".text = ''
+      module qs.lib
+      singleton Theme 1.0 Theme.qml
+      singleton Colors 1.0 Colors.qml
+    '';
+
     programs.zsh.initContent = ''
       [ -f ~/.cache/tinted-fzf-theme.sh ] && source ~/.cache/tinted-fzf-theme.sh
     '';

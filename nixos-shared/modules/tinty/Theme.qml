@@ -1,7 +1,7 @@
 pragma Singleton
 import Quickshell
 import QtQuick
-import qs.lib
+
 
 // Semantic color aliases on top of the standard base16/base24 slots in
 // Colors.qml. This file is static and hand-written — it never needs to be

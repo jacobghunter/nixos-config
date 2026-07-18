@@ -5,3 +5,5 @@ usbipd
 nested.generated.lua
 .qmlls.ini
 result
+nixos-shared/graphical/modules/quickshell/lib
+nixos-shared/graphical/modules/quickshell/.sandbox-bin/

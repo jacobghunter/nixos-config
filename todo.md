@@ -23,6 +23,10 @@
 - stop firefox password manager from being used at all
 - swap file managers
 
+# Tinty
+
+- Fix kitty bar config with powerline, overwrite the background color
+
 # Hyprland
 
 - ~~Fix mouse forward and back to stick to the same monitor~~
