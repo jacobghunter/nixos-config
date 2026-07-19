@@ -110,7 +110,10 @@ in
 
   config = {
 
-    modules.kitty.enable = true;
+    modules.kitty = {
+      enable = true;
+      tintyEnabled = true;
+    };
 
     home.sessionVariables = {
       HYPRCURSOR_THEME = cursorTheme;

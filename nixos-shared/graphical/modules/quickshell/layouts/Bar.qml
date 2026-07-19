@@ -3,6 +3,8 @@ import QtQuick.Layouts
 import Quickshell.Hyprland
 import "../services"
 import "../components"
+import qs.lib as GlobalTheme
+
 
 // FIX: Make the root element the actual visual Rectangle
 Rectangle {
@@ -33,6 +35,11 @@ Rectangle {
             id: hyprWorkspaces
         }
 
+        ActiveWindow {
+            id: activeWindow
+            Layout.alignment: Qt.AlignVCenter
+        }
+
         Text {
             Layout.alignment: Qt.AlignVCenter
             text: `${weatherService.currentForecast} | ${weatherService.currentTemp} ${weatherService.tempUnit}`
@@ -45,13 +52,6 @@ Rectangle {
 
         Item {
             Layout.fillWidth: true
-        }
-
-        // Active Title
-        Text {
-            Layout.alignment: Qt.AlignVCenter
-            text: Hyprland.activeToplevel ? Hyprland.activeToplevel.title : "Desktop"
-            color: "#cdd6f4"
         }
     }
 

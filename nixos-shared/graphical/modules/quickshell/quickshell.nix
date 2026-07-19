@@ -23,9 +23,11 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
-    # Link local shell.qml and Bar.qml to ~/.config/quickshell/
+    # Link local shell.qml and directories to ~/.config/quickshell/
     xdg.configFile."quickshell/shell.qml".source = ./shell.qml;
-    xdg.configFile."quickshell/Bar.qml".source = ./Bar.qml;
+    xdg.configFile."quickshell/components".source = ./components;
+    xdg.configFile."quickshell/layouts".source = ./layouts;
+    xdg.configFile."quickshell/services".source = ./services;
 
     # User systemd service to run Quickshell
     systemd.user.services.quickshell = {

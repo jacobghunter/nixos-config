@@ -20,6 +20,12 @@
   - allows for a quick search for a package, then launches it as an app or in a terminal
   - github page preview in line (sorta like zen browser page previews?)
 - firefox open new tab as child bind
+- stop firefox password manager from being used at all
+- swap file managers
+
+# Tinty
+
+- Fix kitty bar config with powerline, overwrite the background color
 
 # Hyprland
 
@@ -35,6 +41,8 @@
 - workspace/setup binds?
    - like one for zmk with a dev flake, one for website, etc. could combine hyprland layout with nix development flakes
    - gim-like command palette with super+:?
+- super right click to add window rules dynamically?
+- spotify specific special workspace and binds
 
 # PC
 
