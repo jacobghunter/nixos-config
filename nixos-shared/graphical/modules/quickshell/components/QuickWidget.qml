@@ -9,8 +9,8 @@ Rectangle {
     required property bool active
 
     // Color theme overrides for premium dark/translucent look
-    color: Qt.rgba(0.08, 0.08, 0.12, 0.88)
-    border.color: Qt.rgba(1.0, 1.0, 1.0, 0.08)
+    color: Theme.baseBackground
+    border.color: Theme.baseBorder
     border.width: 1
     radius: 20
 
@@ -95,10 +95,9 @@ Rectangle {
             Rectangle {
                 height: 32
                 implicitWidth: weatherLayout.implicitWidth + 16
-                color: Qt.rgba(1.0, 1.0, 1.0, 0.05)
+                color: Theme.baseSelectionBackground
                 radius: 16
-                border.color: Qt.rgba(1.0, 1.0, 1.0, 0.05)
-
+                border.color: Theme.baseBorder
                 RowLayout {
                     id: weatherLayout
                     anchors.centerIn: parent
@@ -126,7 +125,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 1
-            color: Qt.rgba(1.0, 1.0, 1.0, 0.08)
+            color: Theme.selectionBackground
         }
 
         // 2. Quick Settings Toggles (Grid)
@@ -141,8 +140,8 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 52
                 radius: 12
-                color: wifiActive ? Qt.rgba(137/255, 180/255, 250/255, 0.25) : Qt.rgba(1, 1, 1, 0.04)
-                border.color: wifiActive ? "#89b4fa" : Qt.rgba(1, 1, 1, 0.08)
+                color: wifiActive ? Qt.alpha(Theme.primary, Theme.colorAlpha) :  Theme.baseBackground
+                border.color: wifiActive ? Theme.primary : Theme.baseBorder
                 border.width: 1
 
                 RowLayout {
@@ -155,7 +154,7 @@ Rectangle {
                         text: wifiActive ? "󰤨" : "󰤭"
                         font.family: "Iosevka Nerd Font"
                         font.pixelSize: 18
-                        color: wifiActive ? "#89b4fa" : Theme.foregroundMuted
+                        color: wifiActive ? Theme.primary : Theme.foregroundMuted
                     }
 
                     ColumnLayout {
@@ -190,8 +189,8 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 52
                 radius: 12
-                color: bluetoothActive ? Qt.rgba(137/255, 180/255, 250/255, 0.25) : Qt.rgba(1, 1, 1, 0.04)
-                border.color: bluetoothActive ? "#89b4fa" : Qt.rgba(1, 1, 1, 0.08)
+                color: bluetoothActive ? Qt.alpha(Theme.secondary, Theme.colorAlpha) : Theme.baseBackground
+                border.color: bluetoothActive ? Theme.secondary : Theme.baseBorder
                 border.width: 1
 
                 RowLayout {
@@ -204,7 +203,7 @@ Rectangle {
                         text: bluetoothActive ? "󰂯" : "󰂲"
                         font.family: "Iosevka Nerd Font"
                         font.pixelSize: 18
-                        color: bluetoothActive ? "#89b4fa" : Theme.foregroundMuted
+                        color: bluetoothActive ? Theme.secondary : Theme.foregroundMuted
                     }
 
                     ColumnLayout {
@@ -239,8 +238,8 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 52
                 radius: 12
-                color: dndActive ? Qt.rgba(243/255, 139/255, 168/255, 0.25) : Qt.rgba(1, 1, 1, 0.04)
-                border.color: dndActive ? "#f38ba8" : Qt.rgba(1, 1, 1, 0.08)
+                color: dndActive ? Qt.alpha(Theme.error, Theme.colorAlpha) : Theme.baseBackground
+                border.color: dndActive ? Theme.error : Theme.baseBorder
                 border.width: 1
 
                 RowLayout {
@@ -253,7 +252,7 @@ Rectangle {
                         text: dndActive ? "󰂛" : "󰂚"
                         font.family: "Iosevka Nerd Font"
                         font.pixelSize: 18
-                        color: dndActive ? "#f38ba8" : Theme.foregroundMuted
+                        color: dndActive ? Theme.error : Theme.foregroundMuted
                     }
 
                     ColumnLayout {
@@ -288,8 +287,8 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 52
                 radius: 12
-                color: nightLightActive ? Qt.rgba(250/255, 179/255, 135/255, 0.25) : Qt.rgba(1, 1, 1, 0.04)
-                border.color: nightLightActive ? "#fab387" : Qt.rgba(1, 1, 1, 0.08)
+                color: nightLightActive ? Qt.alpha(Theme.warning, Theme.colorAlpha) : Theme.baseBackground
+                border.color: nightLightActive ? Theme.warning : Theme.baseBorder
                 border.width: 1
 
                 RowLayout {
@@ -302,7 +301,7 @@ Rectangle {
                         text: nightLightActive ? "󰖔" : "󰖙"
                         font.family: "Iosevka Nerd Font"
                         font.pixelSize: 18
-                        color: nightLightActive ? "#fab387" : Theme.foregroundMuted
+                        color: nightLightActive ? Theme.warning : Theme.foregroundMuted
                     }
 
                     ColumnLayout {
@@ -354,7 +353,7 @@ Rectangle {
                     text: Pipewire.defaultAudioSink?.audio?.muted ? "󰝟" : "󰕾"
                     font.family: "Iosevka Nerd Font"
                     font.pixelSize: 16
-                    color: "#a6e3a1" // Green
+                    color: Pipewire.defaultAudioSink?.audio?.muted ? Theme.error : Theme.foregroundMuted
 
                     MouseArea {
                         anchors.fill: parent

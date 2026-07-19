@@ -11,6 +11,12 @@ QtObject {
     readonly property color backgroundDarkest: Theme.backgroundDarkest
     readonly property color selectionBackground: Theme.selectionBackground
 
+    readonly property real backgroundAlpha: 0.9
+    readonly property real colorAlpha: 0.25
+    readonly property color baseBackground: Qt.alpha(background, backgroundAlpha)
+    readonly property color baseSelectionBackground: Qt.alpha(selectionBackground, backgroundAlpha) 
+    readonly property color baseBorder: Qt.alpha(selectionBackground, backgroundAlpha)
+
     // Foregrounds
     readonly property color foreground: Theme.foreground
     readonly property color foregroundMuted: Theme.foregroundMuted
