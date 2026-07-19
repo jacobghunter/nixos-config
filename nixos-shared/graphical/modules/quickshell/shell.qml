@@ -1,6 +1,7 @@
 import Quickshell
 import QtQuick
 import Quickshell.Hyprland
+import Quickshell.Io
 import "./layouts" as Layouts
 import "./services/Theme.qml" as Theme
 import "./components" as Components
@@ -52,30 +53,38 @@ ShellRoot {
             screen: modelData
             color: "transparent"
 
-            visible: opacity > 0 || root.widgetVisible
-            opacity: root.widgetVisible ? 1.0 : 0.0
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutCubic
-                }
-            }
+            visible: content.opacity > 0
 
             anchors {
                 top: true
                 right: true
             }
-            anchors.topMargin: 52
-            anchors.rightMargin: 12
+
+            margins {
+                top: 52
+                right: 12
+            }
 
             width: 320
             height: 420
-            exclusionMode: ExclusionMode.None
+            exclusionMode: ExclusionMode.Ignore
 
-            Components.QuickWidget {
+            Item {
+                id: content
                 anchors.fill: parent
-                active: root.widgetVisible
+                opacity: root.widgetVisible ? 1.0 : 0.0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.OutCubic
+                    }
+                }
+
+                Components.QuickWidget {
+                    anchors.fill: parent
+                    active: root.widgetVisible
+                }
             }
         }
     }
