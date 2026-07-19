@@ -103,9 +103,9 @@ Rectangle {
                 readonly property bool isFocused: root.activeWsId === wsId
                 readonly property bool isOccupied: !!root.occupiedWorkspaces[wsId]
 
-                width: isFocused ? 26 : 10
-                height: 10
-                radius: 5
+                width: isFocused ? 20 : 12
+                height: 12
+                radius: 20
 
                 color: isFocused ? Theme.primary : Theme.comment
 
@@ -139,7 +139,7 @@ Rectangle {
                 }
 
                 MouseArea {
-                    anchors.fill: parent
+                  anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
                     acceptedButtons: Qt.LeftButton

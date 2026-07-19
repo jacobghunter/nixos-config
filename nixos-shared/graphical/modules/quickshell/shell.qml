@@ -1,4 +1,3 @@
-// shell.qml
 import Quickshell
 import QtQuick
 import "./layouts" as Layouts
