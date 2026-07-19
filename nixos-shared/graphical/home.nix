@@ -93,6 +93,12 @@ in
     ]
   '';
 
+  xdg.configFile."wireplumber/wireplumber.conf.d/51-disable-le-audio.conf".text = ''
+    monitor.bluez.properties = {
+      bluez5.roles = [ a2dp_sink a2dp_source hfp_hf hfp_ag ]
+    }
+  '';
+
   # --- DEFAULT TO FIREFOX ---
   xdg.mimeApps = {
     enable = true;
