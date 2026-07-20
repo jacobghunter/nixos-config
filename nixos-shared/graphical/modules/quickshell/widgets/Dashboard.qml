@@ -8,10 +8,6 @@ Base {
     id: widgetRoot
     required property bool active
 
-    borderWidth: 1
-    radius: 20
-    padding: 18
-
     // Custom properties for toggles
     property bool wifiActive: true
     property bool bluetoothActive: false

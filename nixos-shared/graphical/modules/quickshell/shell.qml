@@ -10,12 +10,21 @@ import "./widgets" as Widgets
 ShellRoot {
     id: root
 
-    property bool widgetVisible: false
+    property bool dashboardVisible: false
 
     IpcHandler {
         target: "dashboard"
         function toggle(): void {
-            root.widgetVisible = !root.widgetVisible;
+            root.dashboardVisible = !root.dashboardVisible;
+        }
+    }
+
+    property bool launcherVisible: false
+
+    IpcHandler {
+        target: "launcher"
+        function toggle(): void {
+            root.launcherVisible = !root.launcherVisible;
         }
     }
 
@@ -73,7 +82,7 @@ ShellRoot {
             Item {
                 id: content
                 anchors.fill: parent
-                opacity: root.widgetVisible ? 1.0 : 0.0
+                opacity: root.dashboardVisible ? 1.0 : 0.0
 
                 Behavior on opacity {
                     NumberAnimation {
@@ -82,9 +91,9 @@ ShellRoot {
                     }
                 }
 
-                Widgets.Menu {
+                Widgets.Dashboard {
                     anchors.fill: parent
-                    active: root.widgetVisible
+                    active: root.dashboardVisible
                 }
             }
         }

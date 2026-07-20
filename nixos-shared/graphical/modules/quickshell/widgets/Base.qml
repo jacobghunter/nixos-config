@@ -4,13 +4,12 @@ import "../services"
 
 Item {
     id: root
-
     // RESTORED: Properties so you can apply Qt.alpha() from your widgets for blur
     property color bgColor: Theme.baseBackground 
-    property color borderColor: Theme.baseBorder 
+    property color borderColor: Theme.baseBorder
     
     property int padding: 12
-    property int borderWidth: 2
+    property int borderWidth: 1
     property int radius: 24
     
     // Match this to Hyprland's decoration:rounding_power (2 through 10)
