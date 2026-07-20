@@ -6,10 +6,10 @@ Item {
     anchors.fill: parent
 
     property color color: "transparent"
-    property color borderColor: "transparent"
-    property int borderWidth: 0
     property int radius: 12
     property int roundingPower: 4
+
+    property SquircleBorder border: SquircleBorder {}
 
     // Dynamically maps Hyprland's superellipse power to Bezier tension
     readonly property real squircleTension: {
@@ -27,7 +27,7 @@ Item {
         }
     }
 
-    readonly property real inset: borderWidth / 2
+    readonly property real inset: border.width / 2
     readonly property real w: width - inset
     readonly property real h: height - inset
     readonly property real offset: radius * squircleTension
@@ -38,8 +38,8 @@ Item {
 
         ShapePath {
             fillColor: root.color
-            strokeColor: root.borderColor
-            strokeWidth: root.borderWidth
+            strokeColor: root.border.color
+            strokeWidth: root.border.width
 
             startX: root.inset + root.radius; startY: root.inset
 

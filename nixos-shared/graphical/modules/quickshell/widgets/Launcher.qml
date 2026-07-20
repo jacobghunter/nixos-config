@@ -119,8 +119,8 @@ Base {
 
             Squircle {
                 color: Qt.rgba(1, 1, 1, 0.04)
-                borderColor: searchInput.activeFocus ? Theme.primary : Qt.rgba(1, 1, 1, 0.08)
-                borderWidth: 1
+                border.color: searchInput.activeFocus ? Theme.primary : Qt.rgba(1, 1, 1, 0.08)
+                border.width: 1
                 radius: 16
                 roundingPower: launcherRoot.roundingPower
             }
@@ -227,9 +227,8 @@ Base {
                 readonly property bool isHovered: delegateMouse.containsMouse
                 readonly property bool isHighlighted: isSelected || isHovered
 
-                Rectangle {
+                Squircle {
                     anchors.fill: parent
-                    radius: 12
                     color: isHighlighted ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.12) : "transparent"
                     border.color: isHighlighted ? Theme.primary : "transparent"
                     border.width: 1

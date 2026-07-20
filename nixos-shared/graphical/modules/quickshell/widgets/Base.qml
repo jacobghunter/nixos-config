@@ -16,8 +16,8 @@ Item {
 
     Squircle {
         color: root.bgColor
-        borderColor: root.borderColor
-        borderWidth: root.borderWidth
+        border.color: root.borderColor
+        border.width: root.borderWidth
         radius: root.radius
         roundingPower: root.roundingPower
     }
