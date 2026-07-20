@@ -4,15 +4,13 @@ import Quickshell
 import Quickshell.Services.Pipewire
 import "../services"
 
-Rectangle {
+Base {
     id: widgetRoot
     required property bool active
 
-    // Color theme overrides for premium dark/translucent look
-    color: Theme.baseBackground
-    border.color: Theme.baseBorder
-    border.width: 1
+    borderWidth: 1
     radius: 20
+    padding: 18
 
     // Custom properties for toggles
     property bool wifiActive: true
@@ -54,7 +52,6 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 18
         spacing: 16
 
         // 1. Header (Greeting & Weather)
