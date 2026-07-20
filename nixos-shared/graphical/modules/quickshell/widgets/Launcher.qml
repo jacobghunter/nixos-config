@@ -12,7 +12,7 @@ Base {
     implicitHeight: mainLayout.implicitHeight + (padding * 2)
     borderWidth: 1
     radius: 24
-    padding: 16
+    padding: 8
 
     // Theme values (using Base's bgColor/borderColor default or customized)
     bgColor: Qt.rgba(Theme.background.r, Theme.background.g, Theme.background.b, 0.9)
@@ -113,13 +113,17 @@ Base {
         spacing: 12
 
         // Search Bar Area
-        Rectangle {
+        Item {
             Layout.fillWidth: true
             height: 52
-            radius: 16
-            color: Qt.rgba(1, 1, 1, 0.04)
-            border.color: searchInput.activeFocus ? Theme.primary : Qt.rgba(1, 1, 1, 0.08)
-            border.width: 1
+
+            Squircle {
+                color: Qt.rgba(1, 1, 1, 0.04)
+                borderColor: searchInput.activeFocus ? Theme.primary : Qt.rgba(1, 1, 1, 0.08)
+                borderWidth: 1
+                radius: 16
+                roundingPower: launcherRoot.roundingPower
+            }
 
             RowLayout {
                 anchors.fill: parent
