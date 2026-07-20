@@ -112,10 +112,14 @@ ShellRoot {
             visible: launcherContent.opacity > 0
 
             anchors {
-                top: false
+                top: true
                 bottom: false
                 left: false
                 right: false
+            }
+
+            margins {
+                top: screen.height / 4
             }
 
             width: 640
@@ -137,7 +141,10 @@ ShellRoot {
                 }
 
                 Widgets.Launcher {
-                    anchors.fill: parent
+                    id: launcherWidget
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
                     active: root.launcherVisible
                 }
             }

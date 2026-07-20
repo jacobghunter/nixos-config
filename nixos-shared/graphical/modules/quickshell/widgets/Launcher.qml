@@ -9,7 +9,7 @@ Base {
     required property bool active
 
     implicitWidth: 640
-    implicitHeight: 480
+    implicitHeight: mainLayout.implicitHeight + (padding * 2)
     borderWidth: 1
     radius: 24
     padding: 16
@@ -21,18 +21,72 @@ Base {
     property string searchText: ""
     property int selectedIndex: 0
 
-    // Filtered list of desktop applications
+    // Filtered list of desktop applications with fuzzy matching
     readonly property var filteredApps: {
         let query = searchText.toLowerCase().trim();
-        let apps = DesktopEntries.applications.filter(app => !app.noDisplay);
+        let apps = DesktopEntries.applications.values.filter(app => !app.noDisplay);
         
         if (query === "") return apps;
         
-        return apps.filter(app => {
-            let nameMatch = app.name.toLowerCase().includes(query);
-            let commentMatch = app.comment && app.comment.toLowerCase().includes(query);
-            return nameMatch || commentMatch;
-        });
+        let fuzzyMatch = (text, q) => {
+            if (!text) return null;
+            let t = text.toLowerCase();
+            let tIdx = 0;
+            let qIdx = 0;
+            let score = 0;
+            let lastMatchIdx = -1;
+            let consecutiveCount = 0;
+            
+            while (tIdx < t.length && qIdx < q.length) {
+                if (t[tIdx] === q[qIdx]) {
+                    let charScore = 1;
+                    
+                    // Bonus for word starting character
+                    if (tIdx === 0 || t[tIdx - 1] === ' ' || t[tIdx - 1] === '-' || t[tIdx - 1] === '_') {
+                        charScore += 8;
+                    }
+                    
+                    // Bonus for consecutive matches
+                    if (lastMatchIdx !== -1 && tIdx === lastMatchIdx + 1) {
+                        consecutiveCount++;
+                        charScore += consecutiveCount * 4;
+                    } else {
+                        consecutiveCount = 0;
+                    }
+                    
+                    score += charScore;
+                    lastMatchIdx = tIdx;
+                    qIdx++;
+                }
+                tIdx++;
+            }
+            return (qIdx === q.length) ? score : null;
+        };
+        
+        let matched = [];
+        for (let i = 0; i < apps.length; i++) {
+            let app = apps[i];
+            
+            let nameScore = fuzzyMatch(app.name, query);
+            let commentScore = fuzzyMatch(app.comment, query);
+            let genericScore = fuzzyMatch(app.genericName, query);
+            
+            if (nameScore !== null || commentScore !== null || genericScore !== null) {
+                let maxScore = Math.max(
+                    nameScore !== null ? nameScore * 2 : 0,
+                    commentScore !== null ? commentScore : 0,
+                    genericScore !== null ? genericScore : 0
+                );
+                
+                matched.push({
+                    app: app,
+                    score: maxScore
+                });
+            }
+        }
+        
+        matched.sort((a, b) => b.score - a.score);
+        return matched.map(m => m.app);
     }
 
     // Reset selection and focus when launcher is toggled on
@@ -52,7 +106,10 @@ Base {
     }
 
     ColumnLayout {
-        anchors.fill: parent
+        id: mainLayout
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
         spacing: 12
 
         // Search Bar Area
@@ -137,29 +194,40 @@ Base {
             Layout.fillWidth: true
             height: 1
             color: Qt.rgba(1, 1, 1, 0.08)
+            visible: launcherRoot.searchText !== "" && launcherRoot.filteredApps.length > 0
         }
 
         // App List
         ListView {
             id: appList
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: visible ? Math.min(336, contentHeight) : 0
+            visible: launcherRoot.searchText !== "" && launcherRoot.filteredApps.length > 0
             clip: true
             spacing: 4
             model: launcherRoot.filteredApps
 
+            Behavior on Layout.preferredHeight {
+                NumberAnimation {
+                    duration: 150
+                    easing.type: Easing.OutCubic
+                }
+            }
+
             delegate: Item {
                 id: delegateItem
-                width: ListView.view.width
+                width: appList.width
                 height: 56
 
                 readonly property bool isSelected: index === launcherRoot.selectedIndex
+                readonly property bool isHovered: delegateMouse.containsMouse
+                readonly property bool isHighlighted: isSelected || isHovered
 
                 Rectangle {
                     anchors.fill: parent
                     radius: 12
-                    color: isSelected ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.12) : "transparent"
-                    border.color: isSelected ? Theme.primary : "transparent"
+                    color: isHighlighted ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.12) : "transparent"
+                    border.color: isHighlighted ? Theme.primary : "transparent"
                     border.width: 1
 
                     RowLayout {
@@ -172,7 +240,7 @@ Base {
                         IconImage {
                             id: appIcon
                             implicitSize: 32
-                            source: modelData.icon || "application-x-executable"
+                            source: Quickshell.iconPath(modelData.icon || "application-x-executable")
                             Layout.alignment: Qt.AlignVCenter
                         }
 
@@ -184,15 +252,17 @@ Base {
 
                             Text {
                                 text: modelData.name
+                                Layout.fillWidth: true
                                 font.family: "Outfit, Inter, sans-serif"
                                 font.pixelSize: 14
                                 font.bold: true
-                                color: isSelected ? Theme.primary : Theme.foreground
+                                color: isHighlighted ? Theme.primary : Theme.foreground
                                 elide: Text.ElideRight
                             }
 
                             Text {
                                 text: modelData.comment || modelData.genericName || ""
+                                Layout.fillWidth: true
                                 font.family: "Outfit, Inter, sans-serif"
                                 font.pixelSize: 11
                                 color: Theme.foregroundMuted
@@ -205,10 +275,10 @@ Base {
 
                 // Mouse click to launch
                 MouseArea {
+                    id: delegateMouse
                     anchors.fill: parent
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
-                    onPositionChanged: launcherRoot.selectedIndex = index
                     onClicked: {
                         modelData.execute();
                         root.launcherVisible = false;
