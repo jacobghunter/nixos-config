@@ -113,17 +113,10 @@ ShellRoot {
 
             anchors {
                 top: true
-                bottom: false
-                left: false
-                right: false
+                bottom: true
+                left: true
+                right: true
             }
-
-            margins {
-                top: screen.height / 4
-            }
-
-            width: 640
-            height: 480
 
             WlrLayershell.keyboardFocus: root.launcherVisible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
             exclusionMode: ExclusionMode.Ignore
@@ -140,11 +133,18 @@ ShellRoot {
                     }
                 }
 
+                // Background click-off handler to close the launcher when clicking outside the card
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: root.launcherVisible = false
+                }
+
                 Widgets.Launcher {
                     id: launcherWidget
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.top
+                    anchors.topMargin: parent.height / 4
+                    width: 640
                     active: root.launcherVisible
                 }
             }

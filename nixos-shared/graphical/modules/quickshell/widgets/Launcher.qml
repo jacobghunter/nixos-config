@@ -162,6 +162,17 @@ Base {
                         launcherRoot.selectedIndex = 0;
                     }
 
+                    onActiveFocusChanged: {
+                        if (!activeFocus && root.launcherVisible) {
+                            root.launcherVisible = false;
+                        }
+                    }
+
+                    Keys.onEscapePressed: (event) => {
+                        root.launcherVisible = false;
+                        event.accepted = true;
+                    }
+
                     // Key navigation handling
                     Keys.onPressed: (event) => {
                         if (event.key === Qt.Key_Down) {
@@ -183,9 +194,6 @@ Base {
                                 // Toggle visibility state on shell.qml
                                 root.launcherVisible = false; 
                             }
-                            event.accepted = true;
-                        } else if (event.key === Qt.Key_Escape) {
-                            root.launcherVisible = false;
                             event.accepted = true;
                         }
                     }
