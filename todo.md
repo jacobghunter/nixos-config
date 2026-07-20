@@ -14,6 +14,7 @@
 - move all the shared/modules to shared/graphical/modules and put neovim in its own modules folder
 
 # quick shell
+
 - persona style sloppy box borders with jagged edges
 
 # Apps
@@ -25,6 +26,7 @@
 - firefox open new tab as child bind
 - stop firefox password manager from being used at all
 - swap file managers
+- fix kitty ctrl+num bindings to property populate multi-line commands
 
 # Tinty
 
@@ -38,12 +40,12 @@
 - tweak hyprglass
 - fix hyprsplit
 - fix fullscreen on scrolling layout?
-- install more plugins from here: https://github.com/szymon420699/awesome-hyprland-420
+- install more plugins from here: <https://github.com/szymon420699/awesome-hyprland-420>
 - hy3 for 3 column dwindle on ultrawide
 - factor out config stuff
 - workspace/setup binds?
-   - like one for zmk with a dev flake, one for website, etc. could combine hyprland layout with nix development flakes
-   - gim-like command palette with super+:?
+  - like one for zmk with a dev flake, one for website, etc. could combine hyprland layout with nix development flakes
+  - gim-like command palette with super+:?
 - super right click to add window rules dynamically?
 - spotify specific special workspace and binds
 
@@ -82,10 +84,10 @@ Python
 from pykefcontrol.kef_connector import KefConnector
 
 # Replace with your speaker's reserved IP address
-speaker = KefConnector("192.168.1.X") 
+speaker = KefConnector("192.168.1.X")
 
 # Instantly forces the input switch
-speaker.source = "usb" 
+speaker.source = "usb"
 
 Want me to map out how to package pykefcontrol into a Nix flake?
 ```
