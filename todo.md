@@ -13,6 +13,9 @@
 
 - move all the shared/modules to shared/graphical/modules and put neovim in its own modules folder
 
+# quick shell
+- persona style sloppy box borders with jagged edges
+
 # Apps
 
 - ~~Ghostty? Resizes better than kitty~~
