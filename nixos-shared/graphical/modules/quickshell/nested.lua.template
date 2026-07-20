@@ -24,7 +24,7 @@ hl.bind("ALT + 1", hl.dsp.focus({workspace = 1}))
 hl.bind("ALT + 2", hl.dsp.focus({workspace = 2}))
 hl.bind("ALT + 3", hl.dsp.focus({workspace = 3}))
 hl.bind("ALT + D", hl.dsp.exec_cmd("QUICKSHELL_BIN ipc -p QML_PATH call dashboard toggle"))
-
+hl.bind("ALT + S", hl.dsp.exec_cmd("QUICKSHELL_BIN ipc -p QML_PATH call launcher toggle"))
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("QUICKSHELL_BIN -p QML_PATH")

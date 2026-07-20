@@ -2,6 +2,7 @@ import Quickshell
 import QtQuick
 import Quickshell.Hyprland
 import Quickshell.Io
+import Quickshell.Wayland
 import "./layouts" as Layouts
 import "./services/Theme.qml" as Theme
 import "./components" as Components
@@ -94,6 +95,50 @@ ShellRoot {
                 Widgets.Dashboard {
                     anchors.fill: parent
                     active: root.dashboardVisible
+                }
+            }
+        }
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        delegate: PanelWindow {
+            id: launcherWindow
+            required property var modelData
+            screen: modelData
+            color: "transparent"
+
+            visible: launcherContent.opacity > 0
+
+            anchors {
+                top: false
+                bottom: false
+                left: false
+                right: false
+            }
+
+            width: 640
+            height: 480
+
+            WlrLayershell.keyboardFocus: root.launcherVisible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+            exclusionMode: ExclusionMode.Ignore
+
+            Item {
+                id: launcherContent
+                anchors.fill: parent
+                opacity: root.launcherVisible ? 1.0 : 0.0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.OutCubic
+                    }
+                }
+
+                Widgets.Launcher {
+                    anchors.fill: parent
+                    active: root.launcherVisible
                 }
             }
         }
