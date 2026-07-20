@@ -5,6 +5,7 @@ import Quickshell.Io
 import "./layouts" as Layouts
 import "./services/Theme.qml" as Theme
 import "./components" as Components
+import "./widgets" as Widgets
 
 ShellRoot {
     id: root
@@ -81,7 +82,7 @@ ShellRoot {
                     }
                 }
 
-                Components.QuickWidget {
+                Widgets.Menu {
                     anchors.fill: parent
                     active: root.widgetVisible
                 }
