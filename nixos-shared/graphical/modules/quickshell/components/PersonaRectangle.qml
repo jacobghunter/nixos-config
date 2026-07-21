@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import "../services"
+import "../widgets/SquircleHelper.js" as SquircleHelper
 
 Item {
     id: root
@@ -16,21 +17,41 @@ Item {
     property real borderWidth: 3.0
     property color backgroundColor: "transparent"
 
+    // Double Border (Outer Outline) Properties
+    property bool showDoubleBorder: false              // Toggle to draw a second parallel outline around the front border
+    property color doubleBorderColor: borderColor     // Color of the second outline (defaults to borderColor)
+    property real doubleBorderWidth: 1.0              // Width of the second outline in pixels
+    property real doubleBorderOffset: 3.0             // Distance in pixels outside the main front border
+
     // 2. Secondary (Back) Border Properties
     property bool showBackBorder: true
-    property color backBorderColor: "#ff0000"      // Persona Red
+    property color backBorderColor: "transparent"   // Color of the back border outline stroke
+    property color backBackgroundColor: "transparent" // Color of the back background fill
     property real backBorderWidth: 3.0
     property real backBorderOffsetX: 4.0            // Static X displacement to make the back border stick out
     property real backBorderOffsetY: 4.0            // Static Y displacement to make the back border stick out
+    property real backBorderExpansion: 0.0          // Pixels by which the back rectangle is expanded on all sides
 
-    // 3. Jitter & Animation Control
-    property real maxShift: 3.0                     // Maximum random jitter range (pixels)
-    property real updateInterval: 200               // How often the shape updates (250ms = 0.25s)
-    property real animationDuration: 350            //Snappy transition duration between states
+    // 3. Squircle/Rounding Settings
+    property int roundingPower: 0                   // Front superellipse power: 0 = square, 2 = circle, 4 = squircle
+    property real radius: 12.0                      // Front corner radius (used if roundingPower > 0)
+    property int backRoundingPower: roundingPower   // Back superellipse power (defaults to front power)
+    property real backRadius: radius                // Back corner radius (defaults to front radius)
+
+    // 4. Jitter & Animation Control
+    property real maxShift: 6.0                     // Maximum random jitter range (pixels)
+    property real updateInterval: 250               // How often the shape updates (250ms = 0.25s)
+    property real animationDuration: 180            // Snappy transition duration between states
     property bool active: true                      // Toggle animation on/off
     property real contentPadding: 0                 // Custom margin/padding inside the stable area
 
-    // --- Dynamic Safety Margin to prevent any clipping ---
+    // --- Dynamic Insets to prevent clipping while allowing expansion ---
+    // Stable inset for the front shape and internal content area (keeps them constant size)
+    readonly property real frontInset: root.maxShift + 
+                                        root.borderWidth + 
+                                        2.0
+
+    // Safety margin to prevent any drawing from clipping at the parent canvas boundaries.
     readonly property real safetyInset: root.maxShift + 
                                          Math.max(root.borderWidth, root.backBorderWidth) + 
                                          Math.max(Math.abs(root.backBorderOffsetX), Math.abs(root.backBorderOffsetY)) + 
@@ -178,101 +199,191 @@ Item {
             root.backBrX, root.backBrY, root.backBlX, root.backBlY,
             root.width, root.height, 
             root.borderColor, root.backgroundColor, root.borderWidth,
-            root.backBorderColor, root.backBorderWidth, root.backBorderOffsetX, root.backBorderOffsetY, root.showBackBorder
+            root.backBorderColor, root.backBackgroundColor, root.backBorderWidth, root.backBorderOffsetX, root.backBorderOffsetY, root.showBackBorder,
+            root.roundingPower, root.radius,
+            root.backRoundingPower, root.backRadius,
+            root.backBorderExpansion
         ]
 
         onRedrawTriggerChanged: canvas.requestPaint()
+
+
+        // Helper to generate a squircle path with Bezier corners that adapt to shifted coordinates
+        function makeSquirclePath(ctx, cTL, cTR, cBR, cBL, r, o) {
+            if (r <= 0.0) {
+                // Base Case: 0 radius, draw a simple quadrilateral
+                ctx.moveTo(cTL.x, cTL.y);
+                ctx.lineTo(cTR.x, cTR.y);
+                ctx.lineTo(cBR.x, cBR.y);
+                ctx.lineTo(cBL.x, cBL.y);
+                ctx.closePath();
+                return;
+            }
+
+            // Compute side vectors between shifting corners
+            var tx = cTR.x - cTL.x, ty = cTR.y - cTL.y;
+            var rx = cBR.x - cTR.x, ry = cBR.y - cTR.y;
+            var bx = cBL.x - cBR.x, by = cBL.y - cBR.y;
+            var lx = cTL.x - cBL.x, ly = cTL.y - cBL.y;
+
+            // Vector lengths
+            var lt = Math.max(1, Math.sqrt(tx * tx + ty * ty));
+            var lr = Math.max(1, Math.sqrt(rx * rx + ry * ry));
+            var lb = Math.max(1, Math.sqrt(bx * bx + by * by));
+            var ll = Math.max(1, Math.sqrt(lx * lx + ly * ly));
+
+            // Unit direction vectors along the edges
+            var ut = { x: tx / lt, y: ty / lt };
+            var ur = { x: rx / lr, y: ry / lr };
+            var ub = { x: bx / lb, y: by / lb };
+            var ul = { x: lx / ll, y: ly / ll };
+
+            // Start & end points of corner Bezier arcs
+            var pTL_L = { x: cTL.x - ul.x * r, y: cTL.y - ul.y * r };
+            var pTL_T = { x: cTL.x + ut.x * r, y: cTL.y + ut.y * r };
+            var pTR_T = { x: cTR.x - ut.x * r, y: cTR.y - ut.y * r };
+            var pTR_R = { x: cTR.x + ur.x * r, y: cTR.y + ur.y * r };
+            var pBR_R = { x: cBR.x - ur.x * r, y: cBR.y - ur.y * r };
+            var pBR_B = { x: cBR.x + ub.x * r, y: cBR.y + ub.y * r };
+            var pBL_B = { x: cBL.x - ub.x * r, y: cBL.y - ub.y * r };
+            var pBL_L = { x: cBL.x + ul.x * r, y: cBL.y + ul.y * r };
+
+            // Control points for the corner Beziers, pulling from the edge start/end points towards the corners
+            // The distance of the control point from the corner along the edge is (r - o)
+            var d = r - o;
+            var cpTL_1 = { x: cTL.x - ul.x * d, y: cTL.y - ul.y * d };
+            var cpTL_2 = { x: cTL.x + ut.x * d, y: cTL.y + ut.y * d };
+            var cpTR_1 = { x: cTR.x - ut.x * d, y: cTR.y - ut.y * d };
+            var cpTR_2 = { x: cTR.x + ur.x * d, y: cTR.y + ur.y * d };
+            var cpBR_1 = { x: cBR.x - ur.x * d, y: cBR.y - ur.y * d };
+            var cpBR_2 = { x: cBR.x + ub.x * d, y: cBR.y + ub.y * d };
+            var cpBL_1 = { x: cBL.x - ub.x * d, y: cBL.y - ub.y * d };
+            var cpBL_2 = { x: cBL.x + ul.x * d, y: cBL.y + ul.y * d };
+
+            // Trace path
+            ctx.moveTo(pTL_T.x, pTL_T.y);
+            ctx.lineTo(pTR_T.x, pTR_T.y);
+            ctx.bezierCurveTo(cpTR_1.x, cpTR_1.y, cpTR_2.x, cpTR_2.y, pTR_R.x, pTR_R.y);
+            ctx.lineTo(pBR_R.x, pBR_R.y);
+            ctx.bezierCurveTo(cpBR_1.x, cpBR_1.y, cpBR_2.x, cpBR_2.y, pBR_B.x, pBR_B.y);
+            ctx.lineTo(pBL_B.x, pBL_B.y);
+            ctx.bezierCurveTo(cpBL_1.x, cpBL_1.y, cpBL_2.x, cpBL_2.y, pBL_L.x, pBL_L.y);
+            ctx.lineTo(pTL_L.x, pTL_L.y);
+            ctx.bezierCurveTo(cpTL_1.x, cpTL_1.y, cpTL_2.x, cpTL_2.y, pTL_T.x, pTL_T.y);
+            ctx.closePath();
+        }
 
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
 
-            var inset = root.safetyInset;
+            // Compute front superellipse parameters
+            var effFrontRadius = (root.roundingPower > 0) ? root.radius : 0.0;
+            var frontTension = SquircleHelper.getTension(root.roundingPower);
+            var frontOffset = effFrontRadius * frontTension;
 
-            // --- 1. Draw Back Border (if visible) ---
-            if (root.showBackBorder && root.backBorderWidth > 0 && root.backBorderColor !== "transparent" && root.backBorderColor !== "#00000000") {
-                // The base corners for the back border are offset by backBorderOffsetX and backBorderOffsetY
-                var bx0 = inset + root.backBorderOffsetX;
-                var by0 = inset + root.backBorderOffsetY;
-                var bx1 = root.width - inset + root.backBorderOffsetX;
-                var by1 = root.height - inset + root.backBorderOffsetY;
+            // Compute back superellipse parameters
+            var effBackRadius = (root.backRoundingPower > 0) ? root.backRadius : 0.0;
+            var backTension = SquircleHelper.getTension(root.backRoundingPower);
+            var backOffset = effBackRadius * backTension;
 
-                var bpTLx = bx0 + root.backTlX;
-                var bpTLy = by0 + root.backTlY;
-                
-                var bpTRx = bx1 + root.backTrX;
-                var bpTRy = by0 + root.backTrY;
-                
-                var bpBRx = bx1 + root.backBrX;
-                var bpBRy = by1 + root.backBrY;
-                
-                var bpBLx = bx0 + root.backBlX;
-                var bpBLy = by1 + root.backBlY;
+            // Determine border alpha based on background color transparency
+            var isBgTransparent = (root.backgroundColor === "transparent" || root.backgroundColor.a === 0.0);
+            var borderAlpha = isBgTransparent ? 1.0 : root.backgroundColor.a;
 
-                ctx.beginPath();
-                ctx.moveTo(bpTLx, bpTLy);
-                ctx.lineTo(bpTRx, bpTRy);
-                ctx.lineTo(bpBRx, bpBRy);
-                ctx.lineTo(bpBLx, bpBLy);
-                ctx.closePath();
+            // --- 1. Draw Back Rectangle (Filled) ---
+            if (root.showBackBorder) {
+                // Resolve actual back colors with mutual inheritance (defaults to #ff0000)
+                var hasBackBorder = (root.backBorderColor !== "transparent" && root.backBorderColor !== "#00000000" && root.backBorderColor.a !== 0.0);
+                var hasBackBg = (root.backBackgroundColor !== "transparent" && root.backBackgroundColor !== "#00000000" && root.backBackgroundColor.a !== 0.0);
 
-                // Fill the back rectangle completely to prevent background bleed-through
-                ctx.fillStyle = root.backBorderColor;
-                ctx.fill();
+                var resolvedBackBorderColor = "#ff0000";
+                var resolvedBackBgColor = "#ff0000";
 
-                // Stroke the back border outline
-                if (root.backBorderWidth > 0) {
-                    ctx.lineWidth = root.backBorderWidth;
-                    ctx.strokeStyle = root.backBorderColor;
-                    ctx.stroke();
+                if (hasBackBorder && hasBackBg) {
+                    resolvedBackBorderColor = root.backBorderColor;
+                    resolvedBackBgColor = root.backBackgroundColor;
+                } else if (hasBackBorder) {
+                    resolvedBackBorderColor = root.backBorderColor;
+                    resolvedBackBgColor = root.backBorderColor;
+                } else if (hasBackBg) {
+                    resolvedBackBorderColor = root.backBackgroundColor;
+                    resolvedBackBgColor = root.backBackgroundColor;
+                }
+
+                // Only draw if at least one resolved color is non-transparent/visible
+                if (resolvedBackBgColor !== "transparent" || (root.backBorderWidth > 0 && resolvedBackBorderColor !== "transparent")) {
+                    // The back border baseline is offset outwards by backBorderExpansion
+                    var backInset = root.frontInset - root.backBorderExpansion;
+                    var bx0 = backInset + root.backBorderOffsetX;
+                    var by0 = backInset + root.backBorderOffsetY;
+                    var bx1 = root.width - backInset + root.backBorderOffsetX;
+                    var by1 = root.height - backInset + root.backBorderOffsetY;
+
+                    var cBackTL = { x: bx0 + root.backTlX, y: by0 + root.backTlY };
+                    var cBackTR = { x: bx1 + root.backTrX, y: by0 + root.backTrY };
+                    var cBackBR = { x: bx1 + root.backBrX, y: by1 + root.backBrY };
+                    var cBackBL = { x: bx0 + root.backBlX, y: by1 + root.backBlY };
+
+                    ctx.beginPath();
+                    makeSquirclePath(ctx, cBackTL, cBackTR, cBackBR, cBackBL, effBackRadius, backOffset);
+
+                    // Solid fill (keeps background color opaque)
+                    if (resolvedBackBgColor !== "transparent" && resolvedBackBgColor !== "#00000000") {
+                        ctx.globalAlpha = 1.0;
+                        ctx.fillStyle = resolvedBackBgColor;
+                        ctx.fill();
+                    }
+
+                    // Stroke outline (optional - matches translucent borderAlpha)
+                    if (root.backBorderWidth > 0 && resolvedBackBorderColor !== "transparent" && resolvedBackBorderColor !== "#00000000") {
+                        ctx.globalAlpha = borderAlpha;
+                        ctx.lineWidth = root.backBorderWidth;
+                        ctx.strokeStyle = resolvedBackBorderColor;
+                        ctx.stroke();
+                        ctx.globalAlpha = 1.0;
+                    }
                 }
             }
 
             // --- 2. Draw Front Rectangle (Background & Main Border) ---
-            var x0 = inset;
-            var y0 = inset;
-            var x1 = root.width - inset;
-            var y1 = root.height - inset;
+            // The front border baseline is kept completely constant to prevent content shrinking
+            var x0 = root.frontInset;
+            var y0 = root.frontInset;
+            var x1 = root.width - root.frontInset;
+            var y1 = root.height - root.frontInset;
 
-            var pTLx = x0 + root.tlX;
-            var pTLy = y0 + root.tlY;
-            
-            var pTRx = x1 + root.trX;
-            var pTRy = y0 + root.trY;
-            
-            var pBRx = x1 + root.brX;
-            var pBRy = y1 + root.brY;
-            
-            var pBLx = x0 + root.blX;
-            var pBLy = y1 + root.blY;
+            var cTL = { x: x0 + root.tlX, y: y0 + root.tlY };
+            var cTR = { x: x1 + root.trX, y: y0 + root.trY };
+            var cBR = { x: x1 + root.brX, y: y1 + root.brY };
+            var cBL = { x: x0 + root.blX, y: y1 + root.blY };
 
+            // Setup path for front shape
             ctx.beginPath();
-            ctx.moveTo(pTLx, pTLy);
-            ctx.lineTo(pTRx, pTRy);
-            ctx.lineTo(pBRx, pBRy);
-            ctx.lineTo(pBLx, pBLy);
-            ctx.closePath();
+            makeSquirclePath(ctx, cTL, cTR, cBR, cBL, effFrontRadius, frontOffset);
 
-            // Mask/Erase the front shape's interior from the back border,
-            // so the back border line doesn't show through semi-transparent backgrounds.
+            // Erase front footprint from back layer to support translucent backgrounds (must be fully opaque mask)
             if (root.showBackBorder) {
+                ctx.globalAlpha = 1.0;
                 ctx.globalCompositeOperation = "destination-out";
-                ctx.fillStyle = "#ffffff"; // Color value is ignored in destination-out
+                ctx.fillStyle = "#ffffff"; // Color is ignored in destination-out
                 ctx.fill();
-                ctx.globalCompositeOperation = "source-over"; // Restore default blending
+                ctx.globalCompositeOperation = "source-over"; // Restore default
             }
 
-            // Paint the foreground background fill
+            // Fill front background (at full alpha so its native transparency matches)
             if (root.backgroundColor !== "transparent" && root.backgroundColor !== "#00000000") {
                 ctx.fillStyle = root.backgroundColor;
                 ctx.fill();
             }
 
-            // Stroke the foreground border
+            // Stroke front border (using matched background alpha)
             if (root.borderWidth > 0 && root.borderColor !== "transparent" && root.borderColor !== "#00000000") {
+                ctx.globalAlpha = borderAlpha;
                 ctx.lineWidth = root.borderWidth;
                 ctx.strokeStyle = root.borderColor;
                 ctx.stroke();
+                ctx.globalAlpha = 1.0; // Reset
             }
         }
     }
@@ -281,7 +392,7 @@ Item {
     Item {
         id: contentArea
         anchors.fill: parent
-        // Inset by the safety margins to avoid overlapping the dynamic borders
-        anchors.margins: root.safetyInset + root.contentPadding
+        // Inset by the stable front margins to keep layout size constant
+        anchors.margins: root.frontInset + root.contentPadding
     }
 }

@@ -13,12 +13,15 @@ PersonaRectangle {
     borderColor: Theme.primary
     backgroundColor: Theme.panelBackground
     borderWidth: 5.0
-    
+
+    roundingPower: 0
+
+    backBorderExpansion: 6
     showBackBorder: true
-    backBorderColor: Theme.secondary
-    backBorderWidth: 5.0
-    backBorderOffsetX: 5.0
-    backBorderOffsetY: -5.0
+    backBackgroundColor: Theme.secondary
+    backBorderColor: Qt.rgba(0, 0, 0, 1)
+    backBorderOffsetX: 0
+    backBorderOffsetY: 0
     
     contentPadding: 12
 

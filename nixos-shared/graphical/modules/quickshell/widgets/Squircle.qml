@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Shapes
+import "SquircleHelper.js" as SquircleHelper
 
 Item {
     id: root
@@ -12,20 +13,7 @@ Item {
     property SquircleBorder border: SquircleBorder {}
 
     // Dynamically maps Hyprland's superellipse power to Bezier tension
-    readonly property real squircleTension: {
-        switch (roundingPower) {
-            case 2: return 0.552; // Standard circle
-            case 3: return 0.783; // Smooth corner
-            case 4: return 0.909; // True squircle
-            case 5: return 0.950; // Sharp squircle
-            case 6: return 0.970; 
-            case 7: return 0.982; 
-            case 8: return 0.990; 
-            case 9: return 0.995; 
-            case 10: return 0.998; 
-            default: return 0.552; 
-        }
-    }
+    readonly property real squircleTension: SquircleHelper.getTension(roundingPower)
 
     readonly property real inset: border.width / 2
     readonly property real w: width - inset
