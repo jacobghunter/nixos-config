@@ -3,10 +3,24 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Pipewire
 import "../services"
+import "../components"
 
-Base {
+PersonaRectangle {
     id: widgetRoot
     required property bool active
+
+    // Persona-style dual border & background settings
+    borderColor: Theme.primary
+    backgroundColor: Theme.panelBackground
+    borderWidth: 5.0
+    
+    showBackBorder: true
+    backBorderColor: Theme.secondary
+    backBorderWidth: 5.0
+    backBorderOffsetX: 5.0
+    backBorderOffsetY: -5.0
+    
+    contentPadding: 12
 
     // Custom properties for toggles
     property bool wifiActive: true
