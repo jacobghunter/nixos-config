@@ -49,6 +49,7 @@ Item {
     // Stable inset for the front shape and internal content area (keeps them constant size)
     readonly property real frontInset: root.maxShift + 
                                         root.borderWidth + 
+                                        (root.showDoubleBorder ? Math.max(0.0, root.doubleBorderOffset) : 0.0) + 
                                         2.0
 
     // Safety margin to prevent any drawing from clipping at the parent canvas boundaries.
@@ -202,7 +203,8 @@ Item {
             root.backBorderColor, root.backBackgroundColor, root.backBorderWidth, root.backBorderOffsetX, root.backBorderOffsetY, root.showBackBorder,
             root.roundingPower, root.radius,
             root.backRoundingPower, root.backRadius,
-            root.backBorderExpansion
+            root.backBorderExpansion,
+            root.showDoubleBorder, root.doubleBorderColor, root.doubleBorderWidth, root.doubleBorderOffset
         ]
 
         onRedrawTriggerChanged: canvas.requestPaint()
@@ -382,6 +384,32 @@ Item {
                 ctx.globalAlpha = borderAlpha;
                 ctx.lineWidth = root.borderWidth;
                 ctx.strokeStyle = root.borderColor;
+                ctx.stroke();
+                ctx.globalAlpha = 1.0; // Reset
+            }
+
+            // --- 3. Draw Double Border (Outer Front Outline, if enabled) ---
+            if (root.showDoubleBorder && root.doubleBorderWidth > 0 && root.doubleBorderColor !== "transparent" && root.doubleBorderColor !== "#00000000") {
+                var outerInset = root.frontInset - root.doubleBorderOffset;
+                var ox0 = outerInset;
+                var oy0 = outerInset;
+                var ox1 = root.width - outerInset;
+                var oy1 = root.height - outerInset;
+
+                var cOuterTL = { x: ox0 + root.tlX, y: oy0 + root.tlY };
+                var cOuterTR = { x: ox1 + root.trX, y: oy0 + root.trY };
+                var cOuterBR = { x: ox1 + root.brX, y: oy1 + root.brY };
+                var cOuterBL = { x: ox0 + root.blX, y: oy1 + root.blY };
+
+                var effOuterRadius = (root.roundingPower > 0) ? (root.radius + root.doubleBorderOffset) : 0.0;
+                var outerOffset = effOuterRadius * frontTension;
+
+                ctx.beginPath();
+                makeSquirclePath(ctx, cOuterTL, cOuterTR, cOuterBR, cOuterBL, effOuterRadius, outerOffset);
+
+                ctx.globalAlpha = borderAlpha;
+                ctx.lineWidth = root.doubleBorderWidth;
+                ctx.strokeStyle = root.doubleBorderColor;
                 ctx.stroke();
                 ctx.globalAlpha = 1.0; // Reset
             }
