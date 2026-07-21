@@ -16,6 +16,7 @@
 # quick shell
 
 - persona style sloppy box borders with jagged edges
+- small rust application that sorts apps by usage for the launcher. maybe also handle the fzf with this as well?
 
 # Apps
 
