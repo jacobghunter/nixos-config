@@ -8,6 +8,15 @@
 ### Style
 
 - persona style sloppy box borders with jagged edges
+- Add texture to the border, newspaper, dots, something
+- Apply the same to active hyprland window
+- Keep the border static (or subdued) until focused
+- Random animation like the void in hollow night or solar flares? Might be a bit much
+
+Completely different idea:
+- Harkonen black sun, infrared look. 
+- Kinda evil endritch horror type shit
+- Glowing black+white border with effects like the surface of the sun
 
 **Left:**
 Hyprland windows | weather (use location) | now playing (maybe exclusively spotify widget with a toggle for general media?) | Audio volume/switcher
