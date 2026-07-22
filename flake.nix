@@ -5,10 +5,12 @@
     extra-substituters = [
       "https://nix-gaming.cachix.org"
       "https://hyprland.cachix.org"
+      "https://claude-code.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
     ];
   };
 
@@ -64,6 +66,7 @@
     };
 
     antigravity-cli.url = "github:xsen/antigravity-cli-nix";
+    claude-code-nix.url = "github:sadjow/claude-code-nix";
 
     nixcord.url = "github:FlameFlag/nixcord";
 
@@ -93,6 +96,7 @@
       nixos-wsl,
       lazyvim-starter,
       antigravity-cli,
+      claude-code-nix,
       nix-gaming,
       ...
     }@inputs:

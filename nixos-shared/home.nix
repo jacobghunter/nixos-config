@@ -129,6 +129,7 @@
       gnumake
       net-tools
       inputs.antigravity-cli.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
 
       # Tool replacements
       # grep
