@@ -51,6 +51,8 @@ ShellRoot {
                 id: mainBar
                 anchors.fill: parent
                 anchors.margins: 6
+                onDashboardToggleRequested: root.dashboardVisible = !root.dashboardVisible
+                onLauncherToggleRequested: root.launcherVisible = !root.launcherVisible
             }
         }
     }

@@ -11,6 +11,9 @@ Rectangle {
     id: barRoot
     implicitHeight: mainLayout.implicitHeight
 
+    signal dashboardToggleRequested()
+    signal launcherToggleRequested()
+
     // Caelestia-style transparent crust
     // color: Theme.crust
     color: "transparent"
@@ -52,6 +55,64 @@ Rectangle {
 
         Item {
             Layout.fillWidth: true
+        }
+
+        // Dashboard launcher button
+        Rectangle {
+            id: dashboardButton
+            Layout.alignment: Qt.AlignVCenter
+            height: 30
+            width: dashboardIcon.width + 12
+            radius: Theme.borderRadius
+            color: dashboardMouse.containsMouse ? "#1affffff" : "transparent"
+            border.color: dashboardMouse.containsMouse ? Theme.borderColor : "transparent"
+            border.width: Theme.borderSize
+
+            Text {
+                id: dashboardIcon
+                anchors.centerIn: parent
+                text: ""
+                font.family: "Iosevka Nerd Font"
+                font.pixelSize: 13
+                color: "#b4befe"
+            }
+
+            MouseArea {
+                id: dashboardMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: barRoot.dashboardToggleRequested()
+            }
+        }
+
+        // App launcher button
+        Rectangle {
+            id: launcherButton
+            Layout.alignment: Qt.AlignVCenter
+            height: 30
+            width: launcherIcon.width + 12
+            radius: Theme.borderRadius
+            color: launcherMouse.containsMouse ? "#1affffff" : "transparent"
+            border.color: launcherMouse.containsMouse ? Theme.borderColor : "transparent"
+            border.width: Theme.borderSize
+
+            Text {
+                id: launcherIcon
+                anchors.centerIn: parent
+                text: ""
+                font.family: "Iosevka Nerd Font"
+                font.pixelSize: 13
+                color: "#b4befe"
+            }
+
+            MouseArea {
+                id: launcherMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: barRoot.launcherToggleRequested()
+            }
         }
     }
 

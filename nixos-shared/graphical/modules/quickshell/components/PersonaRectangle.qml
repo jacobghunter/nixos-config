@@ -45,6 +45,10 @@ Item {
     property bool active: true                      // Toggle animation on/off
     property real contentPadding: 0                 // Custom margin/padding inside the stable area
 
+    // Emitted every time new jitter targets are rolled, so content can sync its own
+    // motion/flashes to the same beat as the border instead of animating on its own clock.
+    signal jittered()
+
     // --- Dynamic Insets to prevent clipping while allowing expansion ---
     // Stable inset for the front shape and internal content area (keeps them constant size)
     readonly property real frontInset: root.maxShift + 
@@ -168,6 +172,8 @@ Item {
             root.targetBackBrY = (Math.random() * 2.0 - 1.0) * root.maxShift;
             root.targetBackBlX = (Math.random() * 2.0 - 1.0) * root.maxShift;
             root.targetBackBlY = (Math.random() * 2.0 - 1.0) * root.maxShift;
+
+            root.jittered();
         }
 
         onRunningChanged: {
