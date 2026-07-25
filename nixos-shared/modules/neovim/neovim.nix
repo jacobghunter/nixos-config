@@ -1,4 +1,8 @@
-{ pkgs, lib, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   # Neovim configuration with LazyVim
@@ -37,13 +41,16 @@
   # This symlinks the starter config to ~/.config/nvim.
   # LazyVim is smart enough to handle a read-only config and will
   # install plugins and user data in ~/.local/share/nvim/
-  xdg.configFile."nvim" = {
-    source = inputs.lazyvim-starter;
-    recursive = true;
+  xdg = {
+    configFile = {
+      "nvim" = {
+        source = inputs.lazyvim-starter;
+        recursive = true;
+      };
+      "nvim/lua/plugins/kitty-scrollback.lua".source = ./kitty-scrollback.lua;
+      "nvim/lua/plugins/nix-lang.lua".source = ./nix-lang.lua;
+      "nvim/lua/plugins/rust-lang.lua".source = ./rust-lang.lua;
+      "nvim/lua/plugins/tinted.lua".source = ./tinted.lua;
+    };
   };
-
-  xdg.configFile."nvim/lua/plugins/kitty-scrollback.lua".source = ./kitty-scrollback.lua;
-  xdg.configFile."nvim/lua/plugins/nix-lang.lua".source = ./nix-lang.lua;
-  xdg.configFile."nvim/lua/plugins/rust-lang.lua".source = ./rust-lang.lua;
-  xdg.configFile."nvim/lua/plugins/tinted.lua".source = ./tinted.lua;
 }
