@@ -20,6 +20,16 @@
       nodejs # For some LSPs and copilot.lua
       # Add cacert to fix potential SSL issues during plugin installation
       cacert
+      # Nix language support: LSP, formatter, linters
+      nixd
+      nixfmt
+      statix
+      deadnix
+      # Rust language support: LSP, formatter, linter
+      # (rustc/cargo itself is left to per-project dev shells, not global here)
+      rust-analyzer
+      rustfmt
+      clippy
     ];
   };
 
@@ -32,36 +42,8 @@
     recursive = true;
   };
 
-  xdg.configFile."nvim/lua/plugins/kitty-scrollback.lua".text = ''
-    return {
-      {
-        'mikesmithgh/kitty-scrollback.nvim',
-        lazy = true,
-        cmd = { 'KittyScrollbackGenerateKittens', 'KittyScrollbackCheckHealth' },
-        event = { 'User KittyScrollbackLaunch' },
-        config = function()
-          require('kitty-scrollback').setup()
-        end,
-      },
-    }
-  '';
-
-  xdg.configFile."nvim/lua/plugins/tinted.lua".text = ''
-    return {
-      {
-        "tinted-theming/tinted-nvim",
-        priority = 1000,
-        lazy = false,
-        opts = {
-          default_scheme = "base16-ayu-dark", -- fallback; irrelevant once selector is wired to tinty
-          selector = {
-            enabled = true,
-            mode = "file",
-            path = "~/.cache/tinted-nvim-current-scheme",
-            watch = true,
-          },        
-        },
-      },
-    }
-  '';
+  xdg.configFile."nvim/lua/plugins/kitty-scrollback.lua".source = ./kitty-scrollback.lua;
+  xdg.configFile."nvim/lua/plugins/nix-lang.lua".source = ./nix-lang.lua;
+  xdg.configFile."nvim/lua/plugins/rust-lang.lua".source = ./rust-lang.lua;
+  xdg.configFile."nvim/lua/plugins/tinted.lua".source = ./tinted.lua;
 }
