@@ -266,7 +266,11 @@ hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mainMod .. " + G", hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
+-- hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
+
+-- Per-workspace layout override, tracked here since Lua functions (unlike
+-- JS) can't have fields attached directly - this has to be a real table.
+local layout_states = {}
 
 local function toggle_layout()
 	-- 1. Get the current active workspace information
@@ -280,36 +284,37 @@ local function toggle_layout()
 	-- 2. Determine the current layout of this specific workspace.
 	-- If it hasn't been overridden yet, fall back to checking the global default.
 	local current = hl.get_config("general:layout")
-
-	-- Note: If your Lua wrapper doesn't track per-workspace overrides natively via get_config,
-	-- we can track the state internally using a Lua table.
-	toggle_layout.states = toggle_layout.states or {}
-	local current_ws_layout = toggle_layout.states[ws_name] or current
+	local current_ws_layout = layout_states[ws_name] or current
 
 	if current_ws_layout == "dwindle" then
 		-- Apply master exclusively to the current workspace
-		hl.dispatch("keyword", "workspace " .. ws_name .. ", layout:master")
-		toggle_layout.states[ws_name] = "master"
+		-- NOTE: "keyword" is not a dispatcher (hl.dispatch only accepts an HL.Dispatcher),
+		-- so runtime workspace-rule keywords have to go through the real hyprctl binary.
+		hl.dispatch(hl.dsp.exec_cmd('hyprctl keyword workspace "' .. ws_name .. ', layout:master"'))
+		layout_states[ws_name] = "master"
 		hl.notification.create({ text = "Workspace [" .. ws_name .. "] -> Master", duration = 2000 })
 	else
 		-- Revert back to dwindle for this workspace
-		hl.dispatch("keyword", "workspace " .. ws_name .. ", layout:dwindle")
-		toggle_layout.states[ws_name] = "dwindle"
+		hl.dispatch(hl.dsp.exec_cmd('hyprctl keyword workspace "' .. ws_name .. ', layout:dwindle"'))
+		layout_states[ws_name] = "dwindle"
 		hl.notification.create({ text = "Workspace [" .. ws_name .. "] -> Dwindle", duration = 2000 })
 	end
 end
 
-hl.bind(mainMod .. " + H", toggle_layout)
-hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("systemd-run --user systemctl suspend"))
+hl.bind(mainMod .. " + N", toggle_layout)
+hl.bind(mainMod .. " + apostrophe", hl.dsp.exec_cmd("systemd-run --user systemctl suspend"))
 
 --  Row 4 (Z X C V B N M)
 hl.bind(mainMod .. " + Z", hl.dsp.window.drag())
 hl.bind(mainMod .. " + X", hl.dsp.window.resize())
-hl.bind("SUPER + V", hl.dsp.exec_cmd("cliphist list | tofi -c ~/.config/tofi/configV | cliphist decode | wl-copy"))
+hl.bind(
+	mainMod .. " + V",
+	hl.dsp.exec_cmd("cliphist list | tofi -c ~/.config/tofi/configV | cliphist decode | wl-copy")
+)
 hl.bind(mainMod .. " + M", hl.dsp.exit())
 
 --  Special Keys & Mouse
-hl.bind("SUPER + ESCAPE", hl.dsp.exec_cmd("wlogout"))
+hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("wlogout"))
 hl.bind("CTRL + Escape", hl.dsp.exec_cmd("killall waybar || waybar"))
 hl.bind(mainMod .. " + space", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SHIFT + space", hl.dsp.window.center())
@@ -319,6 +324,11 @@ hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+
+hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
+hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
 
 -- Move window position with mainMod + SHIFT + arrow keys
 hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.move({ direction = "l" }))
@@ -339,8 +349,8 @@ hl.bind(mainMod .. " + CTRL + Down", hl.dsp.window.resize({ x = 0, y = 30, relat
 
 -- Screenshot
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region"))
-hl.bind("SUPER + Print", hl.dsp.exec_cmd("hyprshot -m window"))
-hl.bind("SUPER + ALT + Print", hl.dsp.exec_cmd("hyprshot -m output"))
+hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("hyprshot -m window"))
+hl.bind(mainMod .. " + ALT + Print", hl.dsp.exec_cmd("hyprshot -m output"))
 
 -- Volume and Media Control
 hl.bind(mainMod .. " + F11", hl.dsp.exec_cmd("/home/jacob/.config/hypr/scripts/toggle_audio.sh"))

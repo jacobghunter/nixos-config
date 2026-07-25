@@ -165,7 +165,14 @@ in
 
   home.activation.quickshellLspInit = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     QMLLS_INI="${config.home.homeDirectory}/nixos-config/nixos-shared/graphical/modules/quickshell/.qmlls.ini"
-    if [ ! -f "$QMLLS_INI" ]; then
+    # Quickshell replaces this placeholder with a symlink into its ephemeral
+    # /run/user runtime VFS while it's running; once that session ends the
+    # symlink dangles, so clear it before touch (which follows symlinks and
+    # would otherwise fail trying to create a file under the vanished /run path).
+    if [ -L "$QMLLS_INI" ] && [ ! -e "$QMLLS_INI" ]; then
+      $DRY_RUN_CMD rm -f "$QMLLS_INI"
+    fi
+    if [ ! -e "$QMLLS_INI" ]; then
       $DRY_RUN_CMD touch "$QMLLS_INI"
     fi
   '';
