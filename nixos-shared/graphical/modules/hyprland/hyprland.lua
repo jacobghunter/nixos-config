@@ -56,8 +56,7 @@ local fileManager = "nautilus"
 local menu = "rofi -show drun -show-icons"
 local browser = "firefox"
 local notes = "obsidian"
-local editor = "code"
-local editor_alt = "subl"
+local editor = "kitty nvim"
 local colorPicker = "hyprpicker"
 
 --############################

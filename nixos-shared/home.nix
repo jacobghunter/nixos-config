@@ -29,7 +29,7 @@
     programs.home-manager.enable = true;
 
     home.sessionVariables = {
-      EDITOR = "code --wait";
+      EDITOR = "nvim";
       BROWSER = "firefox";
       DEFAULT_BROWSER = "firefox";
       NPM_CONFIG_PREFIX = "$HOME/.npm-global";
@@ -42,7 +42,7 @@
     };
 
     modules.tinty = {
-        enable = true;
+      enable = true;
     };
 
     home.shellAliases = {

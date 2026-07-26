@@ -10,7 +10,7 @@
     enable = true;
     withRuby = true;
     withPython3 = true;
-    defaultEditor = false;
+    defaultEditor = true;
     viAlias = true;
     vimAlias = true;
     extraPackages = with pkgs; [
