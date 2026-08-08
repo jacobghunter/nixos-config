@@ -51,6 +51,10 @@
       "nvim/lua/plugins/nix-lang.lua".source = ./nix-lang.lua;
       "nvim/lua/plugins/rust-lang.lua".source = ./rust-lang.lua;
       "nvim/lua/plugins/tinted.lua".source = ./tinted.lua;
+      "nvim/lua/config/options.lua".text =
+        builtins.readFile "${inputs.lazyvim-starter}/lua/config/options.lua"
+        + "\n"
+        + builtins.readFile ./options.lua;
     };
   };
 }

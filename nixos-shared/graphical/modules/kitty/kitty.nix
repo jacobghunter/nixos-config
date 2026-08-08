@@ -60,53 +60,53 @@ in
         name = "JetBrainsMono NF";
         size = 13;
       };
-      settings =
-        {
-          background_opacity = "0.0";
-          dynamic_background_opacity = "yes";
+      settings = {
+        background_opacity = "0.0";
+        dynamic_background_opacity = "yes";
 
-          allow_remote_control = "yes";
+        allow_remote_control = "yes";
 
-          auto_reload_config = -1;
-          window_padding_width = 8;
-          italic_font = "auto";
-          bold_italic_font = "auto";
-          disable_ligatures = "always";
-          enabled_layouts = "tall,stack";
+        auto_reload_config = -1;
+        window_padding_width = 8;
+        italic_font = "auto";
+        bold_italic_font = "auto";
+        disable_ligatures = "always";
+        enabled_layouts = "tall,stack";
 
-          resize_debounce_time = 0;
-          placement_strategy = "top-left";
-          resize_draw_strategy = "scale";
-          linux_display_server = "wayland";
+        resize_debounce_time = 0;
+        placement_strategy = "top-left";
+        resize_draw_strategy = "scale";
+        linux_display_server = "wayland";
 
-          tab_bar_style = "powerline";
-          tab_powerline_style = "slanted";
+        tab_bar_style = "powerline";
+        tab_powerline_style = "slanted";
 
-          focus_follows_mouse = "yes";
+        focus_follows_mouse = "yes";
 
-          term = "xterm-256color";
-        }
-        // lib.optionalAttrs (!tintyEnabled) {
-          foreground = "#${cfg.colors.text}";
-          background = "#000000";
-          selection_foreground = "#${cfg.colors.background}";
-          selection_background = "#${cfg.colors.primary}";
+        term = "xterm-256color";
+        clipboard_control = "write-clipboard write-primary read-clipboard read-primary no-append";
+      }
+      // lib.optionalAttrs (!tintyEnabled) {
+        foreground = "#${cfg.colors.text}";
+        background = "#000000";
+        selection_foreground = "#${cfg.colors.background}";
+        selection_background = "#${cfg.colors.primary}";
 
-          cursor = "#${cfg.colors.secondary}";
-          cursor_text_color = "#${cfg.colors.background}";
+        cursor = "#${cfg.colors.secondary}";
+        cursor_text_color = "#${cfg.colors.background}";
 
-          url_color = "#${cfg.colors.secondary}";
+        url_color = "#${cfg.colors.secondary}";
 
-          active_border_color = "#${cfg.colors.primary}";
-          inactive_border_color = "#${cfg.colors.inactive}";
-          bell_border_color = "#${cfg.colors.special}";
+        active_border_color = "#${cfg.colors.primary}";
+        inactive_border_color = "#${cfg.colors.inactive}";
+        bell_border_color = "#${cfg.colors.special}";
 
-          active_tab_foreground = "#${cfg.colors.background}";
-          active_tab_background = "#${cfg.colors.primary}";
-          inactive_tab_foreground = "#${cfg.colors.text}";
-          inactive_tab_background = "#${cfg.colors.dark}";
-          tab_bar_background = "#000000";
-        };
+        active_tab_foreground = "#${cfg.colors.background}";
+        active_tab_background = "#${cfg.colors.primary}";
+        inactive_tab_foreground = "#${cfg.colors.text}";
+        inactive_tab_background = "#${cfg.colors.dark}";
+        tab_bar_background = "#000000";
+      };
       keybindings = {
         "kitty_mod+h" = "kitty_scrollback_nvim";
         "kitty_mod+g" = "kitty_scrollback_nvim --config ksb_builtin_last_cmd_output";
