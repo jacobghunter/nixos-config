@@ -64,11 +64,11 @@ in
         zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
 
         # Automatically start zellij on SSH
-        if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$ZELLIJ" ]]; then
-          if command -v zellij >/dev/null 2>&1; then
-            exec zellij attach -c
-          fi
-        fi
+        # if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$ZELLIJ" ]]; then
+        #   if command -v zellij >/dev/null 2>&1; then
+        #     exec zellij attach -c
+        #   fi
+        # fi
 
         # Insert Nth recent command at cursor (invoked by kitty keybindings)
         insert-nth-recent-command() {
