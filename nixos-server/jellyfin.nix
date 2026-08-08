@@ -22,7 +22,7 @@
     ];
   };
 
-  users.users.jacob.extraGroups = [
+  users.users.jellyfin.extraGroups = [
     "video"
     "render"
   ];
@@ -30,6 +30,6 @@
   services.jellyfin = {
     enable = true;
     openFirewall = true;
-    user = "jacob";
+    user = "jellyfin";
   };
 }

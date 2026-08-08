@@ -17,14 +17,17 @@
   # Allow sudo without password
   security.sudo.wheelNeedsPassword = false;
 
-
-
   environment.systemPackages = with pkgs; [
     nodejs
   ];
 
   # For local llms
   services.ollama.enable = true;
+
+  services.qbittorrent = {
+    enable = true;
+    openFirewall = true;
+  };
 
   system.stateVersion = "25.05";
 }
