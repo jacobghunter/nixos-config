@@ -335,6 +335,11 @@ hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "r" }))
 hl.bind(mainMod .. " + SHIFT + up", hl.dsp.window.move({ direction = "u" }))
 hl.bind(mainMod .. " + SHIFT + down", hl.dsp.window.move({ direction = "d" }))
 
+hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "l" }))
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "r" }))
+hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "u" }))
+hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "d" }))
+
 -- Move/resize windows with mainMod + LMB/RMB and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag())
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize())
@@ -345,6 +350,11 @@ hl.bind(mainMod .. " + CTRL + Right", hl.dsp.window.resize({ x = 30, y = 0, rela
 hl.bind(mainMod .. " + CTRL + Left", hl.dsp.window.resize({ x = -30, y = 0, relative = true }), { repeating = true })
 hl.bind(mainMod .. " + CTRL + Up", hl.dsp.window.resize({ x = 0, y = -30, relative = true }), { repeating = true })
 hl.bind(mainMod .. " + CTRL + Down", hl.dsp.window.resize({ x = 0, y = 30, relative = true }), { repeating = true })
+
+hl.bind(mainMod .. " + CTRL + L", hl.dsp.window.resize({ x = 30, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.resize({ x = -30, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -30, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 30, relative = true }), { repeating = true })
 
 -- Screenshot
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region"))
@@ -451,7 +461,7 @@ hl.config({
 		disable_hyprland_logo = true, -- If true disables the random hyprland logo / anime girl background. :(
 		disable_splash_rendering = true,
 		vrr = 0,
-		initial_workspace_tracking = 1,
+		initial_workspace_tracking = 2, -- "group" tracking: correlates via process fork tree, needed for Steam's reaper launcher wrapper
 		animate_manual_resizes = true,
 	},
 
