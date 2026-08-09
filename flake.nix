@@ -152,6 +152,7 @@
             ./nixos-server/disk-config.nix
             ./nixos-server/pi-hole.nix
             ./nixos-server/jellyfin.nix
+            ./nixos-server/homepage.nix
 
             # Shared configurations
             ./nixos-shared/system.nix

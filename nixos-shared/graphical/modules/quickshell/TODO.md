@@ -12,6 +12,7 @@
 - Apply the same to active hyprland window
 - Keep the border static (or subdued) until focused
 - Random animation like the void in hollow night or solar flares? Might be a bit much
+- blocky shadows on buttonts? like chilis website
 
 Completely different idea:
 - Harkonen black sun, infrared look. 
