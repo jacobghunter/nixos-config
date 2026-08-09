@@ -4,7 +4,7 @@
     enable = true;
     openFirewall = true;
     listenPort = 8082;
-    allowedHosts = "nixos-server.local:8082,localhost:8082,127.0.0.1:8082";
+    allowedHosts = "nixos-server.local:8082,localhost:8082,127.0.0.1:8082,192.168.1.167:8082";
 
     # Secrets (API keys/passwords) are NOT stored in the nix store.
     # Create this file on the server by hand after deploying, see nixos-server/homepage.nix comment below.
