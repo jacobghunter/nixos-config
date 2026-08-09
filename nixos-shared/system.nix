@@ -63,6 +63,7 @@
     curlie
     ffmpeg
     uv
+    proton-vpn-cli
   ];
 
   fonts.packages = with pkgs; [
