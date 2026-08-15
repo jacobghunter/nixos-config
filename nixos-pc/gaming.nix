@@ -77,6 +77,28 @@
   services.dbus.implementation = "broker";
   services.irqbalance.enable = true;
 
+  # Disk-backed fallback swap behind zram. zram alone has no headroom once it
+  # fills (compressing/decompressing under 100% zram pressure stalls the
+  # whole system instead of gracefully degrading) - this gives the kernel
+  # somewhere to go before that happens. Lower priority than zram by default,
+  # so it's only used once zram is exhausted.
+  swapDevices = [
+    {
+      device = "/var/swapfile";
+      size = 16384; # 16G
+    }
+  ];
+
+  # systemd-oomd runs by default on NixOS but watches nothing unless a slice
+  # opts in - these were all off, so oomd never intervened despite zram
+  # sitting at ~100% during a memory pressure spike. Matches what Fedora
+  # enables by default.
+  systemd.oomd = {
+    enableRootSlice = true;
+    enableSystemSlice = true;
+    enableUserSlices = true;
+  };
+
   # Increase Mesa shader cache size to prevent shader compilation stuttering over time.
   # Default is 1GB, raising to 5GB lets more games cache their compiled pipelines.
   environment.sessionVariables = {
