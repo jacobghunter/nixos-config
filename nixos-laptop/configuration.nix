@@ -7,6 +7,9 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.kernelModules = [ "i915" ];
 
+  # QEMU emulation for cross-building aarch64 (e.g. the rpi sd-image)
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   # Hardware Acceleration (Video)
   hardware.graphics = {
     enable = true;
