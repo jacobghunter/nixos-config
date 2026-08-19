@@ -4,6 +4,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # QEMU emulation for cross-building aarch64
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   networking.hostName = "nixos-server";
   networking.networkmanager.enable = true;
 
