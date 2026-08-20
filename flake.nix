@@ -250,6 +250,19 @@
             nixos-hardware.nixosModules.raspberry-pi-3
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             ./nixos-pihole/configuration.nix
+
+            # Home Manager
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs self; };
+              home-manager.users.jacob = {
+                imports = [
+                  ./nixos-shared/home-base.nix
+                ];
+              };
+            }
           ];
         };
       };
