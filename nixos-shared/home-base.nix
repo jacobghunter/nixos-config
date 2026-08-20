@@ -48,17 +48,21 @@
     programs.zsh.initContent = ''
       rebuild() {
         if [ -z "$1" ]; then
-          sudo nixos-rebuild switch --flake ~/nixos-config
+          sudo nixos-rebuild switch --flake ~/nixos-config "$@"
         else
-          nixos-rebuild switch --flake ~/nixos-config#"$1" --target-host "jacob@$1" --elevate=sudo
+          local host="$1"
+          shift
+          nixos-rebuild switch --flake ~/nixos-config#"$host" --target-host "jacob@$host" --elevate=sudo "$@"
         fi
       }
 
       rebuild-boot() {
         if [ -z "$1" ]; then
-          sudo nixos-rebuild boot --flake ~/nixos-config
+          sudo nixos-rebuild boot --flake ~/nixos-config "$@"
         else
-          nixos-rebuild boot --flake ~/nixos-config#"$1" --target-host "jacob@$1" --elevate=sudo
+          local host="$1"
+          shift
+          nixos-rebuild boot --flake ~/nixos-config#"$host" --target-host "jacob@$host" --elevate=sudo "$@"
         fi
       }
     '';
