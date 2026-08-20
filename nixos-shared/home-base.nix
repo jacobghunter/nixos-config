@@ -43,14 +43,14 @@
     # `rebuild` / `rebuild-boot` with no args rebuild the current machine
     # locally. With a host arg (e.g. `rebuild nixos-pihole`), they build
     # here and deploy to that host over ssh instead - no local sudo needed
-    # since --use-remote-sudo handles activation on the target (relies on
+    # since --elevate=sudo handles activation on the target (relies on
     # passwordless sudo there, e.g. nixos-pihole's wheelNeedsPassword=false).
     programs.zsh.initContent = ''
       rebuild() {
         if [ -z "$1" ]; then
           sudo nixos-rebuild switch --flake ~/nixos-config
         else
-          nixos-rebuild switch --flake ~/nixos-config#"$1" --target-host "jacob@$1" --use-remote-sudo
+          nixos-rebuild switch --flake ~/nixos-config#"$1" --target-host "jacob@$1" --elevate=sudo
         fi
       }
 
@@ -58,7 +58,7 @@
         if [ -z "$1" ]; then
           sudo nixos-rebuild boot --flake ~/nixos-config
         else
-          nixos-rebuild boot --flake ~/nixos-config#"$1" --target-host "jacob@$1" --use-remote-sudo
+          nixos-rebuild boot --flake ~/nixos-config#"$1" --target-host "jacob@$1" --elevate=sudo
         fi
       }
     '';
