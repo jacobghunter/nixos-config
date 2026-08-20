@@ -3,6 +3,13 @@
 {
   networking.hostName = "nixos-pihole";
 
+  # nixos-hardware's raspberry-pi-3 module needs generic-extlinux-compatible
+  # (u-boot chainloading extlinux.conf), but their newer firmware.nix module
+  # only stages u-boot.bin onto the sd-image when this is explicitly enabled
+  # - it defaults to off, which silently produces an unbootable firmware
+  # partition (no u-boot.bin, no `kernel=` line in config.txt).
+  hardware.raspberry-pi.firmware.uboot.enable = true;
+
   # --- WiFi ---
   # Quick and dirty: plaintext psk in the nix store (world-readable on the
   # Pi, and it'll end up in your git history once this gets folded into the
