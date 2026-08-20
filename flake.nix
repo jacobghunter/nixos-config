@@ -156,6 +156,7 @@
 
             # Shared configurations
             ./nixos-shared/system.nix
+            ./nixos-shared/modules/pihole/pihole.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -250,6 +251,8 @@
             nixos-hardware.nixosModules.raspberry-pi-3
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             ./nixos-pihole/configuration.nix
+            ./nixos-pihole/pi-hole.nix
+            ./nixos-shared/modules/pihole/pihole.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager

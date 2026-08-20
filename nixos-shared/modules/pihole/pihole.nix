@@ -1,0 +1,109 @@
+{ config, lib, ... }:
+let
+  cfg = config.modules.pihole;
+in
+{
+  options.modules.pihole = {
+    enable = lib.mkEnableOption "Pi-hole DNS + ad-blocking";
+
+    interface = lib.mkOption {
+      type = lib.types.str;
+      description = "Network interface pi-hole should bind DNS to.";
+      example = "eth0";
+    };
+
+    domain = lib.mkOption {
+      type = lib.types.str;
+      default = "homelab.me";
+      description = "Local domain pi-hole answers for.";
+    };
+
+    upstreams = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [
+        "1.1.1.1"
+        "1.1.1.2"
+      ];
+      description = "Upstream DNS resolvers.";
+    };
+
+    routerIP = lib.mkOption {
+      type = lib.types.str;
+      default = "192.168.1.1";
+      description = "Router/gateway IP - used for the dhcp.router setting and the gateway hosts entry.";
+    };
+
+    webPasswordHash = lib.mkOption {
+      type = lib.types.str;
+      description = "Balloon-hashed admin web password for the pi-hole webserver API.";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    services = {
+      # DISABLE separate dnsmasq (Pi-hole provides its own)
+      dnsmasq.enable = false;
+
+      # PI-HOLE FTL ENGINE
+      pihole-ftl = {
+        enable = true;
+        lists = [
+          {
+            url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
+            type = "block";
+            enabled = true;
+            description = "Steven Black's HOSTS";
+          }
+        ];
+        openFirewallDNS = true;
+        openFirewallDHCP = true;
+        openFirewallWebserver = true;
+
+        settings = {
+          # DHCP SERVER (Default is OFF - set active=true if you want Pi-hole to be your router's DHCP)
+          dhcp = {
+            active = false;
+            router = cfg.routerIP;
+          };
+
+          dns = {
+            domain = cfg.domain;
+            interface = cfg.interface;
+            upstreams = cfg.upstreams;
+          };
+
+          webserver = {
+            api.pwhash = cfg.webPasswordHash;
+            session.timeout = 43200; # 12 hours
+          };
+        };
+        useDnsmasqConfig = true;
+      };
+
+      # PI-HOLE WEB INTERFACE
+      pihole-web = {
+        enable = true;
+        ports = [ 80 ];
+      };
+
+      # DISABLE SYSTEMD-RESOLVED STUB (Conflicts with Pi-hole on port 53)
+      resolved = {
+        enable = true;
+        settings."Resolve" = {
+          "DNSStubListener" = "no";
+          "MulticastDNS" = "no";
+        };
+      };
+    };
+
+    networking.hosts."${cfg.routerIP}" = [
+      "gateway.${cfg.domain}"
+      "gateway"
+    ];
+
+    # Fix for a benign FTL log warning
+    systemd.tmpfiles.rules = [
+      "f /etc/pihole/versions 0644 pihole pihole - -"
+    ];
+  };
+}
