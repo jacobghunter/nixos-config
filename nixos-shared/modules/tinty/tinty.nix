@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.modules.tinty;
-  
+
   tintyToml = ./tinty.toml;
   hookPath = "${config.xdg.configHome}/tinted-theming/tinty/hooks/quickshell-colors.sh";
 in
@@ -21,7 +21,7 @@ in
 
     xdg.configFile."tinted-theming/tinty/config.toml".text = ''
       ${builtins.readFile tintyToml}
-      
+
       [[items]]
       name = "quickshell-colors"
       # We re-use tinted-shell's path so tinty finds valid templates and doesn't crash

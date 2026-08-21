@@ -27,13 +27,14 @@
             url = "https://github.com/SoftFever/OrcaSlicer/releases/download/v2.3.2/OrcaSlicer_Linux_AppImage_Ubuntu2404_V2.3.2.AppImage";
             sha256 = "1n2afc153fl1pxzif65z0921hkhjynmblp37drv43n9pxk73chy6";
           };
-          extraPkgs = pkgs: with pkgs; [
-            webkitgtk_4_1
-            libsoup_3
-            sqlite
-            libmspack
-            bzip2.out
-          ];
+          extraPkgs =
+            pkgs: with pkgs; [
+              webkitgtk_4_1
+              libsoup_3
+              sqlite
+              libmspack
+              bzip2.out
+            ];
         })
       ];
       nativeBuildInputs = [ makeWrapper ];

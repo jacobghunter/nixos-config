@@ -15,7 +15,9 @@
     enable = true;
     settings = {
       initial_session = {
-        command = "${inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland}/bin/start-hyprland";
+        command = "${
+          inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland
+        }/bin/start-hyprland";
         user = "jacob";
       };
       default_session = {

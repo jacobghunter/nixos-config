@@ -8,7 +8,7 @@
   inactive = "595959";
   background = "000000";
   text = "cdd6f4";
-  
+
   # Alpha values
   alpha = "cc";
   alpha-bg = "b3";

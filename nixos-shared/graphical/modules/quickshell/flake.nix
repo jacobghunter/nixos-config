@@ -22,77 +22,77 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         runNested = pkgs.writeShellScriptBin "run-nested" ''
-          set -euo pipefail
+                    set -euo pipefail
 
-          PROJECT_DIR="$PWD"
-          TEMPLATE="$PROJECT_DIR/nested.lua.template"
-          GENERATED="$PROJECT_DIR/nested.generated.lua"
+                    PROJECT_DIR="$PWD"
+                    TEMPLATE="$PROJECT_DIR/nested.lua.template"
+                    GENERATED="$PROJECT_DIR/nested.generated.lua"
 
-          if [ ! -f "$TEMPLATE" ]; then
-            echo "Error: nested.lua.template not found in $PROJECT_DIR"
-            echo "Run run-nested from your quickshell project directory."
-            exit 1
-          fi
+                    if [ ! -f "$TEMPLATE" ]; then
+                      echo "Error: nested.lua.template not found in $PROJECT_DIR"
+                      echo "Run run-nested from your quickshell project directory."
+                      exit 1
+                    fi
 
-          TARGET_QML=""
-          if [ "$#" -gt 0 ]; then
-            INPUT_PATH="$1"
-            if [ -d "$INPUT_PATH" ]; then
-              if [ -f "$INPUT_PATH/shell.qml" ]; then
-                TARGET_QML="$(realpath "$INPUT_PATH/shell.qml")"
-              elif [ -f "$INPUT_PATH/main.qml" ]; then
-                TARGET_QML="$(realpath "$INPUT_PATH/main.qml")"
-              else
-                echo "Error: Directory '$INPUT_PATH' does not contain shell.qml or main.qml"
-                exit 1
-              fi
-            elif [ -f "$INPUT_PATH" ]; then
-              TARGET_QML="$(realpath "$INPUT_PATH")"
-            else
-              echo "Error: '$INPUT_PATH' is not a valid file or directory."
-              exit 1
-            fi
-          else
-            TARGET_QML="$PROJECT_DIR/shell.qml"
-          fi
+                    TARGET_QML=""
+                    if [ "$#" -gt 0 ]; then
+                      INPUT_PATH="$1"
+                      if [ -d "$INPUT_PATH" ]; then
+                        if [ -f "$INPUT_PATH/shell.qml" ]; then
+                          TARGET_QML="$(realpath "$INPUT_PATH/shell.qml")"
+                        elif [ -f "$INPUT_PATH/main.qml" ]; then
+                          TARGET_QML="$(realpath "$INPUT_PATH/main.qml")"
+                        else
+                          echo "Error: Directory '$INPUT_PATH' does not contain shell.qml or main.qml"
+                          exit 1
+                        fi
+                      elif [ -f "$INPUT_PATH" ]; then
+                        TARGET_QML="$(realpath "$INPUT_PATH")"
+                      else
+                        echo "Error: '$INPUT_PATH' is not a valid file or directory."
+                        exit 1
+                      fi
+                    else
+                      TARGET_QML="$PROJECT_DIR/shell.qml"
+                    fi
 
-          # Create a temporary sandbox bin directory to stub systemd/dbus calls
-          SANDBOX_DIR="$PROJECT_DIR/.sandbox-bin"
-          mkdir -p "$SANDBOX_DIR"
+                    # Create a temporary sandbox bin directory to stub systemd/dbus calls
+                    SANDBOX_DIR="$PROJECT_DIR/.sandbox-bin"
+                    mkdir -p "$SANDBOX_DIR"
 
-          cleanup() {
-            rm -rf "$SANDBOX_DIR"
-            echo "Sandbox directory cleaned up."
-          }
-          trap cleanup EXIT
+                    cleanup() {
+                      rm -rf "$SANDBOX_DIR"
+                      echo "Sandbox directory cleaned up."
+                    }
+                    trap cleanup EXIT
 
-          # Write dummy systemctl stub
-          cat << 'EOF' > "$SANDBOX_DIR/systemctl"
-#!/bin/sh
-# Stub to prevent nested Hyprland from affecting host systemd
-exit 0
-EOF
-          chmod +x "$SANDBOX_DIR/systemctl"
+                    # Write dummy systemctl stub
+                    cat << 'EOF' > "$SANDBOX_DIR/systemctl"
+          #!/bin/sh
+          # Stub to prevent nested Hyprland from affecting host systemd
+          exit 0
+          EOF
+                    chmod +x "$SANDBOX_DIR/systemctl"
 
-          # Write dummy dbus-update-activation-environment stub
-          cat << 'EOF' > "$SANDBOX_DIR/dbus-update-activation-environment"
-#!/bin/sh
-# Stub to prevent nested Hyprland from affecting host D-Bus environment
-exit 0
-EOF
-          chmod +x "$SANDBOX_DIR/dbus-update-activation-environment"
+                    # Write dummy dbus-update-activation-environment stub
+                    cat << 'EOF' > "$SANDBOX_DIR/dbus-update-activation-environment"
+          #!/bin/sh
+          # Stub to prevent nested Hyprland from affecting host D-Bus environment
+          exit 0
+          EOF
+                    chmod +x "$SANDBOX_DIR/dbus-update-activation-environment"
 
-          echo "Starting nested Hyprland with Quickshell (sandboxed)..."
+                    echo "Starting nested Hyprland with Quickshell (sandboxed)..."
 
-          sed \
-            -e "s|QUICKSHELL_BIN|env QT_PLUGIN_PATH='$QT_PLUGIN_PATH' QML2_IMPORT_PATH='$QML2_IMPORT_PATH' ${pkgs.quickshell}/bin/quickshell|g" \
-            -e "s|QML_PATH|$TARGET_QML|g" \
-            "$TEMPLATE" > "$GENERATED"
+                    sed \
+                      -e "s|QUICKSHELL_BIN|env QT_PLUGIN_PATH='$QT_PLUGIN_PATH' QML2_IMPORT_PATH='$QML2_IMPORT_PATH' ${pkgs.quickshell}/bin/quickshell|g" \
+                      -e "s|QML_PATH|$TARGET_QML|g" \
+                      "$TEMPLATE" > "$GENERATED"
 
-          # Prepend sandbox dir to PATH and run nested Hyprland
-          export PATH="$SANDBOX_DIR:$PATH"
-          env -u LD_LIBRARY_PATH -u QT_PLUGIN_PATH -u QML2_IMPORT_PATH -u HYPRLAND_INSTANCE_SIGNATURE \
-            ${pkgs.dbus}/bin/dbus-run-session Hyprland -c "$GENERATED"
+                    # Prepend sandbox dir to PATH and run nested Hyprland
+                    export PATH="$SANDBOX_DIR:$PATH"
+                    env -u LD_LIBRARY_PATH -u QT_PLUGIN_PATH -u QML2_IMPORT_PATH -u HYPRLAND_INSTANCE_SIGNATURE \
+                      ${pkgs.dbus}/bin/dbus-run-session Hyprland -c "$GENERATED"
         '';
 
         serveDocs = pkgs.writeShellScriptBin "serve-docs" ''

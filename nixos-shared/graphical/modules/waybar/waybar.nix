@@ -25,7 +25,8 @@ let
   waybar-trough = palette.waybar-trough + palette.alpha-waybar;
 
   toRgbHex = s: "#" + builtins.substring 0 6 s;
-in {
+in
+{
   xdg.configFile."waybar/variables.css".text = ''
     @define-color primary ${toRgbHex primary};
     @define-color secondary ${toRgbHex secondary};
