@@ -114,9 +114,9 @@
             inputs.vscode-server.nixosModules.default
 
             # Shared configurations
-            ./nixos-shared/system.nix
+            ./nixos-shared/configuration.nix
             ./nixos-shared/graphical/configuration.nix
-            ./nixos-shared/graphical/modules/hyprland/system.nix
+            ./nixos-shared/graphical/modules/hyprland/configuration.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -155,7 +155,7 @@
             ./nixos-server/homepage.nix
 
             # Shared configurations
-            ./nixos-shared/system.nix
+            ./nixos-shared/configuration.nix
             ./nixos-shared/modules/pihole/pihole.nix
 
             # Home Manager
@@ -184,7 +184,7 @@
             ./nixos-wsl/configuration.nix
 
             # Shared configurations
-            ./nixos-shared/system.nix
+            ./nixos-shared/configuration.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -214,9 +214,9 @@
             inputs.vscode-server.nixosModules.default
 
             # Shared configurations
-            ./nixos-shared/system.nix
+            ./nixos-shared/configuration.nix
             ./nixos-shared/graphical/configuration.nix
-            ./nixos-shared/graphical/modules/hyprland/system.nix
+            ./nixos-shared/graphical/modules/hyprland/configuration.nix
             inputs.nix-gaming.nixosModules.platformOptimizations
             inputs.nix-gaming.nixosModules.pipewireLowLatency
 
@@ -255,7 +255,7 @@
             ./nixos-pihole/pi-hole.nix
 
             # Shared configurations
-            ./nixos-shared/system.nix
+            ./nixos-shared/configuration.nix
             ./nixos-shared/modules/pihole/pihole.nix
 
             # Home Manager

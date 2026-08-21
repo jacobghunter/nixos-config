@@ -30,7 +30,7 @@
 
   # avahi (for `ssh jacob@nixos-pihole.local`), users.users.jacob + its
   # authorized keys, services.openssh.enable, and nix.settings.trusted-users
-  # all now come from nixos-shared/system.nix instead of being duplicated
+  # all now come from nixos-shared/configuration.nix instead of being duplicated
   # here - that duplication is exactly what let the pi's authorized keys
   # drift out of sync with the shared list.
   services.openssh.settings = {
