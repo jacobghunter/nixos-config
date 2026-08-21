@@ -3,6 +3,7 @@
 {
   imports = [
     ./gaming.nix
+    ./modules/macros
   ];
 
   # --- BOOT & HARDWARE ---
