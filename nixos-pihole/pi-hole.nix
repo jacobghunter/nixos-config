@@ -12,6 +12,15 @@
     ];
   };
 
+  # Without its own default gateway, packets sourced from enu1u1's static
+  # IP have nowhere to go for anything off-subnet (e.g. upstream DNS at
+  # 1.1.1.1) even though wlan0 has a perfectly good default route - the
+  # kernel won't use wlan0's route for traffic bound to enu1u1's address.
+  networking.defaultGateway = {
+    address = "192.168.1.1";
+    interface = "enu1u1";
+  };
+
   modules.pihole = {
     enable = true;
     interface = "enu1u1"; # Pi 3B's onboard ethernet - USB-attached, so it's "enu1u1" not "enp1s0"/"eth0"
