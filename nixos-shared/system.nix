@@ -62,7 +62,7 @@
     gping
     hyperfine
     curlie
-    ffmpeg
+    ffmpeg-headless
     uv
     proton-vpn-cli
   ];
