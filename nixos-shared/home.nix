@@ -9,6 +9,7 @@
 {
   imports = [
     "${inputs.self}/nixos-shared/home-base.nix"
+    "${inputs.self}/nixos-shared/modules/neovim/neovim.nix"
   ];
 
   config = {

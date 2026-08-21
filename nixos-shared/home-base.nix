@@ -8,7 +8,6 @@
 
 {
   imports = [
-    "${inputs.self}/nixos-shared/modules/neovim/neovim.nix"
     "${inputs.self}/nixos-shared/modules/zsh/zsh.nix"
     "${inputs.self}/nixos-shared/modules/tinty/tinty.nix"
   ];
