@@ -52,6 +52,22 @@ in
       # PI-HOLE FTL ENGINE
       pihole-ftl = {
         enable = true;
+        # nixpkgs' pinned v6.6.2 segfaults deterministically right after
+        # "Database successfully initialized" on aarch64 (confirmed via
+        # strace across multiple fresh-database runs - not corruption, not
+        # sandboxing, not our config). v6.6.1's changelog mentions fixing
+        # "thread-safety issues causing SIGSEGV under concurrent API load",
+        # so this looks like a real upstream regression; v6.7 is the next
+        # release after 6.6.2 and doesn't reproduce it.
+        package = pkgs.pihole-ftl.overrideAttrs (_old: rec {
+          version = "6.7";
+          src = pkgs.fetchFromGitHub {
+            owner = "pi-hole";
+            repo = "FTL";
+            tag = "v${version}";
+            hash = "sha256-vViQ9ZAhajIfCQvOtKjMO2wj8CRt/1h/dzHHFevbbFU=";
+          };
+        });
         lists = [
           {
             url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
@@ -124,20 +140,17 @@ in
       BindPaths = [ "/run/pihole-ftl:/run" ];
     };
 
-    # FTL is exiting immediately after startup with no logged reason (past
-    # fixing the PID file above). The `path` option doesn't work here:
-    # upstream sets environment.PATH via lib.mkForce, which silently wins
-    # over path's own (lower-priority) contribution - no eval error, just
-    # zero effect (confirmed: identical store hash before/after adding it).
-    # ExecStart isn't forced upstream though, so override that instead.
-    # TEMPORARY: straced to /var/log/pihole/ftl-strace.log to find the real
-    # cause - remove once diagnosed.
+    # binutils (addr2line) on PATH so any future crash gets a real symbol
+    # backtrace instead of "command not found" - upstream's `path` option
+    # can't do this: it sets environment.PATH at normal priority, and the
+    # module forces environment.PATH itself via lib.mkForce, so `path`'s
+    # contribution silently loses (no eval error, just zero effect -
+    # confirmed by an identical output hash with/without it). ExecStart
+    # isn't forced upstream though, so override that instead.
     systemd.services.pihole-ftl.serviceConfig.ExecStart = lib.mkForce (
       "${pkgs.writeShellScript "pihole-ftl-start" ''
         export PATH="${pkgs.binutils}/bin:$PATH"
-        exec ${lib.getExe pkgs.strace} -f -o /var/log/pihole/ftl-strace.log ${
-          lib.getExe config.services.pihole-ftl.package
-        } no-daemon
+        exec ${lib.getExe config.services.pihole-ftl.package} no-daemon
       ''}"
     );
   };
