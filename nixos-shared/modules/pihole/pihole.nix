@@ -105,5 +105,11 @@ in
     systemd.tmpfiles.rules = [
       "f /etc/pihole/versions 0644 pihole pihole - -"
     ];
+
+    # Upstream's pihole-ftl unit sets ProtectSystem=strict but doesn't
+    # include /run in ReadWritePaths, even though FTL's default PID file
+    # is /run/pihole-FTL.pid - it fails to write it, exits 1, and
+    # crash-loops into start-limit-hit without this.
+    systemd.services.pihole-ftl.serviceConfig.ReadWritePaths = [ "/run" ];
   };
 }
