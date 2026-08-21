@@ -250,8 +250,12 @@
             # Host-specific configuration
             nixos-hardware.nixosModules.raspberry-pi-3
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            inputs.vscode-server.nixosModules.default
             ./nixos-pihole/configuration.nix
             ./nixos-pihole/pi-hole.nix
+
+            # Shared configurations
+            ./nixos-shared/system.nix
             ./nixos-shared/modules/pihole/pihole.nix
 
             # Home Manager
