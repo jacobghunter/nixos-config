@@ -125,17 +125,19 @@ in
     };
 
     # FTL is exiting immediately after startup with no logged reason (past
-    # fixing the PID file above) - its own crash handler tries to shell out
-    # to addr2line for a backtrace, which isn't on PATH by default. The
-    # `path` option doesn't work here: upstream sets environment.PATH via
-    # lib.mkForce, which silently wins over path's own (lower-priority)
-    # contribution - no eval error, just zero effect (confirmed: identical
-    # store hash before/after adding it). ExecStart isn't forced upstream
-    # though, so override that instead and set PATH inside our own wrapper.
+    # fixing the PID file above). The `path` option doesn't work here:
+    # upstream sets environment.PATH via lib.mkForce, which silently wins
+    # over path's own (lower-priority) contribution - no eval error, just
+    # zero effect (confirmed: identical store hash before/after adding it).
+    # ExecStart isn't forced upstream though, so override that instead.
+    # TEMPORARY: straced to /var/log/pihole/ftl-strace.log to find the real
+    # cause - remove once diagnosed.
     systemd.services.pihole-ftl.serviceConfig.ExecStart = lib.mkForce (
       "${pkgs.writeShellScript "pihole-ftl-start" ''
         export PATH="${pkgs.binutils}/bin:$PATH"
-        exec ${lib.getExe config.services.pihole-ftl.package} no-daemon
+        exec ${lib.getExe pkgs.strace} -f -o /var/log/pihole/ftl-strace.log ${
+          lib.getExe config.services.pihole-ftl.package
+        } no-daemon
       ''}"
     );
   };
