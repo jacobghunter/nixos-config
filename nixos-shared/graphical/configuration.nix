@@ -106,6 +106,7 @@
     usbutils
     util-linux
     nixfmt
+    nixfmt-tree
     seahorse # GUI for gnome-keyring
     texlive.combined.scheme-full # Latex engine
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
