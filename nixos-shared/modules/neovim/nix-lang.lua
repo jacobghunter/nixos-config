@@ -17,12 +17,26 @@ return {
 		},
 	},
 
-	-- Formatter: nixfmt on save
+	-- Formatter: deadnix (removes dead code) + statix (fixes antipatterns) on
+	-- save, then nixfmt last so it cleans up whatever those two touched.
+	-- Both edit the file in place rather than via stdin/stdout, hence stdin = false.
 	{
 		"stevearc/conform.nvim",
 		opts = {
+			formatters = {
+				statix = {
+					command = "statix",
+					args = { "fix", "$FILENAME" },
+					stdin = false,
+				},
+				deadnix = {
+					command = "deadnix",
+					args = { "--edit", "$FILENAME" },
+					stdin = false,
+				},
+			},
 			formatters_by_ft = {
-				nix = { "nixfmt" },
+				nix = { "deadnix", "statix", "nixfmt" },
 			},
 		},
 	},
