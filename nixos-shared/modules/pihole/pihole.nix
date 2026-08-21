@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.modules.pihole;
 in
@@ -118,5 +123,11 @@ in
       RuntimeDirectory = "pihole-ftl";
       BindPaths = [ "/run/pihole-ftl:/run" ];
     };
+
+    # FTL is exiting immediately after startup with no logged reason (past
+    # fixing the PID file above) - its own crash handler tries to shell out
+    # to addr2line for a backtrace, which isn't on PATH by default. Adding
+    # it so the next crash actually tells us where, instead of nothing.
+    systemd.services.pihole-ftl.path = [ pkgs.binutils ];
   };
 }
