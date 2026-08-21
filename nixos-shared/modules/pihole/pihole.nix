@@ -106,10 +106,17 @@ in
       "f /etc/pihole/versions 0644 pihole pihole - -"
     ];
 
-    # Upstream's pihole-ftl unit sets ProtectSystem=strict but doesn't
-    # include /run in ReadWritePaths, even though FTL's default PID file
-    # is /run/pihole-FTL.pid - it fails to write it, exits 1, and
-    # crash-loops into start-limit-hit without this.
-    systemd.services.pihole-ftl.serviceConfig.ReadWritePaths = [ "/run" ];
+    # FTL hardcodes its PID file to /run/pihole-FTL.pid with no config/CLI
+    # override (checked --help and --config), but upstream's unit doesn't
+    # give it anywhere writable under /run - ReadWritePaths alone doesn't
+    # help since that only controls mount read-only-ness, not real Unix
+    # ownership (/run itself stays root:root 755). RuntimeDirectory creates
+    # a pihole-owned dir on the host; BindPaths remounts it *as* /run inside
+    # just this service's sandbox, so the hardcoded path resolves somewhere
+    # it can actually write, without touching the real host /run at all.
+    systemd.services.pihole-ftl.serviceConfig = {
+      RuntimeDirectory = "pihole-ftl";
+      BindPaths = [ "/run/pihole-ftl:/run" ];
+    };
   };
 }
