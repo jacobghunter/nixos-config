@@ -101,6 +101,34 @@
       defaultCommand = "fd --type f";
     };
 
+    # Base SSH aliases for the fleet, kept out of ~/.ssh/config itself so
+    # personal/work entries there (added by hand, not tracked here) stay
+    # untouched. Requires one manual one-time line at the END of
+    # ~/.ssh/config: `Include ~/.ssh/conf.d/*.conf` - putting it at the end
+    # means anything defined earlier in that file wins (ssh_config uses
+    # first-match-wins), so hand-written entries can still override these.
+    home.file.".ssh/conf.d/nixos-hosts.conf".text = ''
+      Host nixos-laptop
+        HostName nixos-laptop.local
+        User jacob
+
+      Host nixos-pc
+        HostName nixos-pc.local
+        User jacob
+
+      Host nixos-server
+        HostName nixos-server.local
+        User jacob
+
+      Host nixos-wsl
+        HostName nixos-wsl.local
+        User jacob
+
+      Host nixos-pihole
+        HostName nixos-pihole.local
+        User jacob
+    '';
+
     # Replaces cd
     programs.zoxide = {
       enable = true;

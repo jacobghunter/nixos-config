@@ -5,6 +5,10 @@
 - maybe dont need wifi, bluetooth on the bar and could hide those in settings pane
 - idle inhibitor
 
+### Hyprland specific stuff
+
+- an indication a workspace has a fullscreened window
+
 ### Style
 
 - persona style sloppy box borders with jagged edges
