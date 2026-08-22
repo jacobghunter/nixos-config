@@ -8,6 +8,18 @@ _: {
     settings = {
       listen = "[::]:8081";
 
+      # Required for production use - without this, the substituter URL
+      # handed back to clients is synthesized from whatever Host header
+      # the request happened to carry.
+      api-endpoint = "http://nixos-server.local:8081/";
+      allowed-hosts = [ "nixos-server.local:8081" ];
+
+      garbage-collection = {
+        # Local disk storage, not S3 - cap growth instead of keeping
+        # every pushed path forever.
+        default-retention-period = "3 months";
+      };
+
       jwt = { };
 
       # Data chunking
