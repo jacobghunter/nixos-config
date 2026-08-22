@@ -9,9 +9,15 @@ in
   # run once, manually, as root on this machine to populate
   # /root/.config/attic/config.toml - that's a credential and can't be
   # provisioned through the Nix store.
+  #
+  # A failing post-build-hook fails the *entire* build/rebuild that
+  # triggered it, so this must never exit non-zero - push is best-effort,
+  # not a build requirement.
   nix.settings.post-build-hook = "${pkgs.writeShellScript "attic-push" ''
-    set -eu
     set -f # disable globbing
-    exec ${attic-client}/bin/attic push nixos-config $OUT_PATHS
+    ${attic-client}/bin/attic push nixos-config $OUT_PATHS || {
+      echo "attic-push: failed to push to nixos-config, continuing anyway" >&2
+      exit 0
+    }
   ''}";
 }
