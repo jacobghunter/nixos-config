@@ -153,6 +153,7 @@
             ./nixos-server/modules/jellyfin/jellyfin.nix
             ./nixos-server/modules/homepage/homepage.nix
             ./nixos-server/modules/attic/attic.nix
+            ./nixos-server/modules/caddy/caddy.nix
 
             # Shared configurations
             ./nixos-shared/configuration.nix

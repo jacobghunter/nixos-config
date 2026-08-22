@@ -1,9 +1,14 @@
 _: {
   services.homepage-dashboard = {
     enable = true;
-    openFirewall = true;
-    listenPort = 80;
-    allowedHosts = "nixos-server.local:80,localhost:80,127.0.0.1:80,192.168.1.167:80";
+    # Fronted by caddy on :80 (nixos-server/modules/caddy) - no need for
+    # this to be reachable directly from outside the host.
+    openFirewall = false;
+    listenPort = 8083;
+    # caddy proxies the Host header through unchanged, so requests via
+    # http://nixos-server.local arrive with no port suffix; the :8083
+    # entries are for hitting this service directly for debugging.
+    allowedHosts = "nixos-server.local,localhost,127.0.0.1,192.168.1.167,localhost:8083,127.0.0.1:8083";
 
     # Secrets (API keys/passwords) are NOT stored in the nix store.
     # Create this file on the server by hand after deploying, see nixos-server/homepage.nix comment below.
