@@ -64,14 +64,27 @@ _: {
           {
             "Pi-hole" = {
               icon = "pi-hole.png";
-              href = "http://nixos-server.local";
+              # Pi-hole moved to the rpi (nixos-pihole) - static IP so this
+              # keeps working regardless of DNS/avahi resolution order.
+              href = "http://192.168.1.14";
               description = "DNS ad-blocker";
               widget = {
                 type = "pihole";
-                url = "http://nixos-server.local";
+                url = "http://192.168.1.14";
                 version = 6;
                 key = "{{HOMEPAGE_VAR_PIHOLE_KEY}}";
               };
+            };
+          }
+        ];
+      }
+      {
+        Nix = [
+          {
+            Attic = {
+              icon = "mdi-package-variant-closed";
+              href = "http://nixos-server.local:8080";
+              description = "Nix binary cache";
             };
           }
         ];

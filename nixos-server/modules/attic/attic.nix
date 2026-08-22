@@ -6,7 +6,7 @@ _: {
     environmentFile = "/etc/atticd.env";
 
     settings = {
-      listen = "[::]:8080";
+      listen = "[::]:8081";
 
       jwt = { };
 
