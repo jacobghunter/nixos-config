@@ -1,12 +1,14 @@
 {
-  config,
   pkgs,
   inputs,
   ...
 }:
 
 {
-  imports = [ "${inputs.self}/nixos-shared/configuration.nix" ];
+  imports = [
+    "${inputs.self}/nixos-shared/configuration.nix"
+    ./modules/calibre/configuration.nix
+  ];
   # QMK Keyboard Support (Needs root for udev rules)
   hardware.keyboard.qmk.enable = true;
 
@@ -62,7 +64,6 @@
   services.xserver.enable = true;
   services.gvfs.enable = true;
   services.udisks2.enable = true;
-  services.udev.packages = [ pkgs.calibre ];
   services.gnome.gnome-keyring.enable = true;
   services.gnome.evolution-data-server.enable = true;
   services.gnome.gnome-online-accounts.enable = true;

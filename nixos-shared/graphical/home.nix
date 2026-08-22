@@ -14,6 +14,7 @@ in
   imports = [
     "${inputs.self}/nixos-shared/home.nix"
     ./modules/firefox/firefox.nix
+    ./modules/calibre/home.nix
     inputs.nixcord.homeModules.nixcord
     inputs.spicetify-nix.homeManagerModules.default
   ];
@@ -33,9 +34,6 @@ in
     bitwarden-desktop
     remmina
     copyq
-
-    # Books
-    calibre
 
     pkgs.mpv
     cava

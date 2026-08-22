@@ -1,5 +1,5 @@
 # ~/nixos-config/configuration.nix
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   # --- BOOT & HARDWARE ---
@@ -32,8 +32,6 @@
   networking.firewall.allowedTCPPorts = [
     7236
     7250
-    9090 # Calibre Wireless Connection
-    8080 # Calibre Content Server
   ];
   networking.firewall.allowedUDPPorts = [
     7236

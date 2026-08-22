@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -55,8 +55,6 @@
   networking.firewall.allowedTCPPorts = [
     7236
     7250
-    9090 # Calibre Wireless Connection
-    8080 # Calibre Content Server
   ];
 
   # --- SYSTEM MAINTENANCE ---
