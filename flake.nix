@@ -145,8 +145,8 @@
             inputs.vscode-server.nixosModules.default
             ./nixos-server/configuration.nix
             ./nixos-server/disk-config.nix
-            ./nixos-server/jellyfin.nix
-            ./nixos-server/homepage.nix
+            ./nixos-server/modules/jellyfin/jellyfin.nix
+            ./nixos-server/modules/homepage/homepage.nix
 
             # Shared configurations
             ./nixos-shared/configuration.nix

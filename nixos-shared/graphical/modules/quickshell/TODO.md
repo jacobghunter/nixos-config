@@ -8,6 +8,7 @@
 ### Hyprland specific stuff
 
 - an indication a workspace has a fullscreened window
+- a powertorys like text extractor screenshot tool
 
 ### Style
 
