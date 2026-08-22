@@ -20,7 +20,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 CACHE_NAME="nixos-config"
-SERVER_URL="http://nixos-server.local:8081"
+
+# IP, not the mDNS hostname - attic's Rust HTTP client uses its own
+# resolver rather than glibc's NSS, so it can't resolve .local names even
+# though ping/curl on this same box can. Ask the machine itself instead of
+# hardcoding it, so this stays correct if the reserved IP ever changes.
+SERVER_IP="$(ip route get 1.1.1.1 | awk '{for (i=1;i<=NF;i++) if ($i=="src") print $(i+1)}')"
+if [[ -z "$SERVER_IP" ]]; then
+  echo "Couldn't determine this machine's LAN IP via 'ip route get'." >&2
+  exit 1
+fi
+SERVER_URL="http://${SERVER_IP}:8081"
 
 echo "==> Minting admin token for '$CACHE_NAME'"
 TOKEN=$(atticd-atticadm make-token --sub jacob-admin --validity '10 years' \

@@ -1,4 +1,7 @@
 _: {
+  # LAN-only - not port-forwarded past the router.
+  networking.firewall.allowedTCPPorts = [ 8081 ];
+
   services.atticd = {
     enable = true;
 
@@ -12,7 +15,13 @@ _: {
       # handed back to clients is synthesized from whatever Host header
       # the request happened to carry.
       api-endpoint = "http://nixos-server.local:8081/";
-      allowed-hosts = [ "nixos-server.local:8081" ];
+      # Both forms: nix's substituter fetches (libcurl, real NSS/mDNS
+      # resolution) can use the .local name, but the attic CLI's Rust HTTP
+      # client can't resolve mDNS and connects via IP instead.
+      allowed-hosts = [
+        "nixos-server.local:8081"
+        "192.168.1.167:8081"
+      ];
 
       garbage-collection = {
         # Local disk storage, not S3 - cap growth instead of keeping
