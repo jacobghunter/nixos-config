@@ -93,11 +93,6 @@
       nixos-hardware,
       home-manager,
       disko,
-      nixos-wsl,
-      lazyvim-starter,
-      antigravity-cli,
-      claude-code-nix,
-      nix-gaming,
       ...
     }@inputs:
     {
@@ -150,7 +145,6 @@
             inputs.vscode-server.nixosModules.default
             ./nixos-server/configuration.nix
             ./nixos-server/disk-config.nix
-            ./nixos-server/pi-hole.nix
             ./nixos-server/jellyfin.nix
             ./nixos-server/homepage.nix
 
