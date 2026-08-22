@@ -83,6 +83,11 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -142,10 +147,12 @@
             # Host-specific configurations
             disko.nixosModules.disko
             inputs.vscode-server.nixosModules.default
+            inputs.attic.nixosModules.atticd
             ./nixos-server/configuration.nix
             ./nixos-server/disk-config.nix
             ./nixos-server/modules/jellyfin/jellyfin.nix
             ./nixos-server/modules/homepage/homepage.nix
+            ./nixos-server/modules/attic/attic.nix
 
             # Shared configurations
             ./nixos-shared/configuration.nix
