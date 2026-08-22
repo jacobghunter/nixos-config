@@ -1,9 +1,8 @@
-{ ... }:
-{
+_: {
   services.homepage-dashboard = {
     enable = true;
     openFirewall = true;
-    listenPort = 8082;
+    listenPort = 80;
     allowedHosts = "nixos-server.local:8082,localhost:8082,127.0.0.1:8082,192.168.1.167:8082";
 
     # Secrets (API keys/passwords) are NOT stored in the nix store.
