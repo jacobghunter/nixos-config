@@ -47,11 +47,11 @@ _: {
           {
             qBittorrent = {
               icon = "qbittorrent.png";
-              href = "http://nixos-server.local:8080";
+              href = "http://nixos-server.local:8082";
               description = "Torrent client";
               widget = {
                 type = "qbittorrent";
-                url = "http://nixos-server.local:8080";
+                url = "http://nixos-server.local:8082";
                 username = "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}";
                 password = "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}";
               };
@@ -83,7 +83,7 @@ _: {
           {
             Attic = {
               icon = "mdi-package-variant-closed";
-              href = "http://nixos-server.local:8080";
+              href = "http://nixos-server.local:8081";
               description = "Nix binary cache";
             };
           }

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   boot.loader.systemd-boot.enable = true;
@@ -30,6 +30,7 @@
   services.qbittorrent = {
     enable = true;
     openFirewall = true;
+    webuiPort = 8082;
   };
 
   system.stateVersion = "25.05";
