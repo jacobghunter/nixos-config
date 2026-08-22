@@ -5,7 +5,7 @@ in
 {
   environment.systemPackages = [ attic-client ];
 
-  # `attic login server https://nixos-server.local:8081 <push-token>` must be
+  # `attic login server https://192.168.1.167:8081 <push-token>` must be
   # run once, manually, as root on this machine to populate
   # /root/.config/attic/config.toml - that's a credential and can't be
   # provisioned through the Nix store.
