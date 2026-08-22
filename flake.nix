@@ -65,7 +65,6 @@
       flake = false;
     };
 
-    antigravity-cli.url = "github:xsen/antigravity-cli-nix";
     claude-code-nix.url = "github:sadjow/claude-code-nix";
 
     nixcord.url = "github:FlameFlag/nixcord";
