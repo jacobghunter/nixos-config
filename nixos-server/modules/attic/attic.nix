@@ -13,11 +13,15 @@ _: {
 
       # Required for production use - without this, the substituter URL
       # handed back to clients is synthesized from whatever Host header
-      # the request happened to carry.
-      api-endpoint = "http://nixos-server.local:8081/";
-      # Both forms: nix's substituter fetches (libcurl, real NSS/mDNS
-      # resolution) can use the .local name, but the attic CLI's Rust HTTP
-      # client can't resolve mDNS and connects via IP instead.
+      # the request happened to carry. Must be the IP, not the .local
+      # hostname - the attic CLI reads this value from cache-config
+      # responses and uses it for all follow-up requests (push,
+      # get-missing-paths, etc), and its Rust HTTP client can't resolve
+      # mDNS names even though nix's own substituter fetches (libcurl) can.
+      api-endpoint = "http://192.168.1.167:8081/";
+      # Both forms in allowed-hosts: nix's substituter fetches can still
+      # arrive with the .local Host header, but the attic CLI now always
+      # connects via IP.
       allowed-hosts = [
         "nixos-server.local:8081"
         "192.168.1.167:8081"
