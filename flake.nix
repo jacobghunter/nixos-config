@@ -116,6 +116,7 @@
             ./nixos-shared/configuration.nix
             ./nixos-shared/graphical/configuration.nix
             ./nixos-shared/graphical/modules/hyprland/configuration.nix
+            ./nixos-shared/modules/attic-push/attic-push.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -158,6 +159,7 @@
             # Shared configurations
             ./nixos-shared/configuration.nix
             ./nixos-shared/modules/pihole/pihole.nix
+            ./nixos-shared/modules/attic-push/attic-push.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -218,6 +220,7 @@
             ./nixos-shared/configuration.nix
             ./nixos-shared/graphical/configuration.nix
             ./nixos-shared/graphical/modules/hyprland/configuration.nix
+            ./nixos-shared/modules/attic-push/attic-push.nix
             inputs.nix-gaming.nixosModules.platformOptimizations
             inputs.nix-gaming.nixosModules.pipewireLowLatency
 
