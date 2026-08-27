@@ -19,33 +19,35 @@
       GTK_THEME = "Adwaita:dark"; # Force dark mode for GTK/Electron/Chrome applications
     };
 
-    # Environment variable manager for project directories
-    programs.direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      nix-direnv.enable = true; # Enables the faster, caching Nix integration
-    };
+    programs = {
+      # Environment variable manager for project directories
+      direnv = {
+        enable = true;
+        enableZshIntegration = true;
+        nix-direnv.enable = true; # Enables the faster, caching Nix integration
+      };
 
-    # Replaces zsh history
-    programs.atuin = {
-      enable = true;
-      enableZshIntegration = true;
-    };
+      # Replaces zsh history
+      atuin = {
+        enable = true;
+        enableZshIntegration = true;
+      };
 
-    programs.yazi = {
-      enable = true;
-      enableZshIntegration = true;
-      shellWrapperName = "y";
-    };
+      yazi = {
+        enable = true;
+        enableZshIntegration = true;
+        shellWrapperName = "y";
+      };
 
-    programs.pay-respects = {
-      enable = true;
-      enableZshIntegration = true;
-    };
+      pay-respects = {
+        enable = true;
+        enableZshIntegration = true;
+      };
 
-    programs.nix-index = {
-      enable = true;
-      enableZshIntegration = true;
+      nix-index = {
+        enable = true;
+        enableZshIntegration = true;
+      };
     };
 
     home.packages = with pkgs; [

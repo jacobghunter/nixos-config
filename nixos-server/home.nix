@@ -1,10 +1,6 @@
-{
-  pkgs,
-  ...
-}:
+_:
 
 {
-  # --- SERVER SPECIFIC PACKAGES ---
-  home.packages = with pkgs; [
-  ];
+  # home.packages = with pkgs; [
+  # ];
 }

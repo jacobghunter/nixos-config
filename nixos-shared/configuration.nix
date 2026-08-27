@@ -1,28 +1,47 @@
 {
-  config,
   pkgs,
   inputs,
   ...
 }:
 
 {
-  nixpkgs.overlays = [
-    inputs.nix-vscode-extensions.overlays.default
-  ];
+  nixpkgs = {
+    overlays = [
+      inputs.nix-vscode-extensions.overlays.default
+    ];
 
-  # Enable ZSH
-  programs.zsh.enable = true;
+    # Allow unfree packages (like VS Code)
+    config.allowUnfree = true;
+    config.permittedInsecurePackages = [
+      "electron-39.8.10"
+    ];
+  };
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    publish = {
+  services = {
+    avahi = {
       enable = true;
-      addresses = true;
-      workstation = true;
-      userServices = true;
+      nssmdns4 = true;
+      openFirewall = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        workstation = true;
+        userServices = true;
+      };
     };
+
+    # Enable VS Code Server service (requires the module to be imported in flake.nix)
+    vscode-server.enable = true;
+
+    openssh.enable = true;
+    upower.enable = true;
+  };
+
+  programs = {
+    zsh.enable = true;
+
+    ## Enable nix-ld for better compatibility with unpatched binaries (helpful for VS Code remote)
+    nix-ld.enable = true;
   };
 
   users.users.jacob = {
@@ -42,15 +61,6 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINTbg6xTr+WRsLqKQsRZveSIk+PWsp1gYYSVxKA2mW+I jacob@nixos-server"
     ];
   };
-
-  # Enable VS Code Server service (requires the module to be imported in flake.nix)
-  services.vscode-server.enable = true;
-
-  services.openssh.enable = true;
-  services.upower.enable = true;
-
-  # Enable nix-ld for better compatibility with unpatched binaries (helpful for VS Code remote)
-  programs.nix-ld.enable = true;
 
   # Common System Packages
   environment.systemPackages = with pkgs; [
@@ -73,11 +83,9 @@
     inter
   ];
 
-  # Allow unfree packages (like VS Code)
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-39.8.10"
-  ];
+  # None of our hosts root on ZFS, so force-importing on boot is unnecessary
+  # and risks silently importing a pool in an inconsistent state.
+  boot.zfs.forceImportRoot = false;
 
   # Enable Nix Flakes
   nix.settings = {

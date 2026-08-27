@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   version = "1.12.0-prerelease-2";
@@ -10,7 +10,7 @@ let
     hash = "sha256-bNUlQBsyGxCu3GHP+qgrYLikLagXxzLjjuZFZFi7Vzk=";
   };
 
-  customKanata = pkgs.kanata.overrideAttrs (oldAttrs: {
+  customKanata = pkgs.kanata.overrideAttrs (_oldAttrs: {
     inherit version src;
     doCheck = false;
     cargoDeps = pkgs.rustPlatform.fetchCargoVendor {

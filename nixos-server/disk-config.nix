@@ -3,8 +3,6 @@
     disk = {
       main = {
         type = "disk";
-        # IMPORTANT: Check your target machine's disk name!
-        # It might be /dev/vda, /dev/nvme0n1, etc.
         device = "/dev/sda";
         content = {
           type = "gpt";

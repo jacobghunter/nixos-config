@@ -88,9 +88,9 @@ in
           };
 
           dns = {
-            domain = cfg.domain;
-            interface = cfg.interface;
-            upstreams = cfg.upstreams;
+            inherit (cfg) domain;
+            inherit (cfg) interface;
+            inherit (cfg) upstreams;
           };
 
           webserver = {
@@ -122,36 +122,39 @@ in
       "gateway"
     ];
 
-    # Fix for a benign FTL log warning
-    systemd.tmpfiles.rules = [
-      "f /etc/pihole/versions 0644 pihole pihole - -"
-    ];
+    systemd = {
+      # Fix for a benign FTL log warning
+      tmpfiles.rules = [
+        "f /etc/pihole/versions 0644 pihole pihole - -"
+      ];
 
-    # FTL hardcodes its PID file to /run/pihole-FTL.pid with no config/CLI
-    # override (checked --help and --config), but upstream's unit doesn't
-    # give it anywhere writable under /run - ReadWritePaths alone doesn't
-    # help since that only controls mount read-only-ness, not real Unix
-    # ownership (/run itself stays root:root 755). RuntimeDirectory creates
-    # a pihole-owned dir on the host; BindPaths remounts it *as* /run inside
-    # just this service's sandbox, so the hardcoded path resolves somewhere
-    # it can actually write, without touching the real host /run at all.
-    systemd.services.pihole-ftl.serviceConfig = {
-      RuntimeDirectory = "pihole-ftl";
-      BindPaths = [ "/run/pihole-ftl:/run" ];
+      services = {
+        # FTL hardcodes its PID file to /run/pihole-FTL.pid with no config/CLI
+        # override (checked --help and --config), but upstream's unit doesn't
+        # give it anywhere writable under /run - ReadWritePaths alone doesn't
+        # help since that only controls mount read-only-ness, not real Unix
+        # ownership (/run itself stays root:root 755). RuntimeDirectory creates
+        # a pihole-owned dir on the host; BindPaths remounts it *as* /run inside
+        # just this service's sandbox, so the hardcoded path resolves somewhere
+        # it can actually write, without touching the real host /run at all.
+        pihole-ftl.serviceConfig = {
+          RuntimeDirectory = "pihole-ftl";
+          BindPaths = [ "/run/pihole-ftl:/run" ];
+        };
+
+        # binutils (addr2line) on PATH so any future crash gets a real symbol
+        # backtrace instead of "command not found" - upstream's `path` option
+        # can't do this: it sets environment.PATH at normal priority, and the
+        # module forces environment.PATH itself via lib.mkForce, so `path`'s
+        # contribution silently loses (no eval error, just zero effect -
+        # confirmed by an identical output hash with/without it). ExecStart
+        # isn't forced upstream though, so override that instead.
+        pihole-ftl.serviceConfig.ExecStart = lib.mkForce "${pkgs.writeShellScript "pihole-ftl-start" ''
+          export PATH="${pkgs.binutils}/bin:$PATH"
+          exec ${lib.getExe config.services.pihole-ftl.package} no-daemon
+        ''}";
+      };
     };
 
-    # binutils (addr2line) on PATH so any future crash gets a real symbol
-    # backtrace instead of "command not found" - upstream's `path` option
-    # can't do this: it sets environment.PATH at normal priority, and the
-    # module forces environment.PATH itself via lib.mkForce, so `path`'s
-    # contribution silently loses (no eval error, just zero effect -
-    # confirmed by an identical output hash with/without it). ExecStart
-    # isn't forced upstream though, so override that instead.
-    systemd.services.pihole-ftl.serviceConfig.ExecStart = lib.mkForce (
-      "${pkgs.writeShellScript "pihole-ftl-start" ''
-        export PATH="${pkgs.binutils}/bin:$PATH"
-        exec ${lib.getExe config.services.pihole-ftl.package} no-daemon
-      ''}"
-    );
   };
 }

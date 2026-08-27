@@ -121,20 +121,22 @@
             # Home Manager
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs self; };
-              home-manager.backupFileExtension = "backup";
-              home-manager.users.jacob = {
-                imports = [
-                  ./nixos-laptop/home.nix
-                  ./nixos-shared/home.nix
-                  ./nixos-shared/graphical/home.nix
-                  ./nixos-shared/graphical/modules/kitty/kitty.nix
-                  ./nixos-shared/graphical/modules/wayle/wayle.nix
-                  ./nixos-shared/graphical/modules/quickshell/quickshell.nix
-                  ./nixos-laptop/modules/hyprland/home.nix
-                ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs self; };
+                backupFileExtension = "backup";
+                users.jacob = {
+                  imports = [
+                    ./nixos-laptop/home.nix
+                    ./nixos-shared/home.nix
+                    ./nixos-shared/graphical/home.nix
+                    ./nixos-shared/graphical/modules/kitty/kitty.nix
+                    ./nixos-shared/graphical/modules/wayle/wayle.nix
+                    ./nixos-shared/graphical/modules/quickshell/quickshell.nix
+                    ./nixos-laptop/modules/hyprland/home.nix
+                  ];
+                };
               };
             }
           ];
@@ -164,14 +166,16 @@
             # Home Manager
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs self; };
-              home-manager.users.jacob = {
-                imports = [
-                  ./nixos-server/home.nix
-                  ./nixos-shared/home.nix
-                ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs self; };
+                users.jacob = {
+                  imports = [
+                    ./nixos-server/home.nix
+                    ./nixos-shared/home.nix
+                  ];
+                };
               };
             }
           ];
@@ -192,15 +196,17 @@
             # Home Manager
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs self; };
-              home-manager.users.jacob = {
-                imports = [
-                  ./nixos-wsl/home.nix
-                  ./nixos-shared/home.nix
-                  ./nixos-shared/graphical/modules/kitty/kitty.nix
-                ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs self; };
+                users.jacob = {
+                  imports = [
+                    ./nixos-wsl/home.nix
+                    ./nixos-shared/home.nix
+                    ./nixos-shared/graphical/modules/kitty/kitty.nix
+                  ];
+                };
               };
             }
           ];
@@ -227,20 +233,22 @@
             # Home Manager
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs self; };
-              home-manager.backupFileExtension = "backup";
-              home-manager.users.jacob = {
-                imports = [
-                  ./nixos-pc/home.nix
-                  ./nixos-shared/home.nix
-                  ./nixos-shared/graphical/home.nix
-                  ./nixos-shared/graphical/modules/kitty/kitty.nix
-                  ./nixos-shared/graphical/modules/wayle/wayle.nix
-                  ./nixos-shared/graphical/modules/quickshell/quickshell.nix
-                  ./nixos-pc/modules/hyprland/home.nix
-                ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs self; };
+                backupFileExtension = "backup";
+                users.jacob = {
+                  imports = [
+                    ./nixos-pc/home.nix
+                    ./nixos-shared/home.nix
+                    ./nixos-shared/graphical/home.nix
+                    ./nixos-shared/graphical/modules/kitty/kitty.nix
+                    ./nixos-shared/graphical/modules/wayle/wayle.nix
+                    ./nixos-shared/graphical/modules/quickshell/quickshell.nix
+                    ./nixos-pc/modules/hyprland/home.nix
+                  ];
+                };
               };
             }
           ];
@@ -265,13 +273,15 @@
             # Home Manager
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs self; };
-              home-manager.users.jacob = {
-                imports = [
-                  ./nixos-shared/home-base.nix
-                ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs self; };
+                users.jacob = {
+                  imports = [
+                    ./nixos-shared/home-base.nix
+                  ];
+                };
               };
             }
           ];

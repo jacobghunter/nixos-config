@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 
@@ -24,10 +23,12 @@ in
     home.packages = [ cfg.package ];
 
     # Link local shell.qml and directories to ~/.config/quickshell/
-    xdg.configFile."quickshell/shell.qml".source = ./shell.qml;
-    xdg.configFile."quickshell/components".source = ./components;
-    xdg.configFile."quickshell/layouts".source = ./layouts;
-    xdg.configFile."quickshell/services".source = ./services;
+    xdg.configFile = {
+      "quickshell/shell.qml".source = ./shell.qml;
+      "quickshell/components".source = ./components;
+      "quickshell/layouts".source = ./layouts;
+      "quickshell/services".source = ./services;
+    };
 
     # User systemd service to run Quickshell
     systemd.user.services.quickshell = {

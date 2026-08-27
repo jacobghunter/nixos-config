@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   inputs,
   ...
@@ -10,8 +9,10 @@
     inputs.nixos-wsl.nixosModules.default
   ];
 
-  wsl.enable = true;
-  wsl.defaultUser = "jacob";
+  wsl = {
+    enable = true;
+    defaultUser = "jacob";
+  };
 
   # To set up serial port on wsl:
   # winget install usbipd

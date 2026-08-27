@@ -9,27 +9,53 @@
     "${inputs.self}/nixos-shared/configuration.nix"
     ./modules/calibre/configuration.nix
   ];
-  # QMK Keyboard Support (Needs root for udev rules)
-  hardware.keyboard.qmk.enable = true;
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  hardware.bluetooth.package = pkgs.bluez;
-  hardware.bluetooth.settings = {
-    General = {
-      ControllerMode = "dual";
-      Experimental = true;
-      KernelExperimental = true;
-      FastConnectable = false;
-      Privacy = "off";
-      JustWorksRepairing = "always";
+  hardware = {
+    # QMK Keyboard Support (Needs root for udev rules)
+    keyboard.qmk.enable = true;
+
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      package = pkgs.bluez;
+      settings = {
+        General = {
+          ControllerMode = "dual";
+          Experimental = true;
+          KernelExperimental = true;
+          FastConnectable = false;
+          Privacy = "off";
+          JustWorksRepairing = "always";
+        };
+      };
     };
   };
+
   systemd.services.bluetooth.serviceConfig.ExecStart = [
     ""
     "${pkgs.bluez}/libexec/bluetooth/bluetoothd -E -f /etc/bluetooth/main.conf"
   ];
-  services.blueman.enable = true;
+
+  services = {
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    xserver.enable = true;
+    gvfs.enable = true;
+    udisks2.enable = true;
+    gnome = {
+      gnome-keyring.enable = true;
+      evolution-data-server.enable = true;
+      gnome-online-accounts.enable = true;
+    };
+    printing.enable = true; # CUPS
+
+    blueman.enable = true;
+  };
 
   # Firewall & DNS
   networking.nameservers = [
@@ -53,22 +79,6 @@
   };
 
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  # General Services
-  services.xserver.enable = true;
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
-  services.gnome.gnome-keyring.enable = true;
-  services.gnome.evolution-data-server.enable = true;
-  services.gnome.gnome-online-accounts.enable = true;
-
-  services.printing.enable = true; # CUPS
   virtualisation.docker.enable = true;
 
   programs.dconf.enable = true;
@@ -108,6 +118,8 @@
     util-linux
     nixfmt
     nixfmt-tree
+    deadnix
+    statix
     seahorse # GUI for gnome-keyring
     texlive.combined.scheme-full # Latex engine
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default

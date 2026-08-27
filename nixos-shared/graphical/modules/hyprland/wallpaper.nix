@@ -1,13 +1,11 @@
 {
   pkgs,
   config,
-  lib,
   inputs,
   ...
 }:
 
 let
-  cfg = config.modules.hyprland;
   staticWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.png";
   # videoWallpaper = "${inputs.self}/assets/backgrounds/outer-wilds.mp4";
 in

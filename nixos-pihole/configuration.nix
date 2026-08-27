@@ -1,7 +1,17 @@
-{ lib, ... }:
+_:
 
 {
-  networking.hostName = "nixos-pihole";
+  networking = {
+    hostName = "nixos-pihole";
+    wireless.extraConfig = "country=US";
+    wireless = {
+      enable = true;
+      networks."Weefee_2.4G" = {
+        psk = "mightyskates216";
+      };
+    };
+
+  };
 
   # nixos-hardware's raspberry-pi-3 module needs generic-extlinux-compatible
   # (u-boot chainloading extlinux.conf), but their newer firmware.nix module
@@ -18,15 +28,7 @@
   # anything more than a bootstrap image.
   # Needed to unlock the Pi 3's wifi radio - without a country set,
   # wpa_supplicant won't associate.
-  networking.wireless.extraConfig = "country=US";
   hardware.enableRedistributableFirmware = true;
-
-  networking.wireless = {
-    enable = true;
-    networks."Weefee_2.4G" = {
-      psk = "mightyskates216";
-    };
-  };
 
   # avahi (for `ssh jacob@nixos-pihole.local`), users.users.jacob + its
   # authorized keys, services.openssh.enable, and nix.settings.trusted-users

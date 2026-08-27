@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   # Base palette (no alpha)

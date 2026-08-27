@@ -33,10 +33,14 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   };
 
+  # xdg-desktop-portal-hyprland is intentionally left out of extraPortals -
+  # home-manager's wayland.windowManager.hyprland.systemd.enable (see home.nix)
+  # already registers that portal's systemd user service, and having both
+  # NixOS and home-manager manage it collides at build time (duplicate
+  # xdg-desktop-portal-hyprland.service unit).
   xdg.portal = {
     enable = true;
     extraPortals = [
-      pkgs.xdg-desktop-portal-hyprland
       pkgs.xdg-desktop-portal-gtk
     ];
     config.common.default = [

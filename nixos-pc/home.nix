@@ -2,7 +2,6 @@
   self,
   config,
   pkgs,
-  inputs,
   lib,
   ...
 }:
@@ -12,8 +11,20 @@
     "${self}/nixos-shared/modules/audio/disable-audio-devices.nix"
   ];
 
-  modules.wayle.showBattery = false;
-  modules.btop.package = pkgs.btop-rocm;
+  modules = {
+    wayle.showBattery = false;
+    btop.package = pkgs.btop-rocm;
+    audioDeviceDisable = {
+      nodeNames = [
+        "alsa_output.usb-Samson_Technologies_Samson_Q2U_Microphone-00.analog-stereo"
+      ];
+      deviceNames = [
+        "alsa_card.pci-0000_10_00.6" # motherboard HD Audio
+        "alsa_card.pci-0000_03_00.1" # GPU Navi 31 HDMI/DP audio
+        "alsa_card.pci-0000_10_00.1" # GPU Radeon HD audio
+      ];
+    };
+  };
 
   home.packages = with pkgs; [
     nvtopPackages.amd
@@ -67,17 +78,6 @@
       toggle_logging = "Shift_L+F2";
       output_folder = "/home/jacob/.local/share/mangohud";
     };
-  };
-
-  modules.audioDeviceDisable = {
-    nodeNames = [
-      "alsa_output.usb-Samson_Technologies_Samson_Q2U_Microphone-00.analog-stereo"
-    ];
-    deviceNames = [
-      "alsa_card.pci-0000_10_00.6" # motherboard HD Audio
-      "alsa_card.pci-0000_03_00.1" # GPU Navi 31 HDMI/DP audio
-      "alsa_card.pci-0000_10_00.1" # GPU Radeon HD audio
-    ];
   };
 
   systemd.user.services.wayle = lib.mkIf config.modules.wayle.enable {

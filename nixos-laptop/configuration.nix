@@ -2,13 +2,14 @@
 { pkgs, ... }:
 
 {
-  # --- BOOT & HARDWARE ---
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.kernelModules = [ "i915" ];
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    initrd.kernelModules = [ "i915" ];
 
-  # QEMU emulation for cross-building aarch64
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    # QEMU emulation for cross-building aarch64
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
+  };
 
   # Hardware Acceleration (Video)
   hardware.graphics = {
@@ -16,10 +17,18 @@
     extraPackages = with pkgs; [ intel-media-driver ];
   };
 
-  # --- NETWORKING ---
-  networking.hostName = "nixos-laptop";
-  networking.networkmanager.enable = true;
-  networking.enableIPv6 = false;
+  networking = {
+    hostName = "nixos-laptop";
+    networkmanager.enable = true;
+    enableIPv6 = false;
+    firewall.allowedTCPPorts = [
+      7236
+      7250
+    ];
+    firewall.allowedUDPPorts = [
+      7236
+    ];
+  };
 
   # Steam
   programs.steam = {
@@ -28,14 +37,6 @@
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
-
-  networking.firewall.allowedTCPPorts = [
-    7236
-    7250
-  ];
-  networking.firewall.allowedUDPPorts = [
-    7236
-  ];
 
   # --- POWER MANAGEMENT ---
   services.power-profiles-daemon.enable = true;
