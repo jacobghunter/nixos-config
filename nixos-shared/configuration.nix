@@ -5,6 +5,8 @@
 }:
 
 {
+  time.timeZone = "America/Phoenix";
+
   nixpkgs = {
     overlays = [
       inputs.nix-vscode-extensions.overlays.default

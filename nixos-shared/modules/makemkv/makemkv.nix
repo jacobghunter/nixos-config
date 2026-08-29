@@ -81,7 +81,7 @@ in
 
     timezone = lib.mkOption {
       type = lib.types.str;
-      default = config.time.timeZone or "Etc/UTC";
+      default = config.time.timeZone;
       description = "Timezone passed to the container.";
     };
 
