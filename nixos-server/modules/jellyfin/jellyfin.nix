@@ -32,10 +32,4 @@
     openFirewall = true;
     user = "jellyfin";
   };
-
-  systemd.tmpfiles.rules = [
-    "z /var/lib/jellyfin 0750 jellyfin jellyfin -"
-    "z /var/lib/jellyfin/root 0750 jellyfin jellyfin -"
-    "z /var/lib/jellyfin/root/default 0750 jellyfin jellyfin -"
-  ];
 }

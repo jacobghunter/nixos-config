@@ -45,7 +45,7 @@
       "/dev/sg1"
     ];
     extraEnvironment.SUP_GROUP_IDS = "24";
-    outputDir = "/var/lib/jellyfin/root/default/Movies";
+    outputDir = "/media/storage/movies";
   };
 
   system.stateVersion = "25.05";
