@@ -461,7 +461,7 @@ hl.config({
 		disable_hyprland_logo = true, -- If true disables the random hyprland logo / anime girl background. :(
 		disable_splash_rendering = true,
 		vrr = 0,
-		initial_workspace_tracking = 2, -- "group" tracking: correlates via process fork tree, needed for Steam's reaper launcher wrapper
+		-- initial_workspace_tracking = 2, -- "group" tracking: correlates via process fork tree, needed for Steam's reaper launcher wrapper
 		animate_manual_resizes = true,
 	},
 
