@@ -45,6 +45,16 @@ _: {
               };
             };
           }
+          {
+            MakeMKV = {
+              icon = "mdi-disc";
+              # Running on nixos-pc for now (optical drive is plugged into
+              # it) - move this to nixos-server.local once the drive gets
+              # moved over, so ripped files land directly on server storage.
+              href = "http://nixos-pc.local:5800";
+              description = "Disc ripper";
+            };
+          }
         ];
       }
       {

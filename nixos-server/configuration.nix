@@ -35,5 +35,17 @@
     nodejs
   ];
 
+  modules.makemkv = {
+    enable = true;
+    # sg0 is the WD disk (target 3:0:0:0); the BD-RE drive (target
+    # 10:0:0:0) is sg1 - confirmed via udevadm/lsscsi, not the module's
+    # default guess. Both /dev/sr0 and /dev/sg1 are group cdrom (gid 24).
+    devices = [
+      "/dev/sr0"
+      "/dev/sg1"
+    ];
+    extraEnvironment.SUP_GROUP_IDS = "24";
+  };
+
   system.stateVersion = "25.05";
 }

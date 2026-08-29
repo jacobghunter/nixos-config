@@ -162,6 +162,7 @@
             ./nixos-shared/configuration.nix
             ./nixos-shared/modules/pihole/pihole.nix
             ./nixos-shared/modules/attic-push/attic-push.nix
+            ./nixos-shared/modules/makemkv/makemkv.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
