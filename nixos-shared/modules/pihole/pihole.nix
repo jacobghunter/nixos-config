@@ -42,6 +42,15 @@ in
       type = lib.types.str;
       description = "Balloon-hashed admin web password for the pi-hole webserver API.";
     };
+
+    localDnsRecords = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        "server.home" = "192.168.1.167";
+      };
+      description = "Extra local DNS records pi-hole should answer for, as hostname -> IP.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -91,6 +100,7 @@ in
             inherit (cfg) domain;
             inherit (cfg) interface;
             inherit (cfg) upstreams;
+            hosts = lib.mapAttrsToList (host: ip: "${ip} ${host}") cfg.localDnsRecords;
           };
 
           webserver = {

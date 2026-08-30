@@ -31,5 +31,12 @@
     enable = true;
     interface = "enu1u1"; # Pi 3B's onboard ethernet - USB-attached, so it's "enu1u1" not "enp1s0"/"eth0"
     webPasswordHash = "$BALLOON-SHA256$v=1$s=1024,t=32$kVqB62qUpnPUQulGDapmBA==$pFYWzIfOzQKS+vs6LcQPz9wfqhkJANVE8pD+PvwumFI=";
+    localDnsRecords = {
+      # go-links + dashboard, both served by caddy on the server (nixos-server/modules/caddy)
+      "go" = "192.168.1.167";
+      "server.home" = "192.168.1.167";
+      # pi-hole itself
+      "pihole.home" = "192.168.1.14";
+    };
   };
 }
