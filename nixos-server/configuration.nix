@@ -46,6 +46,8 @@
     ];
     extraEnvironment.SUP_GROUP_IDS = "24";
     outputDir = "/media/storage/movies";
+    # Match jellyfin's GID
+    pgid = 990;
   };
 
   system.stateVersion = "25.05";
