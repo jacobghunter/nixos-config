@@ -96,6 +96,9 @@ in
               "browser.startup.homepage" = "https://duckduckgo.com";
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
               "media.ffmpeg.vaapi.enabled" = true;
+              # Let single-label "go/<path>" URLs (see nixos-server/modules/caddy)
+              # navigate instead of falling back to a DuckDuckGo search.
+              "browser.fixup.domainwhitelist.go" = true;
             }
             (lib.mkIf cfg.hdr {
               "gfx.wayland.hdr" = true;
