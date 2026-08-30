@@ -6,9 +6,9 @@ _: {
     openFirewall = false;
     listenPort = 8083;
     # caddy proxies the Host header through unchanged, so requests via
-    # http://nixos-server.local arrive with no port suffix; the :8083
+    # http://server.home arrive with no port suffix; the :8083
     # entries are for hitting this service directly for debugging.
-    allowedHosts = "nixos-server.local,localhost,127.0.0.1,192.168.1.167,localhost:8083,127.0.0.1:8083";
+    allowedHosts = "nixos-server.local,server.home,go,localhost,127.0.0.1,192.168.1.167,localhost:8083,127.0.0.1:8083";
 
     # Secrets (API keys/passwords) are NOT stored in the nix store.
     # Create this file on the server by hand after deploying, see nixos-server/homepage.nix comment below.
@@ -36,11 +36,11 @@ _: {
           {
             Jellyfin = {
               icon = "jellyfin.png";
-              href = "http://nixos-server.local:8096";
+              href = "http://server.home:8096";
               description = "Media server";
               widget = {
                 type = "jellyfin";
-                url = "http://nixos-server.local:8096";
+                url = "http://server.home:8096";
                 key = "{{HOMEPAGE_VAR_JELLYFIN_KEY}}";
               };
             };
@@ -48,10 +48,7 @@ _: {
           {
             MakeMKV = {
               icon = "mdi-disc";
-              # Running on nixos-pc for now (optical drive is plugged into
-              # it) - move this to nixos-server.local once the drive gets
-              # moved over, so ripped files land directly on server storage.
-              href = "http://nixos-pc.local:5800";
+              href = "http://server.home:5800";
               description = "Disc ripper";
             };
           }
@@ -62,11 +59,11 @@ _: {
           {
             qBittorrent = {
               icon = "qbittorrent.png";
-              href = "http://nixos-server.local:8082";
+              href = "http://server.home:8082";
               description = "Torrent client";
               widget = {
                 type = "qbittorrent";
-                url = "http://nixos-server.local:8082";
+                url = "http://server.home:8082";
                 username = "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}";
                 password = "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}";
               };
@@ -79,13 +76,13 @@ _: {
           {
             "Pi-hole" = {
               icon = "pi-hole.png";
-              # Pi-hole moved to the rpi (nixos-pihole) - static IP so this
-              # keeps working regardless of DNS/avahi resolution order.
-              href = "http://192.168.1.14";
+              # Pi-hole moved to the rpi (nixos-pihole) - resolved via its own
+              # Pi-hole local DNS record now that mDNS/avahi isn't in the loop.
+              href = "http://pihole.home";
               description = "DNS ad-blocker";
               widget = {
                 type = "pihole";
-                url = "http://192.168.1.14";
+                url = "http://pihole.home";
                 version = 6;
                 key = "{{HOMEPAGE_VAR_PIHOLE_KEY}}";
               };
@@ -98,7 +95,7 @@ _: {
           {
             Attic = {
               icon = "mdi-package-variant-closed";
-              href = "http://nixos-server.local:8081";
+              href = "http://server.home:8081";
               description = "Nix binary cache";
             };
           }
@@ -109,7 +106,7 @@ _: {
           {
             Ollama = {
               icon = "ollama.png";
-              href = "http://nixos-server.local:11434";
+              href = "http://server.home:11434";
               description = "Local LLM server";
             };
           }
