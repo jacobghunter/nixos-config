@@ -1147,7 +1147,6 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_6",
         "spicetify-nix": "spicetify-nix",
-        "tinted-shell": "tinted-shell",
         "vscode-server": "vscode-server",
         "zen-browser": "zen-browser"
       }
@@ -1230,22 +1229,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "tinted-shell": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1786843580,
-        "narHash": "sha256-sCX1USwHdstEYBt/iD2fdV10cHfUNYqdfaFSmvQ/960=",
-        "owner": "tinted-theming",
-        "repo": "tinted-shell",
-        "rev": "faa463871f5550a33e9d670f89a1c38e47116282",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tinted-theming",
-        "repo": "tinted-shell",
         "type": "github"
       }
     },
