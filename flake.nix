@@ -131,7 +131,6 @@
             ./shared/graphical/configuration.nix
             ./shared/graphical/modules/hyprland/configuration.nix
             ./shared/modules/attic-push/attic-push.nix
-            ./nixos-server/modules/calibre-web/calibre-web.nix # TEMP: testing locally, remove before switching for real
 
             # Home Manager
             home-manager.nixosModules.home-manager
