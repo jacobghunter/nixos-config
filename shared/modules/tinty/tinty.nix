@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 let
@@ -19,30 +20,33 @@ in
       tinty
     ];
 
-    xdg.configFile."tinted-theming/tinty/config.toml".text = ''
-      ${builtins.readFile tintyToml}
+    xdg.configFile = {
+      "tinted-theming/tinty/config.toml".text = ''
+        ${builtins.readFile tintyToml}
 
-      [[items]]
-      name = "quickshell-colors"
-      # We re-use tinted-shell's path so tinty finds valid templates and doesn't crash
-      path = "https://github.com/tinted-theming/tinted-shell"
-      themes-dir = "scripts"
-      supported-systems = ["base16", "base24"]
-      hook = "${hookPath}"
-    '';
+        [[items]]
+        name = "quickshell-colors"
+        # We re-use tinted-shell's templates so tinty finds valid templates and doesn't crash.
+        # Pinned via flake input (symlinked locally) so activation never needs network access.
+        path = "${inputs.tinted-shell}"
+        themes-dir = "scripts"
+        supported-systems = ["base16", "base24"]
+        hook = "${hookPath}"
+      '';
 
-    xdg.configFile."tinted-theming/tinty/hooks/quickshell-colors.sh" = {
-      source = ./quickshell-colors.sh;
-      executable = true;
+      "tinted-theming/tinty/hooks/quickshell-colors.sh" = {
+        source = ./quickshell-colors.sh;
+        executable = true;
+      };
+
+      "quickshell/lib/Theme.qml".source = ./Theme.qml;
+
+      "quickshell/lib/qmldir".text = ''
+        module qs.lib
+        singleton Colors 1.0 Colors.qml
+        singleton Theme 1.0 Theme.qml
+      '';
     };
-
-    xdg.configFile."quickshell/lib/Theme.qml".source = ./Theme.qml;
-
-    xdg.configFile."quickshell/lib/qmldir".text = ''
-      module qs.lib
-      singleton Colors 1.0 Colors.qml
-      singleton Theme 1.0 Theme.qml
-    '';
 
     programs.zsh.initContent = ''
       [ -f ~/.cache/tinted-fzf-theme.sh ] && source ~/.cache/tinted-fzf-theme.sh

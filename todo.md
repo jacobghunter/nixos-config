@@ -1,17 +1,11 @@
 - theme zellij and neovim?
 - outline special workspace differently
 
-- set up server as binary cache
-  - have laptop send things to be built there?
-  - let PC build its own stuff
-
 # Shell
 
 - copy last command output?
 
 # Repo management
-
-- move all the shared/modules to shared/graphical/modules and put neovim in its own modules folder
 
 # quick shell
 
@@ -53,10 +47,8 @@
 
 # PC
 
-- obsidian and vscode configs
-  - configure vscode with a theme and some base extensions? (nix linting via nixd too)
+- obsidian config, theming/plugins
 - compiling vulkan shaders on all games
-- vim keys as arrows for hyprland?
 - wayle transparent background?
 - disable opacity hotkey?
 - set default apps for pdf, rdp, etc
