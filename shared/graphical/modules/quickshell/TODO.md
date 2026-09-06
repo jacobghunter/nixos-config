@@ -9,6 +9,7 @@
 
 - an indication a workspace has a fullscreened window
 - a powertorys like text extractor screenshot tool
+- a monitor adder/extension tool where it hot reloads and allows for a preview and then can permanently add a extra_monitors file to the config. want hot relading for this without a nixos rebuild so it can be ephemeral
 
 ### Style
 
