@@ -52,6 +52,13 @@ _: {
               description = "Disc ripper";
             };
           }
+          {
+            "Calibre-Web" = {
+              icon = "calibre-web.png";
+              href = "http://server.home:8085";
+              description = "Ebook library / Kobo sync";
+            };
+          }
         ];
       }
       {

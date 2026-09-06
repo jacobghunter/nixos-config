@@ -92,6 +92,11 @@
       url = "github:zhaofengli/attic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -101,8 +106,17 @@
       nixos-hardware,
       home-manager,
       disko,
+      git-hooks,
       ...
     }@inputs:
+    let
+      # Systems this repo is edited/developed from (drives devShells/checks below).
+      # NixOS build targets (nixosConfigurations) declare their own `system` and don't need an entry here.
+      devSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+    in
     {
       nixosConfigurations = {
         # LAPTOP CONFIG
@@ -121,6 +135,7 @@
             ./shared/graphical/configuration.nix
             ./shared/graphical/modules/hyprland/configuration.nix
             ./shared/modules/attic-push/attic-push.nix
+            ./nixos-server/modules/calibre-web/calibre-web.nix # TEMP: testing locally, remove before switching for real
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -159,6 +174,7 @@
             ./nixos-server/disk-config.nix
             ./nixos-server/modules/jellyfin/jellyfin.nix
             ./nixos-server/modules/homepage/homepage.nix
+            ./nixos-server/modules/calibre-web/calibre-web.nix
             ./nixos-server/modules/attic/attic.nix
             ./nixos-server/modules/caddy/caddy.nix
 
@@ -292,5 +308,22 @@
           ];
         };
       };
+
+      checks = nixpkgs.lib.genAttrs devSystems (system: {
+        pre-commit-check = git-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            nixfmt.enable = true;
+            deadnix.enable = true;
+            statix.enable = true;
+          };
+        };
+      });
+
+      devShells = nixpkgs.lib.genAttrs devSystems (system: {
+        default = nixpkgs.legacyPackages.${system}.mkShell {
+          inherit (self.checks.${system}.pre-commit-check) shellHook;
+        };
+      });
     };
 }

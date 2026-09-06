@@ -16,6 +16,7 @@ _: {
     virtualHosts."go:80".extraConfig = ''
       redir /home http://server.home
       redir /jellyfin http://server.home:8096
+      redir /books http://server.home:8085
       redir /makemkv http://server.home:5800
       redir /qbittorrent http://server.home:8082
       redir /pihole http://pihole.home
