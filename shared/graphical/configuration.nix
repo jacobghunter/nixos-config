@@ -6,7 +6,7 @@
 
 {
   imports = [
-    "${inputs.self}/nixos-shared/configuration.nix"
+    "${inputs.self}/shared/configuration.nix"
     ./modules/calibre/configuration.nix
   ];
 

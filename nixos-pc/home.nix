@@ -8,7 +8,7 @@
 
 {
   imports = [
-    "${self}/nixos-shared/modules/audio/disable-audio-devices.nix"
+    "${self}/shared/modules/audio/disable-audio-devices.nix"
   ];
 
   modules = {

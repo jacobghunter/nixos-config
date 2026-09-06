@@ -8,8 +8,8 @@
 
 {
   imports = [
-    "${inputs.self}/nixos-shared/modules/zsh/zsh.nix"
-    "${inputs.self}/nixos-shared/modules/tinty/tinty.nix"
+    "${inputs.self}/shared/modules/zsh/zsh.nix"
+    "${inputs.self}/shared/modules/tinty/tinty.nix"
   ];
 
   options = {

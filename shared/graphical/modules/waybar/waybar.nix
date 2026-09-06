@@ -4,7 +4,7 @@
 }:
 
 let
-  palette = import "${inputs.self}/nixos-shared/palette.nix" { };
+  palette = import "${inputs.self}/shared/palette.nix" { };
 
   primary = palette.primary + palette.alpha;
   secondary = palette.secondary + palette.alpha;

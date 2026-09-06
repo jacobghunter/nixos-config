@@ -6,7 +6,7 @@
 }:
 
 let
-  palette = import "${inputs.self}/nixos-shared/palette.nix" { };
+  palette = import "${inputs.self}/shared/palette.nix" { };
   autohide = false; # Set to true for auto-hide mode, false for default mode
   dropdownMaxY = 550; # Height threshold (in pixels) for the dropdown zone
   cfg = config.modules.wayle;

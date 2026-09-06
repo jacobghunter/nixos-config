@@ -11,7 +11,7 @@
 # "format-plugged": "<span font='Material Symbols Rounded' size='18750' letter_spacing='-44000'>{icon}</span>",
 
 let
-  palette = import "${inputs.self}/nixos-shared/palette.nix" { };
+  palette = import "${inputs.self}/shared/palette.nix" { };
 
   primary = palette.primary + palette.alpha;
   secondary = palette.secondary + palette.alpha;

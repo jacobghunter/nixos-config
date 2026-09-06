@@ -10,7 +10,7 @@ with lib;
 let
   cfg = config.modules.kitty;
   tintyEnabled = config.modules.tinty.enable;
-  palette = import "${inputs.self}/nixos-shared/palette.nix" { };
+  palette = import "${inputs.self}/shared/palette.nix" { };
 in
 {
   options.modules.kitty = {

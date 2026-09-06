@@ -113,10 +113,10 @@
             inputs.vscode-server.nixosModules.default
 
             # Shared configurations
-            ./nixos-shared/configuration.nix
-            ./nixos-shared/graphical/configuration.nix
-            ./nixos-shared/graphical/modules/hyprland/configuration.nix
-            ./nixos-shared/modules/attic-push/attic-push.nix
+            ./shared/configuration.nix
+            ./shared/graphical/configuration.nix
+            ./shared/graphical/modules/hyprland/configuration.nix
+            ./shared/modules/attic-push/attic-push.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -129,11 +129,11 @@
                 users.jacob = {
                   imports = [
                     ./nixos-laptop/home.nix
-                    ./nixos-shared/home.nix
-                    ./nixos-shared/graphical/home.nix
-                    ./nixos-shared/graphical/modules/kitty/kitty.nix
-                    ./nixos-shared/graphical/modules/wayle/wayle.nix
-                    ./nixos-shared/graphical/modules/quickshell/quickshell.nix
+                    ./shared/home.nix
+                    ./shared/graphical/home.nix
+                    ./shared/graphical/modules/kitty/kitty.nix
+                    ./shared/graphical/modules/wayle/wayle.nix
+                    ./shared/graphical/modules/quickshell/quickshell.nix
                     ./nixos-laptop/modules/hyprland/home.nix
                   ];
                 };
@@ -159,10 +159,10 @@
             ./nixos-server/modules/caddy/caddy.nix
 
             # Shared configurations
-            ./nixos-shared/configuration.nix
-            ./nixos-shared/modules/pihole/pihole.nix
-            ./nixos-shared/modules/attic-push/attic-push.nix
-            ./nixos-shared/modules/makemkv/makemkv.nix
+            ./shared/configuration.nix
+            ./shared/modules/pihole/pihole.nix
+            ./shared/modules/attic-push/attic-push.nix
+            ./shared/modules/makemkv/makemkv.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -174,7 +174,7 @@
                 users.jacob = {
                   imports = [
                     ./nixos-server/home.nix
-                    ./nixos-shared/home.nix
+                    ./shared/home.nix
                   ];
                 };
               };
@@ -192,7 +192,7 @@
             ./nixos-wsl/configuration.nix
 
             # Shared configurations
-            ./nixos-shared/configuration.nix
+            ./shared/configuration.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -204,8 +204,8 @@
                 users.jacob = {
                   imports = [
                     ./nixos-wsl/home.nix
-                    ./nixos-shared/home.nix
-                    ./nixos-shared/graphical/modules/kitty/kitty.nix
+                    ./shared/home.nix
+                    ./shared/graphical/modules/kitty/kitty.nix
                   ];
                 };
               };
@@ -224,10 +224,10 @@
             inputs.vscode-server.nixosModules.default
 
             # Shared configurations
-            ./nixos-shared/configuration.nix
-            ./nixos-shared/graphical/configuration.nix
-            ./nixos-shared/graphical/modules/hyprland/configuration.nix
-            ./nixos-shared/modules/attic-push/attic-push.nix
+            ./shared/configuration.nix
+            ./shared/graphical/configuration.nix
+            ./shared/graphical/modules/hyprland/configuration.nix
+            ./shared/modules/attic-push/attic-push.nix
             inputs.nix-gaming.nixosModules.platformOptimizations
             inputs.nix-gaming.nixosModules.pipewireLowLatency
 
@@ -242,11 +242,11 @@
                 users.jacob = {
                   imports = [
                     ./nixos-pc/home.nix
-                    ./nixos-shared/home.nix
-                    ./nixos-shared/graphical/home.nix
-                    ./nixos-shared/graphical/modules/kitty/kitty.nix
-                    ./nixos-shared/graphical/modules/wayle/wayle.nix
-                    ./nixos-shared/graphical/modules/quickshell/quickshell.nix
+                    ./shared/home.nix
+                    ./shared/graphical/home.nix
+                    ./shared/graphical/modules/kitty/kitty.nix
+                    ./shared/graphical/modules/wayle/wayle.nix
+                    ./shared/graphical/modules/quickshell/quickshell.nix
                     ./nixos-pc/modules/hyprland/home.nix
                   ];
                 };
@@ -268,8 +268,8 @@
             ./nixos-pihole/pi-hole.nix
 
             # Shared configurations
-            ./nixos-shared/configuration.nix
-            ./nixos-shared/modules/pihole/pihole.nix
+            ./shared/configuration.nix
+            ./shared/modules/pihole/pihole.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
@@ -280,7 +280,7 @@
                 extraSpecialArgs = { inherit inputs self; };
                 users.jacob = {
                   imports = [
-                    ./nixos-shared/home-base.nix
+                    ./shared/home-base.nix
                   ];
                 };
               };
