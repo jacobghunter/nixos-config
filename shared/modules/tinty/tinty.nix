@@ -9,6 +9,7 @@ let
 
   tintyToml = ./tinty.toml;
   hookPath = "${config.xdg.configHome}/tinted-theming/tinty/hooks/quickshell-colors.sh";
+  obsidianHookPath = "${config.xdg.configHome}/tinted-theming/tinty/hooks/obsidian-colors.sh";
 in
 {
   options.modules.tinty = {
@@ -35,10 +36,24 @@ in
         themes-dir = "scripts"
         supported-systems = ["base16", "base24"]
         hook = "${hookPath}"
+
+        [[items]]
+        name = "obsidian-colors"
+        # Same re-used-path workaround as quickshell-colors above - only the
+        # hook matters, the "template" is never actually rendered.
+        path = "https://github.com/tinted-theming/tinted-shell"
+        themes-dir = "scripts"
+        supported-systems = ["base16", "base24"]
+        hook = "${obsidianHookPath}"
       '';
 
       "tinted-theming/tinty/hooks/quickshell-colors.sh" = {
         source = ./quickshell-colors.sh;
+        executable = true;
+      };
+
+      "tinted-theming/tinty/hooks/obsidian-colors.sh" = {
+        source = ./obsidian-colors.sh;
         executable = true;
       };
 

@@ -65,8 +65,24 @@ in
           table-editor-obsidian
         ];
 
-        # Static pick for now - swap for a tinty-generated theme later.
-        themes = [ pkgs.obsidianThemes.obsidianite ];
+        # No community theme: Obsidianite (and most themes) hardcode their
+        # own hex values and never read --color-base-*/named accent vars,
+        # so the tinty snippet below has nothing to override. Obsidian's
+        # own stock appearance is fully driven by those vars (confirmed
+        # against its bundled CSS - --interactive-normal, --text-accent,
+        # etc. all cascade from --color-base-*/--color-accent), so staying
+        # on the default theme is what actually makes tinty theming work.
+        # If a community theme is picked later, prefer one that composes
+        # with this variable set rather than replacing it outright.
+
+        # Registers the snippet as enabled WITHOUT declaring it via
+        # cssSnippets - the file itself (.obsidian/snippets/tinty.css) is
+        # intentionally left unmanaged by home-manager so tinty's
+        # obsidian-colors hook (shared/modules/tinty) can write to it
+        # directly on every `tinty apply`. Declaring it via cssSnippets
+        # instead would make home-manager own that path as a read-only
+        # store symlink, which the hook could never write to.
+        appearance.enabledCssSnippets = [ "tinty" ];
       };
     };
   };
