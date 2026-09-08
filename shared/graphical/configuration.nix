@@ -10,6 +10,12 @@
     ./modules/calibre/configuration.nix
   ];
 
+  # Provides pkgs.obsidianPlugins.<id>/pkgs.obsidianThemes.<id> for the
+  # declarative programs.obsidian module (shared/graphical/modules/obsidian).
+  # Applied here (NixOS level) rather than inside the home-manager module,
+  # since useGlobalPkgs = true means overlays only take effect from here.
+  nixpkgs.overlays = [ inputs.nix-obsidian-extensions.overlays.default ];
+
   hardware = {
     # QMK Keyboard Support (Needs root for udev rules)
     keyboard.qmk.enable = true;

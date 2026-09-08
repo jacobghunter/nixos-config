@@ -856,6 +856,27 @@
         "type": "github"
       }
     },
+    "nix-obsidian-extensions": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "treefmt-nix": "treefmt-nix"
+      },
+      "locked": {
+        "lastModified": 1788774559,
+        "narHash": "sha256-cEW4j8NEG9UPUvceOcMgRMCATpAJCcpi2PirerL2QBs=",
+        "owner": "karaolidis",
+        "repo": "nix-obsidian-extensions",
+        "rev": "749df0e5c3fb30152e21f8c205e85b84466c3940",
+        "type": "github"
+      },
+      "original": {
+        "owner": "karaolidis",
+        "repo": "nix-obsidian-extensions",
+        "type": "github"
+      }
+    },
     "nix-vscode-extensions": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -1141,6 +1162,7 @@
         "hyprsplit": "hyprsplit",
         "lazyvim-starter": "lazyvim-starter",
         "nix-gaming": "nix-gaming",
+        "nix-obsidian-extensions": "nix-obsidian-extensions",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixcord": "nixcord",
         "nixos-hardware": "nixos-hardware",
@@ -1229,6 +1251,27 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nix-obsidian-extensions",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785360170,
+        "narHash": "sha256-XE1lKgQ3eIO3E7zWryqcRsax+mYXod/5RHBn4YaR9YE=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "d1187f8bc71fb8aab02395869ec3f5c1920f75c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
         "type": "github"
       }
     },

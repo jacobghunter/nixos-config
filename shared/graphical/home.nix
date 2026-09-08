@@ -15,9 +15,12 @@ in
     "${inputs.self}/shared/home.nix"
     ./modules/firefox/firefox.nix
     ./modules/calibre/home.nix
+    ./modules/obsidian/obsidian.nix
     inputs.nixcord.homeModules.nixcord
     inputs.spicetify-nix.homeManagerModules.default
   ];
+
+  modules.obsidian.enable = true;
 
   services.easyeffects.enable = true;
 
@@ -35,7 +38,6 @@ in
     packages = with pkgs; [
       # Applications
       brave
-      obsidian
       bitwarden-desktop
       remmina
       copyq
