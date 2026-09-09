@@ -75,15 +75,29 @@ in
         # If a community theme is picked later, prefer one that composes
         # with this variable set rather than replacing it outright.
 
-        # Registers the snippet as enabled WITHOUT declaring it via
-        # cssSnippets - the file itself (.obsidian/snippets/tinty.css) is
-        # intentionally left unmanaged by home-manager so tinty's
-        # obsidian-colors hook (shared/modules/tinty) can write to it
-        # directly on every `tinty apply`. Declaring it via cssSnippets
-        # instead would make home-manager own that path as a read-only
-        # store symlink, which the hook could never write to.
-        appearance.enabledCssSnippets = [ "tinty" ];
+        # Registered manually (not via cssSnippets) for two different
+        # reasons per file:
+        # - tinty.css is intentionally left unmanaged by home-manager so
+        #   tinty's obsidian-colors hook (shared/modules/tinty) can write to
+        #   it directly on every `tinty apply`. Declaring it via cssSnippets
+        #   would make home-manager own that path as a read-only store
+        #   symlink, which the hook could never write to.
+        # - Using cssSnippets for either file would also backfire here: the
+        #   module auto-computes enabledCssSnippets FROM cssSnippets and
+        #   that completely replaces (not merges with) this manual list, so
+        #   declaring just one of the two files there would silently drop
+        #   the other from appearance.json.
+        appearance.enabledCssSnippets = [
+          "tinty"
+          "obsidianite-structure"
+        ];
       };
     };
+
+    # Structural (non-color) rules ported from the Obsidianite theme, static
+    # so plain home-manager management is fine - see the file header for
+    # what was kept/dropped/rewritten.
+    home.file."Documents/Obsidian/.obsidian/snippets/obsidianite-structure.css".source =
+      ./obsidianite-structure.css;
   };
 }

@@ -1,0 +1,74 @@
+/*
+ * Heading styling lifted from the Obsidianite community theme
+ * (bennyxguo/Obsidianite) - sizing, accent coloring, and the gradient
+ * underline. Rewritten against Obsidian's real --color-base-*/accent
+ * variables (instead of Obsidianite's own hardcoded hex/custom vars) so
+ * it stays colorable by the tinty-generated snippet.
+ *
+ * Everything else from that theme (checkboxes, blockquotes, link/bold/
+ * italic treatments, translucent hover backgrounds) was dropped - it read
+ * as too much once actually applied, on top of targeting a lot of dead
+ * legacy-CodeMirror-5 CSS in the first place.
+ */
+
+.markdown-preview-section h1,
+.cm-header-1 {
+  font-size: 34px;
+  color: var(--text-accent);
+}
+
+.markdown-preview-section h2,
+.cm-header-2 {
+  font-size: 26px;
+  color: var(--text-normal);
+}
+
+.markdown-preview-section h3,
+.cm-header-3 {
+  font-size: 22px;
+  color: var(--text-normal);
+}
+
+.markdown-preview-section h4,
+.markdown-preview-section h5,
+.markdown-preview-section h6,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-size: 18px;
+  color: var(--text-normal);
+}
+
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-preview-view h5,
+.markdown-preview-view h6 {
+  margin: 45px 0 20px 0;
+  position: relative;
+  padding-bottom: 10px;
+  border-bottom: 1px solid;
+  border-width: 35%;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to right, var(--color-pink), transparent);
+}
+
+.HyperMD-header.HyperMD-header-2,
+.HyperMD-header.HyperMD-header-3,
+.HyperMD-header.HyperMD-header-4,
+.HyperMD-header.HyperMD-header-5,
+.HyperMD-header.HyperMD-header-6 {
+  border-bottom: 1px solid;
+  border-width: 1px;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to right, var(--color-pink), transparent);
+}
+
+.HyperMD-header {
+  padding: 20px;
+}
+
+.cm-formatting.cm-formatting-header.cm-header {
+  color: var(--text-accent);
+  opacity: 0.45;
+}
