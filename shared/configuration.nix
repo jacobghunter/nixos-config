@@ -100,5 +100,11 @@
       "root"
       "@wheel"
     ];
+
+    # Local attic cache on the server (nixos-server/modules/attic) - public
+    # read, LAN-only, so any host here can pull already-built outputs (e.g.
+    # a kernel built for the pi) instead of rebuilding them.
+    substituters = [ "http://192.168.1.167:8081/nixos-config" ];
+    trusted-public-keys = [ "nixos-config:8W0E2b09uOT6kNIBlkeEgfHnVG5jiD/nm5oG586Vi1o=" ];
   };
 }
