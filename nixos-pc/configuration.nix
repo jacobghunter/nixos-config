@@ -26,6 +26,11 @@
     # Pass audio codec model to the kernel for Realtek ALC897
     kernelParams = [
       "snd_hda_intel.model=auto"
+      # Use s2idle instead of deep (S3) sleep: the AMD 600-series chipset's
+      # xHCI controller has a known bug failing to resume from real S3,
+      # causing full freezes requiring a hard reboot. s2idle avoids power-
+      # cycling that controller. See nixos-pc/SUSPEND-FREEZE-NOTES.md.
+      "mem_sleep_default=s2idle"
     ];
   };
 
