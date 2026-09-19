@@ -20,6 +20,7 @@ in
       vaults."Documents/Obsidian".enable = true;
 
       defaultSettings = {
+        app.vimMode = true;
         # Mirrors core-plugins.json on the live vault - only plugins listed
         # here end up enabled, everything else in corePluginsList defaults
         # to off.
