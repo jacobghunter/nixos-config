@@ -27,7 +27,7 @@ in
       };
 
       environmentFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           EnvironmentFile (systemd) supplying CF_API_TOKEN, used by the
@@ -39,6 +39,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.publicJellyfin.enable -> cfg.publicJellyfin.environmentFile != null;
+        message = "modules.caddy.publicJellyfin.environmentFile must be set when modules.caddy.publicJellyfin.enable is true (it supplies CF_API_TOKEN for the Cloudflare DNS-01 challenge).";
+      }
+    ];
+
     services.caddy = {
       enable = true;
       openFirewall = true;
