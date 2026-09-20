@@ -40,7 +40,7 @@
     # Flip on once DNS + CF_API_TOKEN env file are ready to expose Jellyfin
     # publicly; leave off for LAN-only (homepage catch-all + go-links).
     publicJellyfin = {
-      enable = false;
+      enable = true;
       environmentFile = "/etc/caddy-cloudflare.env";
     };
   };
