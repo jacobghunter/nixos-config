@@ -109,6 +109,12 @@ in
 
   config = {
 
+    xdg.userDirs = {
+      enable = true;
+      setSessionVariables = true;
+      pictures = "${config.home.homeDirectory}/Pictures";
+    };
+
     modules.kitty = {
       enable = true;
       tintyEnabled = true;
