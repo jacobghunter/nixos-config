@@ -53,8 +53,8 @@ in
       package =
         if cfg.publicJellyfin.enable then
           pkgs.caddy.withPlugins {
-            plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
-            hash = "sha256-I0FjQOfFaGlOEJlQECmYNBKjIY4CIg5aCCQ/ORmnrSU="; # build once, paste the real hash from the error
+            plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
+            hash = lib.fakeHash; # build once, paste the real hash from the error
           }
         else
           pkgs.caddy;
