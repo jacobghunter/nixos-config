@@ -41,7 +41,7 @@
     # publicly; leave off for LAN-only (homepage catch-all + go-links).
     publicJellyfin = {
       enable = true;
-      environmentFile = "/etc/caddy-cloudflare.env";
+      environmentFile = "/etc/cloudflare.env";
     };
   };
 
