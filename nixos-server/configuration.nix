@@ -35,6 +35,16 @@
     nodejs
   ];
 
+  modules.caddy = {
+    enable = true;
+    # Flip on once DNS + CF_API_TOKEN env file are ready to expose Jellyfin
+    # publicly; leave off for LAN-only (homepage catch-all + go-links).
+    publicJellyfin = {
+      enable = false;
+      environmentFile = "/etc/caddy-cloudflare.env";
+    };
+  };
+
   modules.makemkv = {
     enable = true;
     # sg0 is the WD disk (target 3:0:0:0); the BD-RE drive (target
