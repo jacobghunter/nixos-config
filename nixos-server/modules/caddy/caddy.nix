@@ -54,7 +54,7 @@ in
         if cfg.publicJellyfin.enable then
           pkgs.caddy.withPlugins {
             plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
-            hash = lib.fakeHash; # build once, paste the real hash from the error
+            hash = "sha256-8yZDrejNKsaUnUaTUFYbarWNmxafqp2z2rWo+XRsxV8="; # build once, paste the real hash from the error
           }
         else
           pkgs.caddy;
