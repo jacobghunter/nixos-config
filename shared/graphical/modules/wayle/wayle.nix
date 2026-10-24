@@ -13,11 +13,7 @@ let
 in
 {
   options.modules.wayle = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Whether to enable the Wayle bar.";
-    };
+    enable = lib.mkEnableOption "the Wayle bar";
     showBattery = lib.mkOption {
       type = lib.types.bool;
       default = true;

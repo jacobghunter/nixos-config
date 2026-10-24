@@ -8,6 +8,7 @@
   imports = [
     "${inputs.self}/shared/configuration.nix"
     ./modules/calibre/configuration.nix
+    ./modules/noctalia/configuration.nix
   ];
 
   # Provides pkgs.obsidianPlugins.<id>/pkgs.obsidianThemes.<id> for the

@@ -1,4 +1,4 @@
-- theme zellij and neovim?
+- hyprland right click context menu for (controlling visibility, sending to other workspaces, etc)
 - outline special workspace differently
 
 # Shell

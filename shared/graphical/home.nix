@@ -16,11 +16,13 @@ in
     ./modules/firefox/firefox.nix
     ./modules/calibre/home.nix
     ./modules/obsidian/obsidian.nix
+    ./modules/noctalia/noctalia.nix
     inputs.nixcord.homeModules.nixcord
     inputs.spicetify-nix.homeManagerModules.default
   ];
 
   modules.obsidian.enable = true;
+  modules.noctalia.enable = true;
 
   services.easyeffects.enable = true;
 
