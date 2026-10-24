@@ -54,6 +54,7 @@
           --prefix LD_LIBRARY_PATH : "${bzip2.out}/lib"
       '';
     })
+    prismlauncher
   ];
 
   xdg.configFile."OrcaSlicer/user/default" = {
