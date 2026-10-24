@@ -4,6 +4,8 @@
 }:
 
 {
+  modules.noctalia.hostConfig = ./modules/noctalia/config.toml;
+
   home.packages = with pkgs; [
     powerstat
     upower
