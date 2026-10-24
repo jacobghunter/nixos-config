@@ -190,5 +190,5 @@ enabled = false
 
 [widget.workspaces]
 active_pill_size = 1.6000000000000001
-occupied_color = "surface"
+occupied_color = "on_primary"
 urgent_color = "secondary"
