@@ -13,6 +13,7 @@
 
   modules = {
     wayle.showBattery = false;
+    noctalia.hostConfig = ./modules/noctalia/config.toml;
     btop.package = pkgs.btop-rocm;
     audioDeviceDisable = {
       nodeNames = [

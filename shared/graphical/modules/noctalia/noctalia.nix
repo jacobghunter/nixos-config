@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.modules.noctalia;
+  fromTOMLFile = path: builtins.fromTOML (builtins.readFile path);
 in
 {
   imports = [
@@ -14,6 +15,11 @@ in
 
   options.modules.noctalia = {
     enable = lib.mkEnableOption "noctalia";
+    hostConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Host-specific TOML (monitors, widget placement, plugins) merged over config.toml.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,18 +27,10 @@ in
       enable = true;
       systemd.enable = true;
 
-      settings = {
-        theme = {
-          mode = "dark";
-          source = "builtin";
-          builtin = "Catppuccin";
-        };
-
-        # wallpaper = {
-        #   enabled = true;
-        #   default.path = "/path/to/wallpapers/wallpaper.png";
-        # };
-      };
+      # Exported from the GUI with `noctalia config export`
+      settings = lib.recursiveUpdate (fromTOMLFile ./config.toml) (
+        lib.optionalAttrs (cfg.hostConfig != null) (fromTOMLFile cfg.hostConfig)
+      );
     };
   };
 }
