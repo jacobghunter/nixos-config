@@ -1,40 +1,52 @@
 [bar.default]
 capsule_foreground = "primary"
 capsule_radius = 8
-center = [ "clock", "spacer_2", "weather" ]
-end = [ "tray", "bluetooth", "network", "volume", "brightness", "battery", "notifications", "session" ]
+center = ["clock", "spacer_2", "weather"]
+end = [
+  "tray",
+  "bluetooth",
+  "network",
+  "volume",
+  "brightness",
+  "battery",
+  "notifications",
+  "session",
+]
 margin_ends = 0
 radius_top_left = 0
 radius_top_right = 0
-start = [ "launcher", "wallpaper", "workspaces", "media" ]
+start = ["launcher", "wallpaper", "workspaces", "media"]
 widget_spacing = 10
+
+[control_center]
+width = 950
 
 [calendar]
 enabled = true
 
-    [calendar.account.personal_google]
-    type = "google"
+[calendar.account.personal_google]
+type = "google"
 
 [desktop_widgets]
 schema_version = 2
 
-    [desktop_widgets.grid]
-    cell_size = 16
-    major_interval = 4
-    visible = true
+[desktop_widgets.grid]
+cell_size = 16
+major_interval = 4
+visible = true
 
 [hot_corners]
 delay_ms = 350
 enabled = true
 
-    [hot_corners.bottom_right]
-    action = "launcher"
+[hot_corners.bottom_right]
+action = "launcher"
 
-    [hot_corners.top_left]
-    action = "window_switcher"
+[hot_corners.top_left]
+action = "window_switcher"
 
-    [hot_corners.top_right]
-    action = "control_center"
+[hot_corners.top_right]
+action = "control_center"
 
 [location]
 auto_locate = true
@@ -43,27 +55,27 @@ auto_locate = true
 enabled = false
 schema_version = 2
 
-    [lockscreen_widgets.grid]
-    cell_size = 16
-    major_interval = 4
-    visible = true
+[lockscreen_widgets.grid]
+cell_size = 16
+major_interval = 4
+visible = true
 
 [shell]
 font_family = "JetBrainsMono NF"
 settings_window_translucent = true
 
-    [shell.animation]
-    speed = 1.5000000223517418
+[shell.animation]
+speed = 1.5000000223517418
 
-    [shell.launcher]
-    pinned = [ "discord", "spotify", "bitwarden" ]
+[shell.launcher]
+pinned = ["discord", "spotify", "bitwarden"]
 
-    [shell.panel]
-    control_center_placement = "floating"
-    control_center_position = "center"
+[shell.panel]
+control_center_placement = "floating"
+control_center_position = "center"
 
-    [shell.screen_corners]
-    size = 16
+[shell.screen_corners]
+size = 16
 
 [theme]
 builtin = "Dracula"
@@ -73,8 +85,8 @@ pure_black_dark = true
 source = "builtin"
 wallpaper_scheme = "m3-content"
 
-    [theme.templates]
-    builtin_ids = [ "gtk3", "gtk4", "qt" ]
+[theme.templates]
+builtin_ids = ["gtk3", "gtk4", "qt"]
 
 [wallpaper]
 enabled = false
