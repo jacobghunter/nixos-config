@@ -48,6 +48,18 @@
         enable = true;
         enableZshIntegration = true;
       };
+
+      claude-code = {
+        enable = true;
+        package = inputs.claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        settings = {
+          permissions.defaultMode = "default";
+          theme = "dark";
+          enabledPlugins = {
+            "superpowers@claude-plugins-official" = true;
+          };
+        };
+      };
     };
 
     home.packages = with pkgs; [
@@ -58,7 +70,6 @@
       python3
       gcc
       gnumake
-      inputs.claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 }
