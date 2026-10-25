@@ -2,10 +2,10 @@
 # Merged on top of shared/graphical/modules/noctalia/config.toml.
 
 [bar.default]
-start = [ "launcher", "wallpaper", "w-engine-widget", "workspaces", "media" ]
+start = [ "launcher", "wallpaper", "w-engine-widget", "special-workspaces", "workspaces", "media" ]
 
 [plugins]
-enabled = [ "tadomika_ari/w-engine" ]
+enabled = [ "tadomika_ari/w-engine", "jamesfeeder/special-workspaces" ]
 
 [widget.w-engine-widget]
 type = "tadomika_ari/w-engine:w-engine-widget"

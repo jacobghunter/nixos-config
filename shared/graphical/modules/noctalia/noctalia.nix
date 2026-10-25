@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   inputs,
   ...
 }:
@@ -23,6 +24,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Needed by the special-workspaces plugin to listen to Hyprland's event socket
+    home.packages = [ pkgs.socat ];
+
     programs.noctalia = {
       enable = true;
       systemd.enable = true;

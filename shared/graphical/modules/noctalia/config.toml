@@ -15,7 +15,7 @@ end = [
 margin_ends = 0
 radius_top_left = 0
 radius_top_right = 0
-start = ["launcher", "wallpaper", "workspaces", "media"]
+start = ["launcher", "wallpaper", "special-workspaces", "workspaces", "media"]
 widget_spacing = 10
 
 [control_center]
@@ -60,6 +60,9 @@ cell_size = 16
 major_interval = 4
 visible = true
 
+[plugins]
+enabled = ["jamesfeeder/special-workspaces"]
+
 [shell]
 font_family = "JetBrainsMono NF"
 settings_window_translucent = true
@@ -103,6 +106,13 @@ format = "{:%A %B %e %H:%M}"
 hide_when_no_media = true
 max_length = 300
 show_progress = true
+
+[widget.special-workspaces]
+capsule_min_width = 26
+inactive_color = "on_primary"
+inactive_text_color = "on_surface"
+max_label_chars = 1
+type = "jamesfeeder/special-workspaces:special-workspaces"
 
 [widget.spacer_2]
 length = 30
