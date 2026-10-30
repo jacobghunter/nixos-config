@@ -25,7 +25,6 @@ in
   ];
 
   modules = {
-    # Which quickshell-based desktop shell to run: "noctalia" | "caelestia" | "dms"
     activeShell = "caelestia";
 
     obsidian.enable = true;
