@@ -19,6 +19,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # `dms ipc call <target> <function>` is Dank/Dux's own IPC CLI;
+    # "spotlight"/"launcher" are synonymous targets for its app launcher.
+    modules.activeShellLauncherCmd = "dms ipc call spotlight toggle";
+
     programs.dank-material-shell = {
       enable = true;
       systemd.enable = true;

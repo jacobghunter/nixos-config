@@ -53,7 +53,10 @@ hl.bind(mainMod .. " + SHIFT + TAB", hl.dsp.focus({ monitor = "-1" }))
 
 local terminal = "kitty"
 local fileManager = "nautilus"
-local menu = "rofi -show drun -show-icons"
+-- Nix-generated script that execs the active shell's own launcher toggle
+-- (falls back to rofi if no shell module sets one) - a stable path rather
+-- than an env var, so swapping shells only needs a rebuild, not a logout.
+local menu = "~/.config/hypr/scripts/active-shell-launcher"
 local browser = "firefox"
 local notes = "obsidian"
 local editor = "kitty nvim"

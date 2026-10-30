@@ -24,6 +24,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # `noctalia panel-toggle <id>` is Noctalia's own IPC CLI (src/ipc/ipc_service.h);
+    # "launcher" is the built-in panel id for its app launcher.
+    modules.activeShellLauncherCmd = "noctalia panel-toggle launcher";
+
     # Needed by the special-workspaces plugin to listen to Hyprland's event socket
     home.packages = [ pkgs.socat ];
 

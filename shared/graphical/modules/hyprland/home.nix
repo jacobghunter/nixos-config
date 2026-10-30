@@ -252,6 +252,24 @@ in
 
       "hypr/hyprland.lua".text = builtins.readFile ./hyprland.lua;
 
+      # Generated on every rebuild from whichever shell module is active
+      # (caelestia/noctalia/dms). hyprland.lua execs this *path*, not an env
+      # var - a long-lived Hyprland process never sees new env vars without a
+      # full restart, but it re-reads this file's contents fresh on every
+      # keypress, so swapping shells only needs a rebuild, not a logout.
+      "hypr/scripts/active-shell-launcher" = {
+        text = ''
+          #!/usr/bin/env bash
+          exec ${
+            if config.modules.activeShellLauncherCmd != null then
+              config.modules.activeShellLauncherCmd
+            else
+              "rofi -show drun -show-icons"
+          }
+        '';
+        executable = true;
+      };
+
       "jgmenu/jgmenurc".text = ''
         tint2_look = 0
         shades_of_gray = 0

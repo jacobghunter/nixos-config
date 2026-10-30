@@ -24,6 +24,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # `caelestia shell <message...>` sends an IPC message to the running
+    # shell (see daemons/Shortcuts.qml's `drawers` IpcHandler) - this is the
+    # same mechanism the CLI's own launcher actions use, just invoked directly
+    # so the shared Hyprland config doesn't need to know Caelestia's IPC shape.
+    modules.activeShellLauncherCmd = "caelestia shell drawers toggle launcher";
+
     programs.caelestia = {
       enable = true;
       systemd.enable = true;
