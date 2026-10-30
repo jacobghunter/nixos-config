@@ -17,12 +17,22 @@ in
     ./modules/calibre/home.nix
     ./modules/obsidian/obsidian.nix
     ./modules/noctalia/noctalia.nix
+    ./modules/caelestia/caelestia.nix
+    ./modules/dank-material-shell/dms.nix
+    ./modules/desktop-shell.nix
     inputs.nixcord.homeModules.nixcord
     inputs.spicetify-nix.homeManagerModules.default
   ];
 
-  modules.obsidian.enable = true;
-  modules.noctalia.enable = true;
+  modules = {
+    # Which quickshell-based desktop shell to run: "noctalia" | "caelestia" | "dms"
+    activeShell = "caelestia";
+
+    obsidian.enable = true;
+    noctalia.enable = config.modules.activeShell == "noctalia";
+    caelestia.enable = config.modules.activeShell == "caelestia";
+    dankMaterialShell.enable = config.modules.activeShell == "dms";
+  };
 
   services.easyeffects.enable = true;
 

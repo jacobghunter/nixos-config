@@ -54,6 +54,15 @@
     # No nixpkgs follows, so builds match noctalia.cachix.org
     noctalia.url = "github:noctalia-dev/noctalia";
 
+    # Alternative quickshell-based desktop shells, for trying out alongside noctalia.
+    # See shared/graphical/modules/{caelestia,dank-material-shell}.
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # No nixpkgs follows: its flake needs a newer `go` than our pinned nixpkgs ships.
+    dank-material-shell.url = "github:AvengeMedia/DankMaterialShell/stable";
+
     vscode-server.url = "github:msteen/nixos-vscode-server";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 

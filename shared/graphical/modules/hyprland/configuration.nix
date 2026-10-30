@@ -59,7 +59,6 @@
     sddm-astronaut
 
     dunst
-    kdePackages.dolphin
     hyprpaper
     pavucontrol
     networkmanagerapplet

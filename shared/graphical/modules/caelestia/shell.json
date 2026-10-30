@@ -1,0 +1,822 @@
+{
+    "// nexus": {
+        "maxNetworksShown": 5,
+        "networkRescanInterval": 15000,
+        "wallpapersPerRow": 4
+    },
+    "// nexus (what is this?)": "Config for Caelestia's 'Nexus' panel (confusingly: the launcher action is labelled 'Settings' but runs 'caelestia shell nexus open') - it's the wallpaper-picker / network-list control-center panel, not the wallpaper or network backend itself.",
+    "appearance": {
+        "// font": {
+            "body": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "family": "",
+                    "italic": false,
+                    "size": 16,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                },
+                "medium": {
+                    "family": "",
+                    "italic": false,
+                    "size": 14,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                },
+                "small": {
+                    "family": "",
+                    "italic": false,
+                    "size": 12,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                }
+            },
+            "clock": "Rubik",
+            "headline": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "family": "",
+                    "italic": false,
+                    "size": 32,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                },
+                "medium": {
+                    "family": "",
+                    "italic": false,
+                    "size": 28,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                },
+                "small": {
+                    "family": "",
+                    "italic": false,
+                    "size": 24,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                }
+            },
+            "icon": {
+                "extraLarge": {
+                    "family": "",
+                    "italic": false,
+                    "size": 36,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                },
+                "family": "Material Symbols Rounded",
+                "large": {
+                    "family": "",
+                    "italic": false,
+                    "size": 24,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                },
+                "medium": {
+                    "family": "",
+                    "italic": false,
+                    "size": 18,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                },
+                "small": {
+                    "family": "",
+                    "italic": false,
+                    "size": 15,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                }
+            },
+            "label": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "family": "",
+                    "italic": false,
+                    "size": 14,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                },
+                "medium": {
+                    "family": "",
+                    "italic": false,
+                    "size": 12,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                },
+                "small": {
+                    "family": "",
+                    "italic": false,
+                    "size": 11,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 400
+                }
+            },
+            "mono": {
+                "family": "CaskaydiaCove NF",
+                "large": {
+                    "family": "",
+                    "italic": false,
+                    "size": 16,
+                    "vaxes": {},
+                    "weight": 400
+                },
+                "medium": {
+                    "family": "",
+                    "italic": false,
+                    "size": 14,
+                    "vaxes": {},
+                    "weight": 400
+                },
+                "small": {
+                    "family": "",
+                    "italic": false,
+                    "size": 12,
+                    "vaxes": {},
+                    "weight": 400
+                }
+            },
+            "scale": 1,
+            "title": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "family": "",
+                    "italic": false,
+                    "size": 22,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                },
+                "medium": {
+                    "family": "",
+                    "italic": false,
+                    "size": 16,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                },
+                "small": {
+                    "family": "",
+                    "italic": false,
+                    "size": 14,
+                    "vaxes": {
+                        "ROND": 25
+                    },
+                    "weight": 500
+                }
+            },
+            "workspaces": "Rubik"
+        },
+        "// font (what is this?)": "Per-text-style font overrides: headline/title/body/label/mono/icon, each split into large/medium/small size tiers. An empty 'family' on a size tier means 'inherit the parent style's family'. 'vaxes' are OpenType variable-font axis values - 'ROND' controls corner roundness on GoogleSansFlex glyphs and is meaningless for non-variable fonts like CaskaydiaCove NF (empty {} there).",
+        "anim": {
+            "durations": {
+                "scale": 0.5
+            }
+        },
+        "deformScale": 0,
+        "padding": {
+            "scale": 1
+        },
+        "rounding": {
+            "scale": 1
+        },
+        "spacing": {
+            "scale": 1
+        },
+        "transparency": {
+            "base": 0.5,
+            "enabled": true,
+            "layers": 0.25
+        }
+    },
+    "background": {
+        "// wallpaperTransition": "Crossfade",
+        "// wallpaperTransition (what is this?)": "Animation style used when the wallpaper changes (manual switch or 'caelestia wallpaper -r'). 27 options exist beyond the default Crossfade: ChromaticBloom, ColourDistance, Crosshatch, Crosswarp, Directional, DirectionalWipe, FadeColour, Glitch, GlitchDisplace, HeatMelt, InkSplash, InkwellDrop, Iris, Morph, ParametricGlitch, Perlin, Pixelate, PixelfadeWave, PlasmaFlow, PolkaDotsCurtain, PuzzleRight, RandomSquares, Smoke, SoftWarpFade, VoronoiShatter, ZoomBlurPull.",
+        "desktopClock": {
+            "background": {
+                "blur": true,
+                "enabled": false,
+                "opacity": 0.7
+            },
+            "enabled": false,
+            "invertColors": false,
+            "position": "bottom-right",
+            "scale": 1,
+            "shadow": {
+                "blur": 0.4,
+                "enabled": true,
+                "opacity": 0.7
+            }
+        },
+        "enabled": true,
+        "visualiser": {
+            "autoHide": true,
+            "blur": false,
+            "enabled": false,
+            "rounding": 1,
+            "spacing": 1
+        },
+        "wallpaperEnabled": false
+    },
+    "bar": {
+        "// statusIcons": [
+            {
+                "enabled": true,
+                "id": "lockStatus"
+            },
+            {
+                "enabled": false,
+                "id": "kbLayout"
+            }
+        ],
+        "activeWindow": {
+            "// compact": false,
+            "// showOnHover": true,
+            "// inverted": false
+        },
+        "clock": {
+            "// showSeconds": false,
+            "background": false,
+            "showDate": true,
+            "showIcon": false
+        },
+        "dragThreshold": 20,
+        "entries": [
+            {
+                "enabled": true,
+                "id": "logo"
+            },
+            {
+                "enabled": true,
+                "id": "workspaces"
+            },
+            {
+                "enabled": true,
+                "id": "spacer"
+            },
+            {
+                "enabled": true,
+                "id": "activeWindow"
+            },
+            {
+                "enabled": true,
+                "id": "spacer"
+            },
+            {
+                "enabled": true,
+                "id": "tray"
+            },
+            {
+                "enabled": true,
+                "id": "clock"
+            },
+            {
+                "enabled": true,
+                "id": "statusIcons"
+            },
+            {
+                "enabled": true,
+                "id": "power"
+            }
+        ],
+        "excludedScreens": [
+            ""
+        ],
+        "persistent": true,
+        "popouts": {
+            "activeWindow": true,
+            "statusIcons": true,
+            "tray": true
+        },
+        "scrollActions": {
+            "brightness": true,
+            "volume": true,
+            "workspaces": true
+        },
+        "showOnHover": true,
+        "statusIcons": [
+            {
+                "enabled": true,
+                "id": "audio"
+            },
+            {
+                "enabled": true,
+                "id": "microphone"
+            },
+            {
+                "enabled": true,
+                "id": "network"
+            },
+            {
+                "enabled": false,
+                "id": "bluetooth"
+            },
+            {
+                "enabled": true,
+                "id": "battery"
+            }
+        ],
+        "tray": {
+            "hiddenIcons": [
+              "easyeffects",
+              "nm-applet",
+              "blueman"
+            ],
+            "background": false,
+            "compact": false,
+            "iconSubs": [],
+            "recolour": false
+        },
+        "workspaces": {
+            "// capitalisation": "Preserve",
+            "// ignoredTags": [
+                "hide_in_bar",
+                "xwl_popup"
+            ],
+            "// ignoredTags (what is this?)": "Hyprland window tags (set via 'hyprctl dispatch tag') that get excluded from the bar entirely - from window counts, window icons, and the active-window widget. Defaults assume Hyprland's own hide_in_bar and xwl_popup tags.",
+            "// showUnoccupied": true,
+            "// specialDisplayType": "Icons",
+            "// specialDisplayType (what is this?)": "Same options as displayType (Shapes/Text/Icons), but applies only to special workspaces (like your 'magic' one) instead of normal numbered workspaces - lets special workspaces use Icons while normal ones stay Text, for example.",
+            "// workspaceIcons": [],
+            "// workspaceIcons (what is this?)": "Icon-rule list keyed by workspace NAME/number (e.g. show a specific icon for workspace '3'). Different from windowIcons, which matches the window CLASS running on a workspace via regex (e.g. show a Steam icon when steam.exe is focused). Only used when displayType/specialDisplayType is Icons.",
+            "activeIndicator": true,
+            "activeLabel": "",
+            "activeTrail": false,
+            "displayType": "Text",
+            "label": "  ",
+            "maxWindowIcons": 5,
+            "occupiedBg": false,
+            "occupiedLabel": "",
+            "perMonitor": true,
+            "showWindows": true,
+            "showWindowsOnSpecialWorkspaces": true,
+            "shown": 5,
+            "specialWorkspaceIcons": [
+                {
+                    "flags": "",
+                    "icon": "star",
+                    "name": "magic",
+                    "regex": ""
+                }
+            ],
+            "windowIcons": []
+        }
+    },
+    "border": {
+        "rounding": 20,
+        "smoothing": 34,
+        "thickness": -3
+    },
+    "dashboard": {
+        "// performance": {
+            "showBattery": true,
+            "showCpu": true,
+            "showGpu": true,
+            "showMemory": true,
+            "showNetwork": true,
+            "showStorage": true
+        },
+        "// resourceUpdateInterval": 1000,
+        "// showClockSeconds": false,
+        "dragThreshold": 35,
+        "enabled": true,
+        "mediaUpdateInterval": 500,
+        "showDashboard": true,
+        "showMedia": true,
+        "showOnHover": true,
+        "showPerformance": true,
+        "showWeather": true
+    },
+    "enabled": true,
+    "general": {
+        "// language": "",
+        "// logo": "",
+        "// showOverFullscreen": false,
+        "// showOverFullscreen (what is this?)": "Whether the bar (and other persistent UI) stays drawn on top of fullscreen windows, e.g. games or fullscreen video. Off by default so fullscreen apps get the whole screen.",
+        "apps": {
+            "audio": [
+                "pavucontrol"
+            ],
+            "explorer": [
+                "nautilus"
+            ],
+            "playback": [
+                "mpv"
+            ],
+            "terminal": [
+                "kitty"
+            ]
+        },
+        "idle": {
+            "// inhibitWhenCharging": false,
+            "inhibitWhenAudio": true,
+            "lockBeforeSleep": true,
+            "timeouts": [
+                {
+                    "enabled": true,
+                    "idleAction": "lock",
+                    "inhibitWhenAudio": false,
+                    "inhibitWhenCharging": false,
+                    "respectInhibitors": true,
+                    "timeout": 900
+                },
+                {
+                    "enabled": true,
+                    "idleAction": "dpms off",
+                    "inhibitWhenAudio": false,
+                    "inhibitWhenCharging": false,
+                    "respectInhibitors": true,
+                    "returnAction": "dpms on",
+                    "timeout": 1800
+                },
+                {
+                    "enabled": true,
+                    "idleAction": [
+                        "systemctl",
+                        "suspend-then-hibernate"
+                    ],
+                    "inhibitWhenAudio": false,
+                    "inhibitWhenCharging": false,
+                    "respectInhibitors": true,
+                    "timeout": 2700
+                }
+            ]
+        },
+        "mediaGifSpeedAdjustment": 300,
+        "sessionGifSpeed": 0.7
+    },
+    "launcher": {
+        "// enabled": true,
+        "actionPrefix": ">",
+        "actions": [
+            {
+                "command": [
+                    "autocomplete",
+                    "calc"
+                ],
+                "dangerous": false,
+                "description": "Do simple math equations (powered by Qalc)",
+                "enabled": true,
+                "icon": "calculate",
+                "name": "Calculator"
+            },
+            {
+                "command": [
+                    "autocomplete",
+                    "scheme"
+                ],
+                "dangerous": false,
+                "description": "Change the current colour scheme",
+                "enabled": true,
+                "icon": "palette",
+                "name": "Scheme"
+            },
+            {
+                "command": [
+                    "autocomplete",
+                    "wallpaper"
+                ],
+                "dangerous": false,
+                "description": "Change the current wallpaper",
+                "enabled": true,
+                "icon": "image",
+                "name": "Wallpaper"
+            },
+            {
+                "command": [
+                    "autocomplete",
+                    "variant"
+                ],
+                "dangerous": false,
+                "description": "Change the current scheme variant",
+                "enabled": true,
+                "icon": "colors",
+                "name": "Variant"
+            },
+            {
+                "command": [
+                    "autocomplete",
+                    "transparency"
+                ],
+                "dangerous": false,
+                "description": "Change shell transparency",
+                "enabled": false,
+                "icon": "opacity",
+                "name": "Transparency"
+            },
+            {
+                "command": [
+                    "caelestia",
+                    "wallpaper",
+                    "-r"
+                ],
+                "dangerous": false,
+                "description": "Switch to a random wallpaper",
+                "enabled": true,
+                "icon": "casino",
+                "name": "Random"
+            },
+            {
+                "command": [
+                    "setMode",
+                    "light"
+                ],
+                "dangerous": false,
+                "description": "Change the scheme to light mode",
+                "enabled": true,
+                "icon": "light_mode",
+                "name": "Light"
+            },
+            {
+                "command": [
+                    "setMode",
+                    "dark"
+                ],
+                "dangerous": false,
+                "description": "Change the scheme to dark mode",
+                "enabled": true,
+                "icon": "dark_mode",
+                "name": "Dark"
+            },
+            {
+                "command": [
+                    "systemctl",
+                    "poweroff"
+                ],
+                "dangerous": true,
+                "description": "Shutdown the system",
+                "enabled": true,
+                "icon": "power_settings_new",
+                "name": "Shutdown"
+            },
+            {
+                "command": [
+                    "systemctl",
+                    "reboot"
+                ],
+                "dangerous": true,
+                "description": "Reboot the system",
+                "enabled": true,
+                "icon": "cached",
+                "name": "Reboot"
+            },
+            {
+                "command": [
+                    "loginctl",
+                    "terminate-user",
+                    ""
+                ],
+                "dangerous": true,
+                "description": "Log out of the current session",
+                "enabled": true,
+                "icon": "exit_to_app",
+                "name": "Logout"
+            },
+            {
+                "command": [
+                    "loginctl",
+                    "lock-session"
+                ],
+                "dangerous": false,
+                "description": "Lock the current session",
+                "enabled": true,
+                "icon": "lock",
+                "name": "Lock"
+            },
+            {
+                "command": [
+                    "systemctl",
+                    "suspend-then-hibernate"
+                ],
+                "dangerous": false,
+                "description": "Suspend then hibernate",
+                "enabled": true,
+                "icon": "bedtime",
+                "name": "Sleep"
+            },
+            {
+                "command": [
+                    "caelestia",
+                    "shell",
+                    "controlCenter",
+                    "open"
+                ],
+                "dangerous": false,
+                "description": "Configure the shell",
+                "enabled": true,
+                "icon": "settings",
+                "name": "Settings"
+            }
+        ],
+        "dragThreshold": 50,
+        "enableDangerousActions": false,
+        "favouriteApps": [],
+        "hiddenApps": [],
+        "maxShown": 8,
+        "maxWallpapers": 9,
+        "showOnHover": false,
+        "specialPrefix": "@",
+        "useFuzzy": {
+            "actions": false,
+            "apps": false,
+            "schemes": false,
+            "variants": false,
+            "wallpapers": false
+        },
+        "vimKeybinds": true
+    },
+    "lock": {
+        "// enableFprint": true,
+        "// enableFprint (what is this?)": "Allow unlocking via a fingerprint reader through fprintd, if your hardware/setup has one enrolled.",
+        "// enableHowdy": true,
+        "// enableHowdy (what is this?)": "Allow unlocking via face recognition through Howdy (github.com/boltgolt/howdy), a separate PAM-based facial-auth daemon - only works if Howdy itself is installed and a face is enrolled.",
+        "// enableSessionControls": false,
+        "// enabled": true,
+        "// maxFprintTries": 3,
+        "// maxHowdyTries": 3,
+        "// triggerHowdyOnWake": true,
+        "// triggerHowdyOnWake (what is this?)": "Automatically fires the Howdy face-recognition attempt as soon as the screen wakes, instead of waiting for you to type a key.",
+        "// useWallpaper": false,
+        "hideNotifs": false,
+        "recolourLogo": false
+    },
+    "notifs": {
+        "// fullscreen": "On",
+        "// fullscreen (what is this?)": "Whether notifications are still shown (On) or suppressed (Off) while a window is fullscreen - separate from fullscreenExpireTimeout, which only takes effect when this is On.",
+        "// fullscreenExpireTimeout": 2000,
+        "// groupPreviewNum": 3,
+        "actionOnClick": false,
+        "clearThreshold": 0.3,
+        "defaultExpireTimeout": 5000,
+        "expandThreshold": 20,
+        "expire": false,
+        "openExpanded": false
+    },
+    "osd": {
+        "enableBrightness": true,
+        "enableMicrophone": false,
+        "enabled": true,
+        "hideDelay": 2000
+    },
+    "paths": {
+        "lockNoNotifsPic": "root:/assets/dino.png",
+        "lyricsDir": "~/Music/lyrics",
+        "mediaGif": "root:/assets/bongocat.gif",
+        "noNotifsPic": "root:/assets/dino.png",
+        "sessionGif": "root:/assets/kurukuru.gif",
+        "wallpaperDir": "~/Pictures/Wallpapers"
+    },
+    "services": {
+        "// dataUnits": "Binary",
+        "// dataUnits (what is this?)": "Whether data sizes (network speed, disk, memory) are shown as Binary (KiB/MiB/GiB, 1024-based) or Decimal (KB/MB/GB, 1000-based).",
+        "// lyricsBackend": "Auto",
+        "// lyricsBackend (what is this?)": "Which service is queried for synced lyrics: Local (reads local .lrc files only), LRCLIB (lrclib.net, free/no-auth), NetEase (NetEase Cloud Music's API). Auto tries them in some built-in order.",
+        "audioIncrement": 0.1,
+        "brightnessIncrement": 0.1,
+        "clockFormat": "TwentyFourHour",
+        "defaultPlayer": "Spotify",
+        "gpuType": "Auto",
+        "maxVolume": 1,
+        "playerAliases": [
+            {
+                "from": "com.github.th_ch.youtube_music",
+                "to": "YT Music"
+            }
+        ],
+        "sensorUnits": "Celsius",
+        "smartScheme": true,
+        "visualiserBars": 45,
+        "weatherLocation": "",
+        "weatherUnits": "Celsius"
+    },
+    "session": {
+        "commands": {
+            "hibernate": [
+                "systemctl",
+                "hibernate"
+            ],
+            "logout": [
+                "loginctl",
+                "terminate-user",
+                ""
+            ],
+            "reboot": [
+                "systemctl",
+                "reboot"
+            ],
+            "shutdown": [
+                "systemctl",
+                "poweroff"
+            ]
+        },
+        "dragThreshold": 30,
+        "enabled": true,
+        "icons": {
+            "hibernate": "downloading",
+            "logout": "logout",
+            "reboot": "cached",
+            "shutdown": "power_settings_new"
+        },
+        "vimKeybinds": false
+    },
+    "sidebar": {
+        "// minHoverThreshold": 200,
+        "// minHoverThreshold (what is this?)": "Milliseconds the cursor must sit at the trigger edge before showOnHover actually opens the sidebar - a debounce so brushing past the edge doesn't pop it open.",
+        "// showOnHover": false,
+        "dragThreshold": 80,
+        "enabled": true
+    },
+    "utilities": {
+        "// cards": {
+            "keepAwake": true,
+            "quickToggles": true,
+            "recorder": true
+        },
+        "// cards (what is this?)": "Gates whether entire utility-panel sections render at all (keepAwake card, recorder card, the quickToggles grid itself). This is a level above the quickToggles list below, which only controls individual buttons inside that grid - set quickToggles here to false and the whole grid disappears regardless of what's enabled in the list.",
+        "// quickToggles": [
+            {
+                "enabled": true,
+                "id": "wallpaperPlaying"
+            }
+        ],
+        "enabled": true,
+        "maxToasts": 4,
+        "quickToggles": [
+            {
+                "enabled": true,
+                "id": "wifi"
+            },
+            {
+                "enabled": true,
+                "id": "bluetooth"
+            },
+            {
+                "enabled": true,
+                "id": "mic"
+            },
+            {
+                "enabled": true,
+                "id": "settings"
+            },
+            {
+                "enabled": true,
+                "id": "gameMode"
+            },
+            {
+                "enabled": true,
+                "id": "dnd"
+            },
+            {
+                "enabled": true,
+                "id": "vpn"
+            }
+        ],
+        "toasts": {
+            "// fullscreen": "off",
+            "// fullscreen (what is this?)": "String, not bool like its siblings: controls toast popup behaviour while a window is fullscreen. 'off' (default) suppresses all toasts in fullscreen; check Caelestia's docs/source if other string values are supported, the header only documents the default.",
+            "audioInputChanged": true,
+            "audioOutputChanged": true,
+            "capsLockChanged": false,
+            "chargingChanged": true,
+            "configLoaded": true,
+            "dndChanged": true,
+            "gameModeChanged": true,
+            "kbLayoutChanged": true,
+            "kbLimit": true,
+            "nowPlaying": false,
+            "numLockChanged": true,
+            "vpnChanged": true
+        },
+        "vpn": {
+            "enabled": false,
+            "provider": []
+        }
+    }
+}
