@@ -21,6 +21,10 @@
     # QMK Keyboard Support (Needs root for udev rules)
     keyboard.qmk.enable = true;
 
+    # Exposes /dev/i2c-* (group i2c) so the desktop shell's ddcutil-based
+    # brightness control can reach external monitors over DDC/CI.
+    i2c.enable = true;
+
     bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -37,6 +41,8 @@
       };
     };
   };
+
+  users.users.jacob.extraGroups = [ "i2c" ];
 
   systemd.services.bluetooth.serviceConfig.ExecStart = [
     ""
