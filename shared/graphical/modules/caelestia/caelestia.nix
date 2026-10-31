@@ -110,33 +110,37 @@ in
       )
     );
 
-    # Caelestia's own file watcher (QFileSystemWatcher on the literal
-    # ~/.config/caelestia/shell.json path) doesn't survive an editor's
-    # atomic rename-over-save on the real file: the watched inode dies with
-    # the rename, and the directory-level fallback watches
-    # ~/.config/caelestia/, not this repo's directory where the rename
-    # actually happens - so reload silently stops working until something
-    # restarts the process. There's no IPC reload command to paper over it
-    # (checked caelestia-shell's source: none exists). This path unit
-    # watches the real repo file directly and restarts the shell whenever
-    # it changes, so no manual restart is needed either.
-    systemd.user.paths.caelestia-config-reload = {
-      Unit.Description = "Watch Caelestia's shell.json for changes";
-      Path.PathModified = shellJsonPath;
-      Install.WantedBy = [ "default.target" ];
-    };
+    systemd.user = {
+      # Caelestia's own file watcher (QFileSystemWatcher on the literal
+      # ~/.config/caelestia/shell.json path) doesn't survive an editor's
+      # atomic rename-over-save on the real file: the watched inode dies with
+      # the rename, and the directory-level fallback watches
+      # ~/.config/caelestia/, not this repo's directory where the rename
+      # actually happens - so reload silently stops working until something
+      # restarts the process. There's no IPC reload command to paper over it
+      # (checked caelestia-shell's source: none exists). This path unit
+      # watches the real repo file directly and restarts the shell whenever
+      # it changes, so no manual restart is needed either.
+      paths.caelestia-config-reload = {
+        Unit.Description = "Watch Caelestia's shell.json for changes";
+        Path.PathModified = shellJsonPath;
+        Install.WantedBy = [ "default.target" ];
+      };
 
-    # The launcher spawns apps as plain children (DesktopEntry.execute), so
-    # they land in caelestia.service's cgroup - and the default
-    # KillMode=control-group takes Steam/Discord/etc. down with every shell
-    # restart, including the config-reload one below. Only kill the shell.
-    systemd.user.services.caelestia.Service.KillMode = "process";
+      services = {
+        # The launcher spawns apps as plain children (DesktopEntry.execute), so
+        # they land in caelestia.service's cgroup - and the default
+        # KillMode=control-group takes Steam/Discord/etc. down with every shell
+        # restart, including the config-reload one below. Only kill the shell.
+        caelestia.Service.KillMode = "process";
 
-    systemd.user.services.caelestia-config-reload = {
-      Unit.Description = "Restart Caelestia shell after shell.json changes";
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service";
+        caelestia-config-reload = {
+          Unit.Description = "Restart Caelestia shell after shell.json changes";
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service";
+          };
+        };
       };
     };
   };
