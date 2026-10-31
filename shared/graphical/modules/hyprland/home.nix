@@ -99,6 +99,11 @@ in
       default = 300;
       description = "Idle timeout in seconds before turning off the screen.";
     };
+    hypridle.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to run hypridle. Shells with their own idle daemon (e.g. Caelestia) turn this off so the two don't both lock the screen.";
+    };
   };
 
   imports = [
@@ -142,7 +147,7 @@ in
     };
 
     services.hypridle = {
-      enable = true;
+      inherit (cfg.hypridle) enable;
       settings = {
         general = {
           before_sleep_cmd = "loginctl lock-session";
@@ -269,7 +274,6 @@ in
         '';
         executable = true;
       };
-
       "jgmenu/jgmenurc".text = ''
         tint2_look = 0
         shades_of_gray = 0
@@ -379,7 +383,7 @@ in
         }
         {
             "label" : "lock",
-            "action" : "hyprlock",
+            "action" : "loginctl lock-session",
             "text" : "Lock",
             "keybind" : "l"
         }
@@ -512,6 +516,12 @@ in
       theme = {
         name = "Adwaita-dark";
         package = pkgs.gnome-themes-extra;
+      };
+      # Adwaita (GTK's default) dropped most full-colour icons after GNOME 40,
+      # so older GTK apps like blueman render checkerboard missing-icon boxes.
+      iconTheme = {
+        name = "Papirus-Dark";
+        package = pkgs.papirus-icon-theme;
       };
       gtk3.extraConfig = {
         gtk-application-prefer-dark-theme = 1;

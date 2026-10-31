@@ -14,12 +14,8 @@
   services.greetd = {
     enable = true;
     settings = {
-      initial_session = {
-        command = "${
-          inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland
-        }/bin/start-hyprland";
-        user = "jacob";
-      };
+      # No initial_session autologin: logging in through tuigreet is what
+      # lets PAM unlock gnome-keyring with the login password.
       default_session = {
         command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
         user = "greeter";

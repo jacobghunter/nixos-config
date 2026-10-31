@@ -304,7 +304,8 @@ local function toggle_layout()
 end
 
 hl.bind(mainMod .. " + N", toggle_layout)
-hl.bind(mainMod .. " + apostrophe", hl.dsp.exec_cmd("systemd-run --user systemctl suspend"))
+-- logind lock request: Caelestia's lock screen, or hyprlock via hypridle's lock_cmd under other shells
+hl.bind(mainMod .. " + apostrophe", hl.dsp.exec_cmd("loginctl lock-session"))
 
 --  Row 4 (Z X C V B N M)
 hl.bind(mainMod .. " + Z", hl.dsp.window.drag())
@@ -501,6 +502,5 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("ags")
 	hl.exec_cmd("wl-paste --type text --watch cliphist store")
 	hl.exec_cmd("wl-paste --type image --watch cliphist store")
-	hl.exec_cmd("hypridle")
-	hl.exec_cmd("hyprlock")
+	-- hypridle runs as a home-manager systemd service when the active shell wants it.
 end)
