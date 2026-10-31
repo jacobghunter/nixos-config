@@ -405,8 +405,8 @@ hl.window_rule({
 
 hl.config({
 	general = {
-		gaps_in = 2.5,
-		gaps_out = 5,
+		gaps_in = 3,
+		gaps_out = 6,
 		border_size = borderSize,
 
 		-- https://wiki.hypr.land/Configuring/Basics/Variables/ for info about colors

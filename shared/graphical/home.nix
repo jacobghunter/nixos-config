@@ -25,7 +25,7 @@ in
   ];
 
   modules = {
-    activeShell = "dms";
+    activeShell = "caelestia";
 
     obsidian.enable = true;
     noctalia.enable = config.modules.activeShell == "noctalia";
