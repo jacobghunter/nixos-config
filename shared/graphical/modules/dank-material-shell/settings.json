@@ -119,7 +119,7 @@
           "showBatteryTime": false,
           "showBatteryTimeOnlyOnBattery": false,
           "showBatteryPowerCharging": false,
-          "batteryStyle": "solid",
+          "batteryStyle": "outline",
           "showBatteryPowerDischarging": false
         },
         {
@@ -193,7 +193,7 @@
         },
         {
           "id": "media",
-          "enabled": false
+          "enabled": true
         },
         {
           "id": "clock",
