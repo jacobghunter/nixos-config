@@ -13,6 +13,13 @@
 
   modules = {
     wayle.showBattery = false;
+    caelestia = {
+      showBattery = false;
+      monitors = [
+        "DP-1"
+        "HDMI-A-1"
+      ];
+    };
     noctalia.hostConfig = ./modules/noctalia/config.toml;
     btop.package = pkgs.btop-rocm;
     audioDeviceDisable = {
