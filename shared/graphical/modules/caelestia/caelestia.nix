@@ -8,11 +8,17 @@
 
 let
   cfg = config.modules.caelestia;
-  # Started from a full community shell.json instead of the (very sparse)
-  # upstream defaults. Original source: acastaneiras/caelestia
-  # (https://github.com/acastaneiras/caelestia/blob/main/shell.json), since
-  # hand-edited directly in this repo file - see git log for what changed.
   shellJsonPath = "${config.home.homeDirectory}/nixos-config/shared/graphical/modules/caelestia/shell.json";
+
+  # Caelestia has no per-host config layer, only per-monitor overrides
+  # (~/.config/caelestia/monitors/<name>/shell.json). A list in an override
+  # replaces the global list wholesale instead of merging, so the global
+  # statusIcons are copied in here (at build time) with just battery disabled.
+  monitorOverride = {
+    bar.statusIcons = map (
+      icon: if icon.id == "battery" then icon // { enabled = false; } else icon
+    ) (lib.importJSON ./shell.json).bar.statusIcons;
+  };
 in
 {
   imports = [
@@ -21,6 +27,27 @@ in
 
   options.modules.caelestia = {
     enable = lib.mkEnableOption "the Caelestia desktop shell";
+
+    showBattery = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether to show the battery status icon in the bar. Without a laptop
+        battery Caelestia turns it into a power-profile switcher, which is
+        dead weight on a host without power-profiles-daemon.
+      '';
+    };
+
+    monitors = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "DP-1" ];
+      description = ''
+        Monitor names (`hyprctl monitors -j | jq -r '.[].name'`) to write
+        per-monitor overrides for - needed by showBattery, since Caelestia
+        can only vary bar options per monitor, not per host.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -29,6 +56,13 @@ in
     # same mechanism the CLI's own launcher actions use, just invoked directly
     # so the shared Hyprland config doesn't need to know Caelestia's IPC shape.
     modules.activeShellLauncherCmd = "caelestia shell drawers toggle launcher";
+    # Caelestia runs its own idle/lock/suspend (shell.json general.idle), so
+    # hypridle would just lock a second time with hyprlock.
+    modules.hyprland.hypridle.enable = false;
+
+    # Caelestia has no polkit agent of its own (DMS does), and without one
+    # GUI privilege prompts (udisks mounts, system NM connections) just fail.
+    services.hyprpolkitagent.enable = true;
 
     programs.caelestia = {
       enable = true;
@@ -52,9 +86,29 @@ in
       };
     };
 
+    assertions = [
+      {
+        assertion = cfg.showBattery || cfg.monitors != [ ];
+        message = "modules.caelestia.showBattery = false needs modules.caelestia.monitors set.";
+      }
+    ];
+
     xdg.configFile = {
       "caelestia/shell.json".source = config.lib.file.mkOutOfStoreSymlink shellJsonPath;
-    };
+    }
+    // lib.optionalAttrs (!cfg.showBattery) (
+      lib.listToAttrs (
+        map (
+          monitor:
+          lib.nameValuePair "caelestia/monitors/${monitor}/shell.json" {
+            text = builtins.toJSON monitorOverride;
+            # Same atomic-replace problem as shell.json below: a rebuild swaps
+            # the symlink, which Caelestia's watcher doesn't notice.
+            onChange = "${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service";
+          }
+        ) cfg.monitors
+      )
+    );
 
     # Caelestia's own file watcher (QFileSystemWatcher on the literal
     # ~/.config/caelestia/shell.json path) doesn't survive an editor's
@@ -71,6 +125,12 @@ in
       Path.PathModified = shellJsonPath;
       Install.WantedBy = [ "default.target" ];
     };
+
+    # The launcher spawns apps as plain children (DesktopEntry.execute), so
+    # they land in caelestia.service's cgroup - and the default
+    # KillMode=control-group takes Steam/Discord/etc. down with every shell
+    # restart, including the config-reload one below. Only kill the shell.
+    systemd.user.services.caelestia.Service.KillMode = "process";
 
     systemd.user.services.caelestia-config-reload = {
       Unit.Description = "Restart Caelestia shell after shell.json changes";

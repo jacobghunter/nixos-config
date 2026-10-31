@@ -143,21 +143,24 @@
                     "family": "",
                     "italic": false,
                     "size": 16,
-                    "vaxes": {},
+                    "vaxes": {
+                    },
                     "weight": 400
                 },
                 "medium": {
                     "family": "",
                     "italic": false,
                     "size": 14,
-                    "vaxes": {},
+                    "vaxes": {
+                    },
                     "weight": 400
                 },
                 "small": {
                     "family": "",
                     "italic": false,
                     "size": 12,
-                    "vaxes": {},
+                    "vaxes": {
+                    },
                     "weight": 400
                 }
             },
@@ -258,8 +261,8 @@
         ],
         "activeWindow": {
             "// compact": false,
-            "// showOnHover": true,
-            "// inverted": false
+            "// inverted": false,
+            "// showOnHover": true
         },
         "clock": {
             "// showSeconds": false,
@@ -335,7 +338,7 @@
                 "id": "network"
             },
             {
-                "enabled": false,
+                "enabled": true,
                 "id": "bluetooth"
             },
             {
@@ -344,14 +347,15 @@
             }
         ],
         "tray": {
-            "hiddenIcons": [
-              "easyeffects",
-              "nm-applet",
-              "blueman"
-            ],
             "background": false,
             "compact": false,
-            "iconSubs": [],
+            "hiddenIcons": [
+                "easyeffects",
+                "nm-applet",
+                "blueman"
+            ],
+            "iconSubs": [
+            ],
             "recolour": false
         },
         "workspaces": {
@@ -364,7 +368,8 @@
             "// showUnoccupied": true,
             "// specialDisplayType": "Icons",
             "// specialDisplayType (what is this?)": "Same options as displayType (Shapes/Text/Icons), but applies only to special workspaces (like your 'magic' one) instead of normal numbered workspaces - lets special workspaces use Icons while normal ones stay Text, for example.",
-            "// workspaceIcons": [],
+            "// workspaceIcons": [
+            ],
             "// workspaceIcons (what is this?)": "Icon-rule list keyed by workspace NAME/number (e.g. show a specific icon for workspace '3'). Different from windowIcons, which matches the window CLASS running on a workspace via regex (e.g. show a Steam icon when steam.exe is focused). Only used when displayType/specialDisplayType is Icons.",
             "activeIndicator": true,
             "activeLabel": "",
@@ -386,7 +391,14 @@
                     "regex": ""
                 }
             ],
-            "windowIcons": []
+            "windowIcons": [
+                {
+                    "flags": "",
+                    "icon": "sports_esports",
+                    "name": "",
+                    "regex": "^steam"
+                }
+            ]
         }
     },
     "border": {
@@ -637,8 +649,10 @@
         ],
         "dragThreshold": 50,
         "enableDangerousActions": false,
-        "favouriteApps": [],
-        "hiddenApps": [],
+        "favouriteApps": [
+        ],
+        "hiddenApps": [
+        ],
         "maxShown": 8,
         "maxWallpapers": 9,
         "showOnHover": false,
@@ -690,7 +704,7 @@
         "lyricsDir": "~/Music/lyrics",
         "mediaGif": "root:/assets/bongocat.gif",
         "noNotifsPic": "root:/assets/dino.png",
-        "sessionGif": "root:/assets/kurukuru.gif",
+        "sessionGif": "",
         "wallpaperDir": "~/Pictures/Wallpapers"
     },
     "services": {
@@ -700,7 +714,7 @@
         "// lyricsBackend (what is this?)": "Which service is queried for synced lyrics: Local (reads local .lrc files only), LRCLIB (lrclib.net, free/no-auth), NetEase (NetEase Cloud Music's API). Auto tries them in some built-in order.",
         "audioIncrement": 0.1,
         "brightnessIncrement": 0.1,
-        "clockFormat": "TwentyFourHour",
+        "clockFormat": "TwelveHour",
         "defaultPlayer": "Spotify",
         "gpuType": "Auto",
         "maxVolume": 1,
@@ -711,16 +725,17 @@
             }
         ],
         "sensorUnits": "Celsius",
-        "smartScheme": true,
+        "smartScheme": false,
         "visualiserBars": 45,
         "weatherLocation": "",
-        "weatherUnits": "Celsius"
+        "weatherUnits": "Fahrenheit"
     },
     "session": {
+        "// commands (what is this?)": "Button order is hardcoded (top to bottom: logout, shutdown, gif, hibernate, reboot), so the slots are remapped here by command+icon to get logout, lock, restart, power off (gif hidden via paths.sessionGif = \"\"). Key names no longer match what the buttons do.",
         "commands": {
             "hibernate": [
                 "systemctl",
-                "hibernate"
+                "reboot"
             ],
             "logout": [
                 "loginctl",
@@ -729,20 +744,20 @@
             ],
             "reboot": [
                 "systemctl",
-                "reboot"
+                "poweroff"
             ],
             "shutdown": [
-                "systemctl",
-                "poweroff"
+                "loginctl",
+                "lock-session"
             ]
         },
         "dragThreshold": 30,
         "enabled": true,
         "icons": {
-            "hibernate": "downloading",
+            "hibernate": "cached",
             "logout": "logout",
-            "reboot": "cached",
-            "shutdown": "power_settings_new"
+            "reboot": "power_settings_new",
+            "shutdown": "lock"
         },
         "vimKeybinds": false
     },
@@ -751,7 +766,8 @@
         "// minHoverThreshold (what is this?)": "Milliseconds the cursor must sit at the trigger edge before showOnHover actually opens the sidebar - a debounce so brushing past the edge doesn't pop it open.",
         "// showOnHover": false,
         "dragThreshold": 80,
-        "enabled": true
+        "enabled": true,
+        "showOnHover": true
     },
     "utilities": {
         "// cards": {
@@ -816,7 +832,8 @@
         },
         "vpn": {
             "enabled": false,
-            "provider": []
+            "provider": [
+            ]
         }
     }
 }
