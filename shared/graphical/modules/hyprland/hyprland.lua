@@ -9,6 +9,22 @@
 
 require("variables")
 
+-- Caelestia writes its live colour scheme (refreshed on every
+-- `caelestia scheme set`) to ~/.config/hypr/scheme/current.lua, and
+-- caelestia.nix's caelestia-scheme-reload path unit runs `hyprctl reload`
+-- whenever that file changes, so this picks the new colours up without a
+-- rebuild or logout. Falls back to variables.lua's static palette when
+-- Caelestia isn't the active shell (or hasn't applied a scheme yet).
+local ok, scheme = pcall(require, "scheme.current")
+if ok and scheme then
+	local function border(colour, alpha)
+		return "rgba(" .. colour .. alpha .. ")"
+	end
+
+	activeBorder = { colors = { border(scheme.primary, "cc"), border(scheme.secondary, "cc") }, angle = 45 }
+	specialBorder = { colors = { border(scheme.primary, "cc"), border(scheme.tertiary, "cc") }, angle = 45 }
+end
+
 --################
 --## FILE VARS ###
 --################
@@ -412,7 +428,8 @@ hl.config({
 
 		-- https://wiki.hypr.land/Configuring/Basics/Variables/ for info about colors
 		["col.active_border"] = activeBorder,
-		["col.inactive_border"] = inactiveBorder,
+		-- Fully transparent: inactive windows show no border at all.
+		["col.inactive_border"] = "rgba(00000000)",
 
 		-- Set to true enable resizing windows by clicking and dragging on borders and gaps
 		resize_on_border = true,
