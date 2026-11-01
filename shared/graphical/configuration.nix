@@ -15,7 +15,15 @@
   # declarative programs.obsidian module (shared/graphical/modules/obsidian).
   # Applied here (NixOS level) rather than inside the home-manager module,
   # since useGlobalPkgs = true means overlays only take effect from here.
-  nixpkgs.overlays = [ inputs.nix-obsidian-extensions.overlays.default ];
+  nixpkgs.overlays = [
+    inputs.nix-obsidian-extensions.overlays.default
+    # nixcord patches pkgs.openasar with a patch written against its own
+    # nixpkgs' OpenASAR; ours can lag behind and fail to apply it, so take
+    # openasar from nixcord's nixpkgs to keep the two in step.
+    (_: prev: {
+      inherit (inputs.nixcord.inputs.nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}) openasar;
+    })
+  ];
 
   hardware = {
     # QMK Keyboard Support (Needs root for udev rules)

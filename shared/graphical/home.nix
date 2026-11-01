@@ -95,6 +95,10 @@ in
       discord = {
         vencord.enable = false;
         equicord.enable = true;
+        # Same effect as Settings > Advanced > Hardware Acceleration off, which
+        # is set in settings.json. Discord's own toggle doesn't stick here, and
+        # nixcord's discord.settings would make that file read-only.
+        commandLineArgs = [ "--disable-gpu" ];
       };
       config = {
         useQuickCss = true;
