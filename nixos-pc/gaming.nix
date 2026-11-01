@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   boot = {
@@ -41,6 +41,11 @@
       enable = true;
       package = pkgs.ananicy-cpp;
       rulesProvider = pkgs.ananicy-rules-cachyos;
+      # The workaround moves realtime-scheduled processes (e.g. Hyprland via the
+      # LowLatency_RT rule) into the root cgroup, which drops Hyprland and
+      # everything it spawns out of the logind session - breaking
+      # `loginctl lock-session` from binds.
+      settings.cgroup_realtime_workaround = lib.mkForce false;
     };
 
     dbus.implementation = "broker";
