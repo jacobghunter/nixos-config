@@ -320,8 +320,13 @@ local function toggle_layout()
 end
 
 hl.bind(mainMod .. " + N", toggle_layout)
--- logind lock request: Caelestia's lock screen, or hyprlock via hypridle's lock_cmd under other shells
-hl.bind(mainMod .. " + apostrophe", hl.dsp.exec_cmd("loginctl lock-session"))
+-- logind lock request: Caelestia's lock screen, or hyprlock via hypridle's lock_cmd under other shells.
+-- Turns off Caelestia's Keep Awake first so its locked-idle timeout can suspend (no-op under other shells);
+-- lock from Caelestia's UI instead to stay awake while locked.
+hl.bind(
+	mainMod .. " + apostrophe",
+	hl.dsp.exec_cmd("caelestia shell idleInhibitor disable; loginctl lock-session")
+)
 
 --  Row 4 (Z X C V B N M)
 hl.bind(mainMod .. " + Z", hl.dsp.window.drag())

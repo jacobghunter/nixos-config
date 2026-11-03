@@ -452,6 +452,19 @@
             "lockBeforeSleep": true,
             "timeouts": [
                 {
+                    "// idleAction": "Suspend after 5 idle minutes, but only while locked. Respects Keep Awake, so locking from the UI with it on stays awake; the SUPER+apostrophe bind turns Keep Awake off first.",
+                    "enabled": true,
+                    "idleAction": [
+                        "sh",
+                        "-c",
+                        "[ \"$(caelestia shell lock isLocked)\" = true ] && systemctl suspend-then-hibernate"
+                    ],
+                    "inhibitWhenAudio": false,
+                    "inhibitWhenCharging": false,
+                    "respectInhibitors": true,
+                    "timeout": 300
+                },
+                {
                     "enabled": true,
                     "idleAction": "lock",
                     "inhibitWhenAudio": false,
