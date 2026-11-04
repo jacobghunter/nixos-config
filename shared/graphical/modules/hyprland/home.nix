@@ -244,6 +244,12 @@ in
         hyprshot
         cliphist
         nautilus
+        # Provides the org.gnome.desktop.interface GSettings schema. Without
+        # it compiled into this profile's share/glib-2.0/schemas, libadwaita
+        # apps (Nautilus, etc.) can't read color-scheme and silently default
+        # to light, even though Caelestia's dconf writes are correct - there's
+        # no GNOME session here to pull this in on its own.
+        gsettings-desktop-schemas
       ];
     };
 
