@@ -38,6 +38,17 @@ in
       '';
     };
 
+    hibernate = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether idle sleep (the caelestia-sleep command shell.json's idle
+        timeouts call) uses suspend-then-hibernate or plain suspend. Waking
+        from hibernation is a full cold boot, which buys nothing on a desktop
+        without a battery to run flat.
+      '';
+    };
+
     monitors = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -71,6 +82,14 @@ in
       # Caelestia has no polkit agent of its own (DMS does), and without one
       # GUI privilege prompts (udisks mounts, system NM connections) just fail.
       services.hyprpolkitagent.enable = true;
+
+      # shell.json is shared by every host and has no per-host layer, so its
+      # idle timeouts call this instead of systemctl directly.
+      home.packages = [
+        (pkgs.writeShellScriptBin "caelestia-sleep" ''
+          exec ${pkgs.systemd}/bin/systemctl ${if cfg.hibernate then "suspend-then-hibernate" else "suspend"}
+        '')
+      ];
 
       programs.caelestia = {
         enable = true;

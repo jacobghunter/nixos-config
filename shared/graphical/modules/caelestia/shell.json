@@ -457,7 +457,7 @@
                     "idleAction": [
                         "sh",
                         "-c",
-                        "[ \"$(caelestia shell lock isLocked)\" = true ] && systemctl suspend-then-hibernate"
+                        "[ \"$(caelestia shell lock isLocked)\" = true ] && caelestia-sleep"
                     ],
                     "inhibitWhenAudio": false,
                     "inhibitWhenCharging": false,
@@ -482,10 +482,10 @@
                     "timeout": 1800
                 },
                 {
+                    "// idleAction": "caelestia-sleep is installed by caelestia.nix: suspend-then-hibernate, or plain suspend on hosts with modules.caelestia.hibernate = false.",
                     "enabled": true,
                     "idleAction": [
-                        "systemctl",
-                        "suspend-then-hibernate"
+                        "caelestia-sleep"
                     ],
                     "inhibitWhenAudio": false,
                     "inhibitWhenCharging": false,

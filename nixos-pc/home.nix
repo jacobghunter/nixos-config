@@ -15,6 +15,7 @@
     wayle.showBattery = false;
     caelestia = {
       showBattery = false;
+      hibernate = false;
       monitors = [
         "DP-1"
         "HDMI-A-1"
