@@ -35,29 +35,40 @@
     nodejs
   ];
 
-  modules.caddy = {
-    enable = true;
-    # Flip on once DNS + CF_API_TOKEN env file are ready to expose Jellyfin
-    # publicly; leave off for LAN-only (homepage catch-all + go-links).
-    publicJellyfin = {
+  modules = {
+    caddy = {
       enable = true;
-      environmentFile = "/etc/cloudflare.env";
+      # Flip on once DNS + CF_API_TOKEN env file are ready to expose Jellyfin
+      # publicly; leave off for LAN-only (homepage catch-all + go-links).
+      publicJellyfin = {
+        enable = true;
+        environmentFile = "/etc/cloudflare.env";
+      };
     };
-  };
 
-  modules.makemkv = {
-    enable = true;
-    # sg0 is the WD disk (target 3:0:0:0); the BD-RE drive (target
-    # 10:0:0:0) is sg1 - confirmed via udevadm/lsscsi, not the module's
-    # default guess. Both /dev/sr0 and /dev/sg1 are group cdrom (gid 24).
-    devices = [
-      "/dev/sr0"
-      "/dev/sg1"
-    ];
-    extraEnvironment.SUP_GROUP_IDS = "24";
-    outputDir = "/media/storage/movies";
-    # Match jellyfin's GID
-    pgid = 990;
+    # Remote access to the home network. After the first deploy, run
+    # `sudo tailscale up` once, then approve the subnet route + exit node in
+    # the Tailscale admin console (and disable key expiry for this machine).
+    tailscale = {
+      enable = true;
+      advertiseRoutes = [ "192.168.1.0/24" ];
+      exitNode = true;
+    };
+
+    makemkv = {
+      enable = true;
+      # sg0 is the WD disk (target 3:0:0:0); the BD-RE drive (target
+      # 10:0:0:0) is sg1 - confirmed via udevadm/lsscsi, not the module's
+      # default guess. Both /dev/sr0 and /dev/sg1 are group cdrom (gid 24).
+      devices = [
+        "/dev/sr0"
+        "/dev/sg1"
+      ];
+      extraEnvironment.SUP_GROUP_IDS = "24";
+      outputDir = "/media/storage/movies";
+      # Match jellyfin's GID
+      pgid = 990;
+    };
   };
 
   system.stateVersion = "25.05";

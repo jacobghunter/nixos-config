@@ -197,6 +197,7 @@
             ./shared/modules/pihole/pihole.nix
             ./shared/modules/attic-push/attic-push.nix
             ./shared/modules/makemkv/makemkv.nix
+            ./shared/modules/tailscale/tailscale.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
