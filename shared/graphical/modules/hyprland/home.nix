@@ -49,6 +49,23 @@ let
   cursorSize = 24;
   cursorPackage = pkgs.bibata-cursors;
 
+  # gsettings-desktop-schemas ships its GSettings schemas (incl.
+  # org.gnome.desktop.interface, which libadwaita apps like Nautilus read for
+  # dark/light mode) pre-compiled under a versioned subdirectory, but nothing
+  # on a GNOME-less Hyprland system ever links that into a profile glib
+  # searches by default - so without this, Caelestia's dark-mode dconf
+  # writes are correct but unreadable, and GTK4/libadwaita apps silently
+  # default to light. GSETTINGS_SCHEMA_DIR (set via hyprland.lua, below)
+  # points glib straight at the package's own compiled cache, bypassing the
+  # whole profile-merge problem. readDir avoids hardcoding the version
+  # string in the subdirectory name.
+  gsettingsSchemaDir =
+    let
+      base = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas";
+      name = lib.head (builtins.attrNames (builtins.readDir base));
+    in
+    "${base}/${name}/glib-2.0/schemas";
+
   cfg = config.modules.hyprland;
 
   hyprlandFlakePackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -244,12 +261,6 @@ in
         hyprshot
         cliphist
         nautilus
-        # Provides the org.gnome.desktop.interface GSettings schema. Without
-        # it compiled into this profile's share/glib-2.0/schemas, libadwaita
-        # apps (Nautilus, etc.) can't read color-scheme and silently default
-        # to light, even though Caelestia's dconf writes are correct - there's
-        # no GNOME session here to pull this in on its own.
-        gsettings-desktop-schemas
       ];
     };
 
@@ -314,6 +325,8 @@ in
 
         borderSize = ${borderSize}
         rounding = ${borderRadius}
+
+        gsettingsSchemaDir = "${gsettingsSchemaDir}"
       '';
 
       # 2. Generate Rofi Colors/Vars

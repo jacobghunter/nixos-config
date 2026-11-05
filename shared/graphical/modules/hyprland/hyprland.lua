@@ -97,6 +97,11 @@ hl.env("GTK_THEME", "Adwaita:dark")
 hl.env("GDK_BACKEND", "wayland,x11,*")
 hl.env("SDL_VIDEODRIVER", "wayland")
 hl.env("CLUTTER_BACKEND", "wayland")
+-- Without a GNOME session, nothing links gsettings-desktop-schemas' compiled
+-- cache onto glib's normal search path, so libadwaita apps (Nautilus, etc.)
+-- can't read org.gnome.desktop.interface and silently default to light. This
+-- points glib straight at the package's own pre-compiled schema cache.
+hl.env("GSETTINGS_SCHEMA_DIR", gsettingsSchemaDir)
 
 -- XDG Specifications
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
