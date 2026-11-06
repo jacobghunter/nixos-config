@@ -178,7 +178,7 @@ hl.animation({
 	enabled = true,
 	speed = 3,
 	bezier = "default",
-	style = "slidevert",
+	style = "slidefadevert 30%",
 })
 
 hl.gesture({
@@ -328,10 +328,7 @@ hl.bind(mainMod .. " + N", toggle_layout)
 -- logind lock request: Caelestia's lock screen, or hyprlock via hypridle's lock_cmd under other shells.
 -- Turns off Caelestia's Keep Awake first so its locked-idle timeout can suspend (no-op under other shells);
 -- lock from Caelestia's UI instead to stay awake while locked.
-hl.bind(
-	mainMod .. " + apostrophe",
-	hl.dsp.exec_cmd("caelestia shell idleInhibitor disable; loginctl lock-session")
-)
+hl.bind(mainMod .. " + apostrophe", hl.dsp.exec_cmd("caelestia shell idleInhibitor disable; loginctl lock-session"))
 
 --  Row 4 (Z X C V B N M)
 hl.bind(mainMod .. " + Z", hl.dsp.window.drag())
@@ -452,18 +449,20 @@ hl.config({
 	-- https://wiki.hypr.land/Configuring/Variables/#decoration
 	decoration = {
 		rounding = rounding,
-		rounding_power = 4,
-		-- Change transparency of focused and unfocused windows
+		rounding_power = 3,
 		active_opacity = 0.9,
 		inactive_opacity = 0.85,
-		-- https://wiki.hyprland.org/Configuring/Variables/#blur
 		blur = {
 			enabled = true,
-			size = 2,
+			variant = "haze",
+			haze = {
+				intensity = 0.5,
+				iridescence = 0.35,
+			},
+			popups = true,
+			size = 4,
 			passes = 3,
-			new_optimizations = true,
 			vibrancy = 0.1696,
-			ignore_opacity = true,
 			xray = true,
 		},
 	},
@@ -471,6 +470,7 @@ hl.config({
 	-- https://wiki.hypr.land/Configuring/Variables/#animations
 	animations = {
 		enabled = true,
+		workspace_wraparound = true,
 	},
 
 	-- Ref https://wiki.hypr.land/Configuring/Workspace-Rules/

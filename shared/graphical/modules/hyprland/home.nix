@@ -70,14 +70,11 @@ let
 
   hyprlandFlakePackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
 
-  hdrFixPlugin = pkgs.callPackage ./hyprland-fix-hdr-screenshare.nix {
-    hyprlandPackage = hyprlandFlakePackage;
-  };
-
-  hyprglassPlugin = pkgs.callPackage ./hyprglass.nix {
-    hyprlandPackage = hyprlandFlakePackage;
-    src = inputs.hyprglass;
-  };
+  # Disabled along with the hyprglass flake input - see flake.nix.
+  # hyprglassPlugin = pkgs.callPackage ./hyprglass.nix {
+  #   hyprlandPackage = hyprlandFlakePackage;
+  #   src = inputs.hyprglass;
+  # };
 in
 {
   options.modules.hyprland = {
@@ -148,8 +145,7 @@ in
       package = hyprlandFlakePackage;
       systemd.enable = true;
       plugins = [
-        hdrFixPlugin
-        hyprglassPlugin
+        # hyprglassPlugin
         # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
       ];
       extraLuaFiles = {
@@ -291,6 +287,7 @@ in
         '';
         executable = true;
       };
+
       "jgmenu/jgmenurc".text = ''
         tint2_look = 0
         shades_of_gray = 0

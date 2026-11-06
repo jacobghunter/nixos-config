@@ -22,12 +22,8 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Update this to point to master at some point, its this way to build the hdr plugin to fix screenshare/blur
-
-    hyprland = {
-      url = "github:hyprwm/Hyprland/v0.55.2";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # No nixpkgs follows, so builds match hyprland.cachix.org
+    hyprland.url = "github:hyprwm/Hyprland/v0.57.1";
     hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
@@ -46,10 +42,13 @@
       url = "github:shezdy/hyprsplit";
       inputs.hyprland.follows = "hyprland";
     };
-    hyprglass = {
-      url = "github:hyprnux/hyprglass/v0.6.2";
-      flake = false;
-    };
+    # Dropped for now in favour of Hyprland's built-in blur variants (0.57+,
+    # e.g. decoration.blur.variant = "acrylic"). Re-enable along with
+    # hyprglassPlugin in shared/graphical/modules/hyprland/home.nix.
+    # hyprglass = {
+    #   url = "github:hyprnux/hyprglass/v1.1.1";
+    #   flake = false;
+    # };
 
     # No nixpkgs follows, so builds match noctalia.cachix.org
     noctalia.url = "github:noctalia-dev/noctalia";
