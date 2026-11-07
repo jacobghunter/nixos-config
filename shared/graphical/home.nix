@@ -16,6 +16,7 @@ in
     ./modules/firefox/firefox.nix
     ./modules/calibre/home.nix
     ./modules/obsidian/obsidian.nix
+    ./modules/orca-slicer/orca-slicer.nix
     ./modules/noctalia/noctalia.nix
     ./modules/caelestia/caelestia.nix
     ./modules/dank-material-shell/dms.nix
@@ -28,6 +29,7 @@ in
     activeShell = "caelestia";
 
     obsidian.enable = true;
+    orcaSlicer.enable = true;
     noctalia.enable = config.modules.activeShell == "noctalia";
     caelestia.enable = config.modules.activeShell == "caelestia";
     dankMaterialShell.enable = config.modules.activeShell == "dms";
