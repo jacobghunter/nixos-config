@@ -95,6 +95,22 @@ in
         enable = true;
         systemd.enable = true;
 
+        # Upstream picks the battery icon with Math.floor(percentage * 7), so
+        # 37% shows battery_2_bar (~29% full). Round to the nearest bar
+        # instead (37% -> battery_3_bar, ~43%); capped at 6 since there's no
+        # battery_7_bar - 100% still gets battery_full via the check above it.
+        # --replace-fail so an upstream rewrite breaks the build loudly
+        # instead of silently dropping the patch.
+        package =
+          inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli.overrideAttrs
+            (old: {
+              postPatch = (old.postPatch or "") + ''
+                substituteInPlace utils/Icons.qml \
+                  --replace-fail "let level = Math.floor(percentage * 7);" \
+                                 "let level = Math.min(6, Math.round(percentage * 7));"
+              '';
+            });
+
         # settings/extraConfig deliberately left unset: setting either makes
         # home-manager own shell.json as a read-only store symlink (no live
         # editing, no writes from the GUI below). Instead, shell.json is

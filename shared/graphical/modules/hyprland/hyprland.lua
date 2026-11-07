@@ -470,7 +470,6 @@ hl.config({
 	-- https://wiki.hypr.land/Configuring/Variables/#animations
 	animations = {
 		enabled = true,
-		workspace_wraparound = true,
 	},
 
 	-- Ref https://wiki.hypr.land/Configuring/Workspace-Rules/
