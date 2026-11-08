@@ -268,9 +268,12 @@ hl.bind(mainMod .. " + mouse_up", hl.dsp.layout("move -col"))
 hl.bind(mainMod .. " + SHIFT + mouse_down", hl.dsp.layout("swapcol r"))
 hl.bind(mainMod .. " + SHIFT + mouse_up", hl.dsp.layout("swapcol l"))
 
--- Switch workspaces with mainMod + mouse side buttons (back/forward)
-hl.bind(mainMod .. " + mouse:275", hs.dsp.focus({ workspace = "e-1" }))
-hl.bind(mainMod .. " + mouse:276", hs.dsp.focus({ workspace = "e+1" }))
+-- Switch workspaces with mainMod + mouse side buttons (back/forward).
+-- Native m±1 (open workspaces on this monitor) wraps around at the ends;
+-- hyprsplit's e±1 clamps instead. hyprsplit already keeps each monitor on its
+-- own workspace range, so m±1 covers the same set.
+hl.bind(mainMod .. " + mouse:275", hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(mainMod .. " + mouse:276", hl.dsp.focus({ workspace = "m+1" }))
 
 --  Row 2 (Q W E R T Y U I O P)
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
@@ -326,9 +329,16 @@ end
 
 hl.bind(mainMod .. " + N", toggle_layout)
 -- logind lock request: Caelestia's lock screen, or hyprlock via hypridle's lock_cmd under other shells.
--- Turns off Caelestia's Keep Awake first so its locked-idle timeout can suspend (no-op under other shells);
--- lock from Caelestia's UI instead to stay awake while locked.
-hl.bind(mainMod .. " + apostrophe", hl.dsp.exec_cmd("caelestia shell idleInhibitor disable; loginctl lock-session"))
+-- Turns off Caelestia's Keep Awake first so its locked-idle timeout can suspend (no-op under other shells),
+-- then sleeps once the lock screen is up. The 1s pause lets the lock surface map before suspend, so the
+-- desktop never flashes on wake. caelestia-sleep honours the host's hibernate setting; plain suspend is the
+-- fallback under other shells. Lock from Caelestia's UI instead to stay awake while locked.
+hl.bind(
+	mainMod .. " + apostrophe",
+	hl.dsp.exec_cmd(
+		"caelestia shell idleInhibitor disable; loginctl lock-session && sleep 1 && (caelestia-sleep || systemctl suspend)"
+	)
+)
 
 --  Row 4 (Z X C V B N M)
 hl.bind(mainMod .. " + Z", hl.dsp.window.drag())
