@@ -9,7 +9,14 @@
     "${inputs.self}/shared/configuration.nix"
     ./modules/calibre/configuration.nix
     ./modules/noctalia/configuration.nix
+    "${inputs.self}/shared/modules/tailscale/tailscale.nix"
   ];
+
+  # Reach nixos-server from anywhere by its MagicDNS name. acceptRoutes stays
+  # off: on Linux an accepted 192.168.1.0/24 route also wins while at home on
+  # that same LAN, detouring local traffic through the server. After the first
+  # deploy, run `sudo tailscale up` once and log in through the printed URL.
+  modules.tailscale.enable = true;
 
   # Provides pkgs.obsidianPlugins.<id>/pkgs.obsidianThemes.<id> for the
   # declarative programs.obsidian module (shared/graphical/modules/obsidian).
