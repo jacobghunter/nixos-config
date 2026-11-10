@@ -19,6 +19,22 @@ let
       icon: if icon.id == "battery" then icon // { enabled = false; } else icon
     ) (lib.importJSON ./shell.json).bar.statusIcons;
   };
+
+  # Caelestia writes runtime state back into shell.json itself (e.g. the VPN
+  # tile saves utilities.vpn.enabled on every connect/disconnect, reformatting
+  # the whole file as it goes), which tripped caelestia-config-reload and
+  # restarted the shell mid-toggle. Only restart when the parsed settings
+  # actually changed - ignoring formatting and the keys the shell owns.
+  shellOwnedKeys = [ ".utilities.vpn.enabled" ];
+  reloadIfChanged = pkgs.writeShellScript "caelestia-reload-if-changed" ''
+    cache="''${XDG_RUNTIME_DIR:-/tmp}/caelestia-shell.json.normalized"
+    new=$(${pkgs.jq}/bin/jq -S 'del(${lib.concatStringsSep ", " shellOwnedKeys})' "${shellJsonPath}") || exit 0
+    if [ -f "$cache" ] && [ "$new" = "$(cat "$cache")" ]; then
+      exit 0
+    fi
+    printf '%s' "$new" > "$cache"
+    exec ${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service
+  '';
 in
 {
   imports = [
@@ -191,7 +207,7 @@ in
             Unit.Description = "Restart Caelestia shell after shell.json changes";
             Service = {
               Type = "oneshot";
-              ExecStart = "${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service";
+              ExecStart = "${reloadIfChanged}";
             };
           };
 
