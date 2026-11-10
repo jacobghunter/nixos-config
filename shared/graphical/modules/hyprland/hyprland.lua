@@ -282,6 +282,8 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(editor))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(notes))
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(fileManager))
+-- Force the focused window fully opaque, overriding active/inactive_opacity (toggle)
+hl.bind(mainMod .. " + O", hl.dsp.window.set_prop({ prop = "opaque", value = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(colorPicker .. " | wl-copy"))
 
 --  Row 3 (A S D F G H J K L)
