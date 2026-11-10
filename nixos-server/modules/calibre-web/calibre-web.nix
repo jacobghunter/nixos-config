@@ -75,6 +75,14 @@ in
     # every Kobo Sync option, even with config_kobo_sync set below.
     package = pkgs.calibre-web.overridePythonAttrs (old: {
       dependencies = old.dependencies ++ old.optional-dependencies.kobo;
+      # Fetch Metadata copies the result's series over the form whenever the
+      # field exists, but Google Books always returns series "" / index 1 -
+      # so applying a Google result wiped existing series info. Only take the
+      # series when the provider actually has one.
+      postPatch = (old.postPatch or "") + ''
+        substituteInPlace src/calibreweb/cps/static/js/get_meta.js \
+          --replace-fail 'if (typeof book.series !== "undefined") {' 'if (book.series) {'
+      '';
     });
     listen = {
       ip = "0.0.0.0";
