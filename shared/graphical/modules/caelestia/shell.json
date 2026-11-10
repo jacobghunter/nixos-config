@@ -837,7 +837,13 @@
     },
     "vpn": {
       "enabled": false,
-      "provider": []
+      "provider": [
+        {
+          "id": "tailscale",
+          "name": "tailscale"
+        }
+      ],
+      "selectedProvider": "tailscale"
     }
   }
 }
