@@ -42,6 +42,16 @@ let
     UPDATE user SET name = 'jacob', password = '${adminPasswordHash}' WHERE name = 'admin';
     SQL
   '';
+
+  # The upstream module has no Kobo options, so set them the same way it sets
+  # config_port: straight into the settings row on every start. The external
+  # port matters because calibre-web isn't behind a proxy here - unproxied
+  # Kobo requests get download/cover URLs built from config_external_port
+  # (cps/kobo.py), which otherwise defaults to 8083 and breaks sync on 8085.
+  # Proxying unknown requests keeps the stock Kobo store working.
+  enableKoboSync = pkgs.writeShellScript "calibre-web-enable-kobo-sync" ''
+    ${pkgs.sqlite}/bin/sqlite3 "${appDb}" "UPDATE settings SET config_kobo_sync = 1, config_kobo_proxy = 1, config_external_port = ${toString cfg.listen.port}"
+  '';
 in
 {
   assertions = [
@@ -60,6 +70,12 @@ in
 
   services.calibre-web = {
     enable = true;
+    # nixpkgs leaves the "kobo" extra (jsonschema) out by default; without it
+    # cps/services/SyncToken.py fails to import and calibre-web silently hides
+    # every Kobo Sync option, even with config_kobo_sync set below.
+    package = pkgs.calibre-web.overridePythonAttrs (old: {
+      dependencies = old.dependencies ++ old.optional-dependencies.kobo;
+    });
     listen = {
       ip = "0.0.0.0";
       port = 8085;
@@ -83,6 +99,9 @@ in
     (lib.mkBefore [ "${initLibrary}" ])
     # Must run after it - that's the step that runs migrations and creates
     # the admin row in the first place.
-    (lib.mkAfter [ "${setAdminAccount}" ])
+    (lib.mkAfter [
+      "${setAdminAccount}"
+      "${enableKoboSync}"
+    ])
   ];
 }
