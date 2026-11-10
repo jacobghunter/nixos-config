@@ -40,10 +40,10 @@
       enable = true;
       # Flip on once DNS + CF_API_TOKEN env file are ready to expose Jellyfin
       # publicly; leave off for LAN-only (homepage catch-all + go-links).
-      publicJellyfin = {
-        enable = true;
-        environmentFile = "/etc/cloudflare.env";
-      };
+      cloudflareEnvironmentFile = "/etc/cloudflare.env";
+      publicJellyfin.enable = true;
+      # Kobo Sync only (/kobo/*) - the Calibre-Web UI stays LAN/Tailscale-only.
+      publicCalibreKobo.enable = true;
     };
 
     # Remote access to the home network. After the first deploy, run
