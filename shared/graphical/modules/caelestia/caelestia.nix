@@ -19,6 +19,9 @@ let
       icon: if icon.id == "battery" then icon // { enabled = false; } else icon
     ) (lib.importJSON ./shell.json).bar.statusIcons;
   };
+  monitorOverrideFile = pkgs.writeText "caelestia-monitor-override.json" (
+    builtins.toJSON monitorOverride
+  );
 
   # Caelestia writes runtime state back into shell.json itself (e.g. the VPN
   # tile saves utilities.vpn.enabled on every connect/disconnect, reformatting
@@ -81,7 +84,7 @@ in
     (lib.mkIf (!cfg.enable) {
       # Left behind from a previous enable, hyprland.lua would otherwise keep
       # reading it as border colours even after switching to another shell.
-      home.activation.removeCaelestiaScheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      home.activation.removeCaelestiaScheme = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
         rm -f "${config.xdg.configHome}/hypr/scheme/current.lua"
       '';
     })
@@ -152,21 +155,30 @@ in
         }
       ];
 
-      xdg.configFile = {
-        "caelestia/shell.json".source = config.lib.file.mkOutOfStoreSymlink shellJsonPath;
-      }
-      // lib.optionalAttrs (!cfg.showBattery) (
-        lib.listToAttrs (
-          map (
-            monitor:
-            lib.nameValuePair "caelestia/monitors/${monitor}/shell.json" {
-              text = builtins.toJSON monitorOverride;
-              # Same atomic-replace problem as shell.json below: a rebuild swaps
-              # the symlink, which Caelestia's watcher doesn't notice.
-              onChange = "${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service";
-            }
-          ) cfg.monitors
-        )
+      xdg.configFile."caelestia/shell.json".source = config.lib.file.mkOutOfStoreSymlink shellJsonPath;
+
+      # Copied in as real files rather than xdg.configFile store symlinks:
+      # Caelestia re-saves every per-monitor file whenever it writes runtime
+      # state (e.g. the VPN tile), and a read-only store link makes each of
+      # those saves fail with "Failed to save config". Rewritten on every
+      # activation so the build-time content still wins; restarts the shell
+      # only when it actually changed (its watcher misses the replace).
+      home.activation.caelestiaMonitorOverrides = lib.mkIf (!cfg.showBattery) (
+        lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+          changed=0
+          for monitor in ${lib.escapeShellArgs cfg.monitors}; do
+            target="${config.xdg.configHome}/caelestia/monitors/$monitor/shell.json"
+            if [ -L "$target" ] || ! cmp -s "${monitorOverrideFile}" "$target"; then
+              run mkdir -p "$(dirname "$target")"
+              run rm -f "$target"
+              run install -m 644 "${monitorOverrideFile}" "$target"
+              changed=1
+            fi
+          done
+          if [ "$changed" = 1 ]; then
+            run ${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service || true
+          fi
+        ''
       );
 
       systemd.user = {
