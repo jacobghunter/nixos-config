@@ -205,6 +205,7 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 extraSpecialArgs = { inherit inputs self; };
+                backupFileExtension = "backup";
                 users.jacob = {
                   imports = [
                     ./nixos-server/home.nix
@@ -235,6 +236,7 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 extraSpecialArgs = { inherit inputs self; };
+                backupFileExtension = "backup";
                 users.jacob = {
                   imports = [
                     ./nixos-wsl/home.nix
