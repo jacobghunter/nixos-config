@@ -27,6 +27,9 @@
     kernelParams = [
       "snd_hda_intel.model=auto"
     ];
+
+    # QEMU emulation for cross-building aarch64 (the Pis)
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   time.hardwareClockInLocalTime = true;

@@ -32,9 +32,6 @@
       };
     };
 
-    # Enable VS Code Server service (requires the module to be imported in flake.nix)
-    vscode-server.enable = true;
-
     openssh.enable = true;
     upower.enable = true;
   };

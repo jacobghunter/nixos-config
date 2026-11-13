@@ -62,7 +62,6 @@
     # No nixpkgs follows: its flake needs a newer `go` than our pinned nixpkgs ships.
     dank-material-shell.url = "github:AvengeMedia/DankMaterialShell/stable";
 
-    vscode-server.url = "github:msteen/nixos-vscode-server";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 
     # Server specific
@@ -142,7 +141,6 @@
             ./nixos-laptop/configuration.nix
             ./nixos-laptop/hardware-configuration.nix
             nixos-hardware.nixosModules.lenovo-thinkpad-e15-intel
-            inputs.vscode-server.nixosModules.default
 
             # Shared configurations
             ./shared/configuration.nix
@@ -181,7 +179,6 @@
           modules = [
             # Host-specific configurations
             disko.nixosModules.disko
-            inputs.vscode-server.nixosModules.default
             inputs.attic.nixosModules.atticd
             ./nixos-server/configuration.nix
             ./nixos-server/disk-config.nix
@@ -223,7 +220,6 @@
           specialArgs = { inherit inputs self; };
           modules = [
             # Host-specific configurations
-            inputs.vscode-server.nixosModules.default
             ./nixos-wsl/configuration.nix
 
             # Shared configurations
@@ -257,7 +253,6 @@
             # Host-specific configurations
             ./nixos-pc/configuration.nix
             ./nixos-pc/hardware-configuration.nix
-            inputs.vscode-server.nixosModules.default
 
             # Shared configurations
             ./shared/configuration.nix
@@ -299,13 +294,43 @@
             # Host-specific configuration
             nixos-hardware.nixosModules.raspberry-pi-3
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-            inputs.vscode-server.nixosModules.default
             ./nixos-pihole/configuration.nix
             ./nixos-pihole/pi-hole.nix
 
             # Shared configurations
             ./shared/configuration.nix
             ./shared/modules/pihole/pihole.nix
+
+            # Home Manager
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs self; };
+                users.jacob = {
+                  imports = [
+                    ./shared/home-base.nix
+                  ];
+                };
+              };
+            }
+          ];
+        };
+
+        # PARENTS EXIT NODE CONFIG (Raspberry Pi 3B)
+        nixos-parents = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = { inherit inputs self; };
+          modules = [
+            # Host-specific configuration
+            nixos-hardware.nixosModules.raspberry-pi-3
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            ./nixos-parents/configuration.nix
+
+            # Shared configurations
+            ./shared/configuration.nix
+            ./shared/modules/tailscale/tailscale.nix
 
             # Home Manager
             home-manager.nixosModules.home-manager
