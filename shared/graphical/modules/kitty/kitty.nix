@@ -62,6 +62,7 @@ in
       settings = {
         background_opacity = "0.0";
         dynamic_background_opacity = "yes";
+        restore_session_after_logout = "yes";
 
         allow_remote_control = "yes";
 
