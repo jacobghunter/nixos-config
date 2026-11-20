@@ -295,6 +295,7 @@
             nixos-hardware.nixosModules.raspberry-pi-3
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             ./nixos-pihole/configuration.nix
+            ./shared/modules/pi-wifi/pi-wifi.nix
             ./nixos-pihole/pi-hole.nix
 
             # Shared configurations
@@ -327,6 +328,7 @@
             nixos-hardware.nixosModules.raspberry-pi-3
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             ./nixos-parents/configuration.nix
+            ./shared/modules/pi-wifi/pi-wifi.nix
 
             # Shared configurations
             ./shared/configuration.nix

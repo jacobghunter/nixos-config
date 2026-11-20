@@ -3,14 +3,6 @@ _:
 {
   networking = {
     hostName = "nixos-pihole";
-    wireless.extraConfig = "country=US";
-    wireless = {
-      enable = true;
-      networks."Weefee_2.4G" = {
-        psk = "mightyskates216";
-      };
-    };
-
   };
 
   # nixos-hardware's raspberry-pi-3 module needs generic-extlinux-compatible
@@ -19,16 +11,6 @@ _:
   # - it defaults to off, which silently produces an unbootable firmware
   # partition (no u-boot.bin, no `kernel=` line in config.txt).
   hardware.raspberry-pi.firmware.uboot.enable = true;
-
-  # --- WiFi ---
-  # Quick and dirty: plaintext psk in the nix store (world-readable on the
-  # Pi, and it'll end up in your git history once this gets folded into the
-  # monorepo). Fine for getting SSH access; swap to
-  # `networking.wireless.environmentFile` + agenix/sops before this is
-  # anything more than a bootstrap image.
-  # Needed to unlock the Pi 3's wifi radio - without a country set,
-  # wpa_supplicant won't associate.
-  hardware.enableRedistributableFirmware = true;
 
   # avahi (for `ssh jacob@nixos-pihole.local`), users.users.jacob + its
   # authorized keys, services.openssh.enable, and nix.settings.trusted-users
