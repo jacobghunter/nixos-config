@@ -26,7 +26,12 @@
   services.tailscale.extraSetFlags = [ "--operator=jacob" ];
   # Tailscale's split DNS (*.home -> Pi-hole) needs resolved on Linux; without
   # it tailscaled and NetworkManager fight over /etc/resolv.conf.
-  services.resolved.enable = true;
+  services.resolved = {
+    enable = true;
+    # resolved never sends single-label names to unicast DNS by default, which
+    # breaks the Pi-hole's "go" record (http://go/<name> go-links).
+    settings.Resolve.ResolveUnicastSingleLabel = "yes";
+  };
 
   # Provides pkgs.obsidianPlugins.<id>/pkgs.obsidianThemes.<id> for the
   # declarative programs.obsidian module (shared/graphical/modules/obsidian).
