@@ -1288,6 +1288,7 @@
         "nixpkgs": "nixpkgs_8",
         "noctalia": "noctalia",
         "spicetify-nix": "spicetify-nix",
+        "webos-dev-manager": "webos-dev-manager",
         "zen-browser": "zen-browser"
       }
     },
@@ -1396,6 +1397,29 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "webos-dev-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-x86-darwin": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794667405,
+        "narHash": "sha256-9fd3UG6Tqi3egj5QEKyt1v3GPbM7E7HxNBfUdxkLBZQ=",
+        "owner": "webosbrew",
+        "repo": "dev-manager-desktop",
+        "rev": "1cdb0dbbd1d643bfed974f118b70b7590941df97",
+        "type": "github"
+      },
+      "original": {
+        "owner": "webosbrew",
+        "repo": "dev-manager-desktop",
         "type": "github"
       }
     },

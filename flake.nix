@@ -110,6 +110,14 @@
       url = "github:karaolidis/nix-obsidian-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Not in nixpkgs. Its x86_64-darwin-only nixpkgs input is never used on
+    # Linux, so point it at ours too rather than locking a second nixpkgs.
+    webos-dev-manager = {
+      url = "github:webosbrew/dev-manager-desktop";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-x86-darwin.follows = "nixpkgs";
+    };
   };
 
   outputs =
