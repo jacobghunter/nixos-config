@@ -69,6 +69,7 @@ in
 
       # Electronics / Hardware
       kicad-small
+      caligula # SD card / USB flashing - only offers removable drives, unlike dd
 
       qt6.qtdeclarative # ships qmlls, needed on every machine, not just inside a dev shell
     ];

@@ -1,5 +1,5 @@
-local hs = require("hyprsplit")
-hs.monitor_priority({ "DP-1", "HDMI-A-1" })
+-- SUPER+1-5 -> DP-1, SUPER+6-0 -> HDMI-A-1 (also sets hyprsplit priority)
+set_workspace_monitors({ "DP-1", "HDMI-A-1" })
 
 hl.monitor({
     output = "HDMI-A-1",

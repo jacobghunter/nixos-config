@@ -187,74 +187,58 @@ hl.gesture({
 	action = "workspace",
 })
 
--- Define the helper functions
+-- Monitors that SUPER+1-5 and SUPER+6-0 target, in that order. Machine configs
+-- (pc.lua) set this via set_workspace_monitors, which also feeds hyprsplit's
+-- priority so both agree on which monitor owns which workspace range. Machines
+-- that never call it get plain hyprsplit binds on whichever monitor is focused.
+local workspace_monitors = {}
+
+function set_workspace_monitors(names)
+	workspace_monitors = names
+	hs.monitor_priority(names)
+end
+
+-- Resolves a 1-10 bind to { monitor, hyprsplit workspace }. Monitor is nil when
+-- the target monitor isn't configured or isn't currently connected.
+local function resolve_ws(ws_num)
+	local target = workspace_monitors[ws_num <= 5 and 1 or 2]
+	if target then
+		for _, monitor in ipairs(hl.get_monitors()) do
+			if monitor.name == target then
+				return target, (ws_num - 1) % 5 + 1
+			end
+		end
+	end
+	return nil, ws_num
+end
+
 local function focus_ws(ws_num)
 	return function()
-		local monitors = hl.get_monitors()
-		local monitor_count = #monitors
-		if monitor_count > 1 then
-			if ws_num <= 5 then
-				local monitor = monitors[1]
-				if monitor then
-					hl.dispatch(hl.dsp.focus({ monitor = monitor.name }))
-					hl.dispatch(hs.dsp.focus({ workspace = ws_num }))
-				end
-			else
-				local monitor = monitors[2]
-				if monitor then
-					hl.dispatch(hl.dsp.focus({ monitor = monitor.name }))
-					hl.dispatch(hs.dsp.focus({ workspace = ws_num - 5 }))
-				end
-			end
-		else
-			hl.dispatch(hs.dsp.focus({ workspace = ws_num }))
+		local monitor, ws = resolve_ws(ws_num)
+		if monitor then
+			hl.dispatch(hl.dsp.focus({ monitor = monitor }))
 		end
+		hl.dispatch(hs.dsp.focus({ workspace = ws }))
 	end
 end
 
 local function move_ws(ws_num)
 	return function()
-		local monitors = hl.get_monitors()
-		local monitor_count = #monitors
-		if monitor_count > 1 then
-			if ws_num <= 5 then
-				local monitor = monitors[1]
-				if monitor then
-					hl.dispatch(hl.dsp.window.move({ monitor = monitor.name }))
-					hl.dispatch(hs.dsp.window.move({ workspace = ws_num }))
-				end
-			else
-				local monitor = monitors[2]
-				if monitor then
-					hl.dispatch(hl.dsp.window.move({ monitor = monitor.name }))
-					hl.dispatch(hs.dsp.window.move({ workspace = ws_num - 5 }))
-				end
-			end
-		else
-			hl.dispatch(hs.dsp.window.move({ workspace = ws_num }))
+		local monitor, ws = resolve_ws(ws_num)
+		if monitor then
+			hl.dispatch(hl.dsp.window.move({ monitor = monitor }))
 		end
+		hl.dispatch(hs.dsp.window.move({ workspace = ws }))
 	end
 end
 
--- Create a function that builds the binds based on current hardware
+-- Bind 1-0 unconditionally: monitors aren't connected yet when the config is
+-- first evaluated, so the monitor count is checked at keypress time instead.
 local function setup_workspace_binds()
-	local monitors = hl.get_monitors()
-	local monitor_count = #monitors
-
-	-- 1-5 Binds
-	for i = 1, 5 do
-		local n = tostring(i)
+	for i = 1, 10 do
+		local n = (i == 10) and "0" or tostring(i)
 		hl.bind(mainMod .. " + " .. n, focus_ws(i))
 		hl.bind(mainMod .. " + SHIFT + " .. n, move_ws(i))
-	end
-
-	-- 6-0 Binds (Only if multi-monitor)
-	if monitor_count > 1 then
-		for i = 6, 10 do
-			local n = (i == 10) and "0" or tostring(i)
-			hl.bind(mainMod .. " + " .. n, focus_ws(i))
-			hl.bind(mainMod .. " + SHIFT + " .. n, move_ws(i))
-		end
 	end
 end
 
@@ -338,7 +322,7 @@ hl.bind(mainMod .. " + N", toggle_layout)
 hl.bind(
 	mainMod .. " + apostrophe",
 	hl.dsp.exec_cmd(
-		"caelestia shell idleInhibitor disable; loginctl lock-session && sleep 1 && (caelestia-sleep || systemctl suspend)"
+		"caelestia shell idleInhibitor disable; loginctl lock-session \"$XDG_SESSION_ID\" && sleep 1 && (caelestia-sleep || systemctl suspend)"
 	)
 )
 
@@ -437,6 +421,14 @@ hl.window_rule({
 	float = true,
 	center = true,
 	size = "800 650",
+})
+
+-- Steam games: controller input doesn't count as Wayland activity, so block idle lock/suspend while one is focused.
+hl.window_rule({
+	match = {
+		class = "^steam_app_.*",
+	},
+	idle_inhibit = "focus",
 })
 
 hl.config({
