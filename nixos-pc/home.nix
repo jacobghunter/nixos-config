@@ -38,6 +38,7 @@
   home.packages = with pkgs; [
     nvtopPackages.amd
     prismlauncher
+    deadlock-mod-manager
   ];
 
   programs.mangohud = {
