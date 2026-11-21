@@ -47,10 +47,7 @@
 
 # PC
 
-- obsidian config, theming/plugins
 - compiling vulkan shaders on all games
-- wayle transparent background?
-- disable opacity hotkey?
 - set default apps for pdf, rdp, etc
 - target certain browser windows like bitwarden to open floating?
   - maybe also steam menus?

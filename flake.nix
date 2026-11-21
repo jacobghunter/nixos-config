@@ -358,9 +358,40 @@
             }
           ];
         };
+
+        # 3D PRINTER CONFIG (Raspberry Pi 3B) - Klipper/Moonraker/Mainsail for the Sovol SV06
+        nixos-printer = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = { inherit inputs self; };
+          modules = [
+            # Host-specific configuration
+            nixos-hardware.nixosModules.raspberry-pi-3
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            ./nixos-printer/configuration.nix
+            ./shared/modules/pi-wifi/pi-wifi.nix
+
+            # Shared configurations
+            ./shared/configuration.nix
+
+            # Home Manager
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs self; };
+                users.jacob = {
+                  imports = [
+                    ./shared/home-base.nix
+                  ];
+                };
+              };
+            }
+          ];
+        };
       };
 
-      checks = nixpkgs.lib.genAttrs devSystems (system: {
+      checks =nixpkgs.lib.genAttrs devSystems (system: {
         pre-commit-check = git-hooks.lib.${system}.run {
           src = ./.;
           hooks = {

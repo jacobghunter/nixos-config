@@ -1,0 +1,4 @@
+*.img
+*.img.zst
+result
+result-*
