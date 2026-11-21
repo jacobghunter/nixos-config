@@ -12,11 +12,6 @@
     "${inputs.self}/shared/modules/tailscale/tailscale.nix"
   ];
 
-  # Remote access to home through nixos-server's subnet route, toggled from
-  # Caelestia's VPN tile. Meant to be switched on only while away: on Linux
-  # the accepted 192.168.1.0/24 route also wins while on that same LAN,
-  # detouring local traffic through the server. After the first deploy, run
-  # `sudo tailscale up` once and log in through the printed URL.
   modules.tailscale = {
     enable = true;
     acceptRoutes = true;
@@ -69,15 +64,9 @@
   ];
 
   services = {
-    # Lets jacob run `tailscale up/down` without sudo - Caelestia's VPN toggle
-    # (shell.json utilities.vpn) calls them as the user, not root.
     tailscale.extraSetFlags = [ "--operator=jacob" ];
-    # Tailscale's split DNS (*.home -> Pi-hole) needs resolved on Linux; without
-    # it tailscaled and NetworkManager fight over /etc/resolv.conf.
     resolved = {
       enable = true;
-      # resolved never sends single-label names to unicast DNS by default, which
-      # breaks the Pi-hole's "go" record (http://go/<name> go-links).
       settings.Resolve.ResolveUnicastSingleLabel = "yes";
     };
 
