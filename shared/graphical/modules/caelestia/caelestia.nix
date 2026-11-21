@@ -38,6 +38,49 @@ let
     printf '%s' "$new" > "$cache"
     exec ${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service
   '';
+
+  # Caelestia locks on logind's PrepareForSleep (general.idle.lockBeforeSleep)
+  # but takes no delay inhibitor, so logind suspends before the lock surface
+  # is drawn and the desktop flashes on wake (e.g. lid close). This holds one
+  # on its behalf, released once the lock is secure (or logind's 5s
+  # InhibitDelayMaxSec runs out), and retaken after resume.
+  sleepLock = pkgs.writeShellScript "caelestia-sleep-lock" ''
+    caelestia=${config.programs.caelestia.cli.package}/bin/caelestia
+    pid=
+
+    take() {
+      ${pkgs.systemd}/bin/systemd-inhibit --what=sleep --mode=delay \
+        --who="Caelestia" --why="Lock the screen before sleep" \
+        ${pkgs.coreutils}/bin/sleep infinity &
+      pid=$!
+    }
+
+    release() {
+      [ -n "$pid" ] || return
+      ${pkgs.procps}/bin/pkill -P "$pid" sleep
+      wait "$pid"
+      pid=
+    }
+
+    take
+    while read -r line; do
+      case "$line" in
+        *"PrepareForSleep (true"*)
+          for _ in $(${pkgs.coreutils}/bin/seq 40); do
+            [ "$($caelestia shell lock isSecure 2>/dev/null)" = true ] && break
+            ${pkgs.coreutils}/bin/sleep 0.1
+          done
+          # The first secure frame can still be mid fade-in.
+          ${pkgs.coreutils}/bin/sleep 0.3
+          release
+          ;;
+        *"PrepareForSleep (false"*)
+          take
+          ;;
+      esac
+    done < <(${pkgs.glib}/bin/gdbus monitor --system --dest org.freedesktop.login1 \
+      --object-path /org/freedesktop/login1)
+  '';
 in
 {
   imports = [
@@ -127,6 +170,21 @@ in
                 substituteInPlace utils/Icons.qml \
                   --replace-fail "let level = Math.floor(percentage * 7);" \
                                  "let level = Math.min(6, Math.round(percentage * 7));"
+
+                # The brightness slider/IPC clamps to 0, which turns a laptop
+                # backlight fully off. Floor internal panels at 1%; external
+                # DDC/Apple displays still go to 0 (that just dims them).
+                substituteInPlace services/Brightness.qml \
+                  --replace-fail "value = Math.max(0, Math.min(1, value));" \
+                                 "value = Math.max(isDdc || isAppleDisplay ? 0 : 0.01, Math.min(1, value));"
+
+                # isLocked flips the instant locking is requested; `secure` only
+                # once the compositor confirms the lock surface is up. Exposed
+                # for caelestia-sleep-lock below.
+                substituteInPlace modules/lock/Lock.qml \
+                  --replace-fail "        function isLocked(): bool {" \
+                                 "        function isSecure(): bool { return lock.secure; }
+                function isLocked(): bool {"
               '';
             });
 
@@ -221,6 +279,19 @@ in
               Type = "oneshot";
               ExecStart = "${reloadIfChanged}";
             };
+          };
+
+          caelestia-sleep-lock = {
+            Unit = {
+              Description = "Delay sleep until Caelestia's lock screen is up";
+              PartOf = [ "caelestia.service" ];
+              After = [ "caelestia.service" ];
+            };
+            Service = {
+              ExecStart = "${sleepLock}";
+              Restart = "on-failure";
+            };
+            Install.WantedBy = [ "caelestia.service" ];
           };
 
           caelestia-scheme-reload = {

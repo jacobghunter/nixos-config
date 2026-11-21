@@ -21,17 +21,6 @@
     enable = true;
     acceptRoutes = true;
   };
-  # Lets jacob run `tailscale up/down` without sudo - Caelestia's VPN toggle
-  # (shell.json utilities.vpn) calls them as the user, not root.
-  services.tailscale.extraSetFlags = [ "--operator=jacob" ];
-  # Tailscale's split DNS (*.home -> Pi-hole) needs resolved on Linux; without
-  # it tailscaled and NetworkManager fight over /etc/resolv.conf.
-  services.resolved = {
-    enable = true;
-    # resolved never sends single-label names to unicast DNS by default, which
-    # breaks the Pi-hole's "go" record (http://go/<name> go-links).
-    settings.Resolve.ResolveUnicastSingleLabel = "yes";
-  };
 
   # Provides pkgs.obsidianPlugins.<id>/pkgs.obsidianThemes.<id> for the
   # declarative programs.obsidian module (shared/graphical/modules/obsidian).
@@ -80,6 +69,18 @@
   ];
 
   services = {
+    # Lets jacob run `tailscale up/down` without sudo - Caelestia's VPN toggle
+    # (shell.json utilities.vpn) calls them as the user, not root.
+    tailscale.extraSetFlags = [ "--operator=jacob" ];
+    # Tailscale's split DNS (*.home -> Pi-hole) needs resolved on Linux; without
+    # it tailscaled and NetworkManager fight over /etc/resolv.conf.
+    resolved = {
+      enable = true;
+      # resolved never sends single-label names to unicast DNS by default, which
+      # breaks the Pi-hole's "go" record (http://go/<name> go-links).
+      settings.Resolve.ResolveUnicastSingleLabel = "yes";
+    };
+
     pipewire = {
       enable = true;
       alsa.enable = true;
