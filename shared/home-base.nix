@@ -103,6 +103,10 @@
         Host nixos-pihole
           HostName nixos-pihole.local
           User jacob
+
+        Host tv
+          HostName 192.168.1.223
+          User root
       '';
     };
 
