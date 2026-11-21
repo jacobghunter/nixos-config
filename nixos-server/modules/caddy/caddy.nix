@@ -103,6 +103,7 @@ in
           redir /makemkv http://server.home:5800
           redir /qbittorrent http://server.home:8082
           redir /pihole http://pihole.home
+          redir /pihole-backup http://server.home:8053/admin
           redir /attic http://server.home:8081
           redir /ollama http://server.home:11434
         '';

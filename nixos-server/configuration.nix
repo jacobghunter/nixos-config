@@ -46,6 +46,15 @@
       publicCalibreKobo.enable = true;
     };
 
+    # Backup Pi-hole, so DNS survives nixos-pihole going down. Same records,
+    # password and blocklists as the Pi (shared module defaults). Web UI moves
+    # off 80, which caddy owns: http://server.home:8053/admin
+    pihole = {
+      enable = true;
+      interface = "enp1s0";
+      webPort = 8053;
+    };
+
     # Remote access to the home network. After the first deploy, run
     # `sudo tailscale up` once, then approve the subnet route + exit node in
     # the Tailscale admin console (and disable key expiry for this machine).

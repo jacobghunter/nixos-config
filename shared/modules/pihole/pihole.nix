@@ -40,16 +40,24 @@ in
 
     webPasswordHash = lib.mkOption {
       type = lib.types.str;
+      # Shared by every Pi-hole so one password works on all of their web UIs.
+      default = "$BALLOON-SHA256$v=1$s=1024,t=32$kVqB62qUpnPUQulGDapmBA==$pFYWzIfOzQKS+vs6LcQPz9wfqhkJANVE8pD+PvwumFI=";
       description = "Balloon-hashed admin web password for the pi-hole webserver API.";
+    };
+
+    webPort = lib.mkOption {
+      type = lib.types.port;
+      default = 80;
+      description = "Port for the pi-hole web interface. Change it on hosts where something else (e.g. caddy) already has 80.";
     };
 
     localDnsRecords = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = { };
+      default = import ./local-records.nix;
       example = {
         "server.home" = "192.168.1.167";
       };
-      description = "Extra local DNS records pi-hole should answer for, as hostname -> IP.";
+      description = "Local DNS records pi-hole should answer for, as hostname -> IP. Defaults to the shared set in local-records.nix.";
     };
   };
 
@@ -114,7 +122,7 @@ in
       # PI-HOLE WEB INTERFACE
       pihole-web = {
         enable = true;
-        ports = [ 80 ];
+        ports = [ cfg.webPort ];
       };
 
       # DISABLE SYSTEMD-RESOLVED STUB (Conflicts with Pi-hole on port 53)

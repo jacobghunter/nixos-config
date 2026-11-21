@@ -95,6 +95,24 @@ _: {
               };
             };
           }
+          {
+            "Pi-hole (backup)" = {
+              icon = "pi-hole.png";
+              # Backup Pi-hole on this server (shared/modules/pihole). Its web
+              # UI is on 8053 because caddy owns 80.
+              href = "http://server.home:8053/admin";
+              description = "Backup DNS ad-blocker";
+              widget = {
+                type = "pihole";
+                # Loopback, not server.home: the widget shouldn't depend on
+                # DNS to report on the DNS server.
+                url = "http://127.0.0.1:8053";
+                version = 6;
+                # Both Pi-holes share the same admin password (module default).
+                key = "{{HOMEPAGE_VAR_PIHOLE_KEY}}";
+              };
+            };
+          }
         ];
       }
       {

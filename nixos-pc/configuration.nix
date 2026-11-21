@@ -48,15 +48,19 @@
     # Pi-hole full time. The router's DHCP also advertises itself (192.168.1.1)
     # as a DNS server, and resolved drifts onto it whenever Pi-hole misses a
     # reply - then local records (server.home, go) stop resolving. So NM keeps
-    # its DHCP DNS to itself and resolved only knows about Pi-hole. The PC
-    # never leaves the LAN; the laptop keeps the shared AdGuard/Cloudflare set.
+    # its DHCP DNS to itself and resolved only knows about the Pi-holes: the Pi,
+    # then the backup on nixos-server (same records, so failover is harmless).
+    # The PC never leaves the LAN; the laptop keeps the shared AdGuard/Cloudflare set.
     networkmanager = {
       enable = true;
       # Overrides resolved.nix's "systemd-resolved"; tailscaled still talks to
       # resolved directly, so split DNS is unaffected.
       dns = lib.mkForce "none";
     };
-    nameservers = lib.mkForce [ "192.168.1.14" ];
+    nameservers = lib.mkForce [
+      "192.168.1.14"
+      "192.168.1.167"
+    ];
     enableIPv6 = false;
 
     firewall.allowedTCPPorts = [
