@@ -14,6 +14,11 @@ _:
 
   sdImage.expandOnBoot = true;
 
+  # Headless box: no display, no bluetooth. Same fix as nixos-printer - on
+  # these Pi 3Bs NixOS froze ~12s into every boot (before wifi came up) until
+  # the graphics and bluetooth drivers were kept from loading.
+  boot.kernelParams = [ "module_blacklist=vc4,hci_uart,btbcm" ];
+
   # avahi (for `ssh jacob@nixos-parents.local`), users.users.jacob + its
   # authorized keys, services.openssh.enable, and nix.settings.trusted-users
   # all now come from shared/configuration.nix instead of being duplicated
