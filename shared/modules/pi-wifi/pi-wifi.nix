@@ -4,7 +4,7 @@
 # device, which scripts/pi-image.sh writes - baked into a fresh SD image, or
 # pushed to a running Pi with `--push`. Nix never manages that file, so
 # deploys leave it alone and a Pi can move networks without a rebuild.
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   networking.wireless = {
@@ -21,9 +21,10 @@
   # A deploy that leaves wpa_supplicant with no network knocks a headless Pi
   # off wifi until someone plugs in a screen or cable - e.g. migrating a Pi
   # that used to declare its network in Nix before its imperative.conf
-  # exists. Refuse to switch instead.
+  # exists. Refuse to switch instead. grep by store path: pre-switch checks
+  # run with a minimal PATH, and a missing grep would read as "no network".
   system.preSwitchChecks.piWifiNetwork = ''
-    if [ "$2" != "dry-activate" ] && ! grep -qs '^network={' /etc/wpa_supplicant/imperative.conf; then
+    if [ "$2" != "dry-activate" ] && ! ${pkgs.gnugrep}/bin/grep -qs '^network={' /etc/wpa_supplicant/imperative.conf; then
       echo "pi-wifi: /etc/wpa_supplicant/imperative.conf has no wifi network;" >&2
       echo "pi-wifi: switching would take this Pi offline. Run" >&2
       echo "pi-wifi:   scripts/pi-image.sh --push ${config.networking.hostName}" >&2
