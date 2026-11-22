@@ -12,13 +12,7 @@ _:
   # partition (no u-boot.bin, no `kernel=` line in config.txt).
   hardware.raspberry-pi.firmware.uboot.enable = true;
 
-  # sd-image's first-boot expand-root-partition (sfdisk + partprobe +
-  # resize2fs on the live root disk) froze this Pi 3 solid every time, on
-  # two different cards - last journal line was always that unit starting.
-  # Grow the partition offline on the PC after flashing instead:
-  #   nix shell nixpkgs#cloud-utils nixpkgs#e2fsprogs -c sh -c \
-  #     'sudo growpart /dev/sdX 2 && sudo e2fsck -f /dev/sdX2 && sudo resize2fs /dev/sdX2'
-  sdImage.expandOnBoot = false;
+  sdImage.expandOnBoot = true;
 
   # avahi (for `ssh jacob@nixos-parents.local`), users.users.jacob + its
   # authorized keys, services.openssh.enable, and nix.settings.trusted-users

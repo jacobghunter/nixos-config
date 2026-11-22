@@ -19,7 +19,7 @@ let
   # protocol; staying on a known-good pair means no reflash. Moving to a newer
   # Klipper may need the board reflashed (via the printer's own SD slot).
   klipperVersion = "0.13.0-501-gc9d904aa9";
-  klipper = pkgs.klipper.overrideAttrs {
+  klipper = pkgs.klipper.overrideAttrs (old: {
     version = klipperVersion;
     src = pkgs.fetchFromGitHub {
       owner = "Klipper3d";
@@ -27,12 +27,17 @@ let
       rev = "c9d904aa9d9de3ddb84a4c929f9d667c085329fc";
       hash = "sha256-wqgyecBkntDJBCF292fll+vBXuwWDlaY/ZLYzWyRKTE=";
     };
+    # This commit predates the canboot -> katapult rename that nixpkgs'
+    # installPhase expects (CAN-bus flash helper; unused here, but copied).
+    installPhase =
+      builtins.replaceStrings [ "lib/katapult/flashtool.py" ] [ "lib/canboot/flash_can.py" ]
+        old.installPhase;
     # The upstream installPhase bakes the nixpkgs version into .version
     # before overrides apply; report the version actually running.
     postInstall = ''
       echo "v${klipperVersion}-NixOS" > $out/lib/klipper/.version
     '';
-  };
+  });
 in
 {
   services = {
