@@ -22,11 +22,26 @@
       interface = "end0";
     };
 
+    # That gateway route stays even with no cable in end0, and the kernel
+    # keeps using it - all traffic then dies on the dead port while wifi sits
+    # connected (seen on the Pi 5's first boot). Ignoring routes on a
+    # linkless interface lets wifi's DHCP route take over until the cable's in.
+
     hosts."192.168.1.14" = [
       "pi-hole.homelab.me"
       "pi-hole"
     ];
   };
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.all.ignore_routes_with_linkdown" = 1;
+    "net.ipv4.conf.default.ignore_routes_with_linkdown" = 1;
+  };
+  # The firewall's strict reverse-path check doesn't honour the sysctl above:
+  # with no cable it still maps the LAN to end0, so everything arriving on
+  # wifi failed the check and was dropped (ping/ssh timed out). Loose mode
+  # only needs *a* route back to the sender.
+  networking.firewall.checkReversePath = "loose";
+
   modules.pihole = {
     enable = true;
     interface = "end0"; # Pi 5's onboard ethernet (macb, predictable name "end0")
