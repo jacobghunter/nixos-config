@@ -31,7 +31,7 @@ in
       domain = lib.mkOption {
         type = lib.types.str;
         default = "jellyfin.jacobghunter.com";
-        description = "Public hostname to serve Jellyfin on. Must have a Cloudflare-proxied DNS record pointing at this host.";
+        description = "Public hostname to serve Jellyfin on. Needs a Cloudflare DNS record pointing at this host - DNS only (grey cloud), since Cloudflare's proxy doesn't allow video streaming.";
       };
 
       upstream = lib.mkOption {
