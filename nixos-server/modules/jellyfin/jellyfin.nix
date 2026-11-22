@@ -22,6 +22,10 @@ let
     HardwareAccelerationType = "vaapi";
     VaapiDevice = "/dev/dri/renderD128";
     EnableHardwareEncoding = "true";
+    # HEVC Main10 output keeps HDR10 for clients that support it, and is what
+    # makes 4K fit under RemoteClientBitrateLimit. ~2.6x realtime at 4K on
+    # the UHD 630.
+    AllowHevcEncoding = "true";
     # HDR -> SDR via OpenCL on the GPU (intel-compute-runtime-legacy1).
     EnableTonemapping = "true";
     EnableDecodingColorDepth10Hevc = "true";
@@ -29,24 +33,47 @@ let
     # Pause transcodes that are far enough ahead, and clean up old segments.
     EnableThrottling = "true";
     EnableSegmentDeletion = "true";
+    # Everything the UHD 630 can decode (no AV1 on Gen9).
+    HardwareDecodingCodecs = [
+      "h264"
+      "hevc"
+      "mpeg2video"
+      "vc1"
+      "vp8"
+      "vp9"
+    ];
   };
-  # Everything the UHD 630 can decode (no AV1 on Gen9).
-  hardwareDecodingCodecs = [
-    "h264"
-    "hevc"
-    "mpeg2video"
-    "vc1"
-    "vp8"
-    "vp9"
-  ];
 
-  applyEncodingSettings = pkgs.writeText "jellyfin-encoding-settings.py" ''
+  # system.xml (Dashboard -> Playback -> Streaming).
+  serverSettings = {
+    # Bits/s, per stream - enough for 4K HDR10 HEVC. Anything over it gets a
+    # (hardware) transcode down to fit. jellyfin-bitrate-share below lowers it
+    # per user when other remote streams are already using the upload.
+    RemoteClientBitrateLimit = "20000000";
+  };
+
+  # Total upload (~30 Mbps) shared between remote streams, less some headroom.
+  remoteUploadBudget = 28000000;
+  # Lowest per-user limit handed out - still a watchable 1080p.
+  remoteBitrateFloor = 8000000;
+
+  # network.xml (Dashboard -> Networking).
+  networkSettings = {
+    # Caddy fronts the public domain, so trust its X-Forwarded-For - otherwise
+    # every remote client shows up as 127.0.0.1, counts as LAN, and skips
+    # RemoteClientBitrateLimit.
+    KnownProxies = [ "127.0.0.1" ];
+  };
+
+  # Sets just the given keys in one of Jellyfin's config XMLs. String values
+  # become element text, lists become <string> children.
+  applySettings = pkgs.writeText "jellyfin-apply-settings.py" ''
     import json
     import os
     import sys
     import xml.etree.ElementTree as ET
 
-    path, settings, codecs = sys.argv[1], json.loads(sys.argv[2]), json.loads(sys.argv[3])
+    path, root_tag, settings = sys.argv[1], sys.argv[2], json.loads(sys.argv[3])
     ET.register_namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
     ET.register_namespace("xsd", "http://www.w3.org/2001/XMLSchema")
 
@@ -54,7 +81,7 @@ let
         tree = ET.parse(path)
     else:
         # Fresh install: Jellyfin fills in every other option with its defaults.
-        tree = ET.ElementTree(ET.Element("EncodingOptions"))
+        tree = ET.ElementTree(ET.Element(root_tag))
     root = tree.getroot()
 
     def child(tag):
@@ -64,16 +91,23 @@ let
         return el
 
     for tag, value in settings.items():
-        child(tag).text = value
-
-    codec_list = child("HardwareDecodingCodecs")
-    for el in list(codec_list):
-        codec_list.remove(el)
-    for codec in codecs:
-        ET.SubElement(codec_list, "string").text = codec
+        el = child(tag)
+        if isinstance(value, list):
+            for old in list(el):
+                el.remove(old)
+            el.text = None
+            for item in value:
+                ET.SubElement(el, "string").text = item
+        else:
+            el.text = value
 
     ET.indent(tree, space="  ")
     tree.write(path, encoding="utf-8", xml_declaration=True)
+  '';
+
+  applyTo = file: rootTag: settings: ''
+    ${lib.getExe pkgs.python3} ${applySettings} ${configDir}/${file} ${rootTag} \
+      ${lib.escapeShellArg (builtins.toJSON settings)}
   '';
 in
 {
@@ -108,11 +142,36 @@ in
   };
 
   # Runs as the jellyfin user before the server starts (and so before it reads
-  # encoding.xml).
+  # its config XMLs).
   systemd.services.jellyfin.preStart = ''
     mkdir -p ${configDir}
-    ${lib.getExe pkgs.python3} ${applyEncodingSettings} ${configDir}/encoding.xml \
-      ${lib.escapeShellArg (builtins.toJSON encodingSettings)} \
-      ${lib.escapeShellArg (builtins.toJSON hardwareDecodingCodecs)}
+    ${applyTo "encoding.xml" "EncodingOptions" encodingSettings}
+    ${applyTo "system.xml" "ServerConfiguration" serverSettings}
+    ${applyTo "network.xml" "NetworkConfiguration" networkSettings}
   '';
+
+  # Splits remoteUploadBudget between remote streams (see bitrate-share.py):
+  # first remote viewer gets RemoteClientBitrateLimit, the next gets what's
+  # left. Needs an API key (Dashboard -> API Keys) in /etc/jellyfin-bitrate.env
+  # as JELLYFIN_API_KEY=..., root-only - like /etc/cloudflare.env.
+  systemd.services.jellyfin-bitrate-share = {
+    description = "Share upload bandwidth between remote Jellyfin streams";
+    after = [ "jellyfin.service" ];
+    wants = [ "jellyfin.service" ];
+    wantedBy = [ "multi-user.target" ];
+    environment = {
+      JELLYFIN_URL = "http://127.0.0.1:8096";
+      TOTAL_BITRATE = toString remoteUploadBudget;
+      MAX_BITRATE = serverSettings.RemoteClientBitrateLimit;
+      FLOOR_BITRATE = toString remoteBitrateFloor;
+      POLL_SECONDS = "5";
+    };
+    serviceConfig = {
+      ExecStart = "${lib.getExe pkgs.python3} -u ${./bitrate-share.py}";
+      EnvironmentFile = "/etc/jellyfin-bitrate.env";
+      DynamicUser = true;
+      Restart = "always";
+      RestartSec = 10;
+    };
+  };
 }
