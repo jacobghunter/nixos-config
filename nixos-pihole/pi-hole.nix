@@ -3,7 +3,7 @@
     # Static IP on ethernet so DNS clients always find pi-hole at the same
     # address, even if the router (or its DHCP reservation for this MAC) ever
     # changes. Wifi stays on DHCP as a fallback path - not used for DNS.
-    interfaces.enu1u1 = {
+    interfaces.end0 = {
       useDHCP = false;
       ipv4.addresses = [
         {
@@ -13,13 +13,13 @@
       ];
     };
 
-    # Without its own default gateway, packets sourced from enu1u1's static
+    # Without its own default gateway, packets sourced from end0's static
     # IP have nowhere to go for anything off-subnet (e.g. upstream DNS at
     # 1.1.1.1) even though wlan0 has a perfectly good default route - the
-    # kernel won't use wlan0's route for traffic bound to enu1u1's address.
+    # kernel won't use wlan0's route for traffic bound to end0's address.
     defaultGateway = {
       address = "192.168.1.1";
-      interface = "enu1u1";
+      interface = "end0";
     };
 
     hosts."192.168.1.14" = [
@@ -29,7 +29,7 @@
   };
   modules.pihole = {
     enable = true;
-    interface = "enu1u1"; # Pi 3B's onboard ethernet - USB-attached, so it's "enu1u1" not "enp1s0"/"eth0"
+    interface = "end0"; # Pi 5's onboard ethernet (macb, predictable name "end0")
     # Password and local DNS records come from the shared module defaults
     # (shared/modules/pihole), so the backup on nixos-server stays identical.
   };

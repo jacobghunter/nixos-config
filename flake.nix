@@ -294,13 +294,13 @@
           ];
         };
 
-        # PI-HOLE CONFIG (Raspberry Pi 3B)
+        # PI-HOLE CONFIG (Raspberry Pi 5)
         nixos-pihole = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           specialArgs = { inherit inputs self; };
           modules = [
             # Host-specific configuration
-            nixos-hardware.nixosModules.raspberry-pi-3
+            nixos-hardware.nixosModules.raspberry-pi-5
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             ./nixos-pihole/configuration.nix
             ./shared/modules/pi-wifi/pi-wifi.nix

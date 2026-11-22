@@ -9,13 +9,13 @@
 {
   networking.wireless = {
     enable = true;
-    # Needed to unlock the Pi 3's wifi radio - without a country set,
+    # Needed to unlock the Pi's wifi radio - without a country set,
     # wpa_supplicant won't associate.
     extraConfig = "country=US";
     allowAuxiliaryImperativeNetworks = true;
   };
 
-  # The Pi 3's wifi chip needs its (redistributable) firmware blob.
+  # The Pi's wifi chip needs its (redistributable) firmware blob.
   hardware.enableRedistributableFirmware = true;
 
   # A deploy that leaves wpa_supplicant with no network knocks a headless Pi
