@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Tailscale</title>
+	<style>
+		html, body {
+			margin: 0;
+			height: 100%;
+			background: #141414;
+			color: #e8e8e8;
+			font-family: "LG Smart UI", "Museo Sans", sans-serif;
+		}
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 48px;
+		}
+		h1 { margin: 0; font-size: 64px; font-weight: 600; }
+		#state { font-size: 44px; }
+		#state.on { color: #6fdc8c; }
+		#state.off { color: #9a9a9a; }
+		#state.busy { color: #f1c21b; }
+		#detail { font-size: 30px; color: #9a9a9a; min-height: 1.2em; }
+		button {
+			font: inherit;
+			font-size: 40px;
+			padding: 24px 72px;
+			border-radius: 16px;
+			border: 4px solid #3a3a3a;
+			background: #262626;
+			color: #e8e8e8;
+		}
+		button:focus { outline: none; border-color: #e8e8e8; background: #393939; }
+		button:disabled { opacity: 0.5; }
+	</style>
+</head>
+<body>
+	<h1>Tailscale</h1>
+	<div id="state" class="busy">Checking…</div>
+	<div id="detail"></div>
+	<button id="toggle" disabled>…</button>
+	<script src="main.js"></script>
+</body>
+</html>

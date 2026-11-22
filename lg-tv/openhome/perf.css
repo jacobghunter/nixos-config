@@ -1,0 +1,5 @@
+/* Added by apply-perf.sh (lg-tv notes). Gives each app tile its own compositor
+   layer so the focus zoom (transform transition) doesn't repaint the screen
+   every frame. Measured on the B4 / webOS 9.2.4 while navigating the home row:
+   15-27 fps with 31-40 frames over 50 ms -> 60 fps with none. */
+.appitem { will-change: transform; }
