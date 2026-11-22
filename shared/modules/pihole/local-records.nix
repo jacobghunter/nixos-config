@@ -7,4 +7,6 @@
   "server.home" = "192.168.1.167";
   # pi-hole itself
   "pihole.home" = "192.168.1.14";
+  # 3D printer Pi (nixos-printer): Mainsail on 80, Moonraker API on 7125
+  "printer.home" = "192.168.1.140";
 }
