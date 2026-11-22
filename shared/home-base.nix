@@ -111,6 +111,10 @@
         Host nixos-printer
           HostName nixos-printer.local
           User jacob
+
+        Host nixos-parents
+          HostName nixos-parents.local
+          User jacob
       '';
     };
 
