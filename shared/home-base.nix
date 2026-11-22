@@ -107,6 +107,10 @@
         Host tv
           HostName 192.168.1.223
           User root
+
+        Host nixos-printer
+          HostName nixos-printer.local
+          User jacob
       '';
     };
 

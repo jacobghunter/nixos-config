@@ -14,11 +14,13 @@ _:
   # partition (no u-boot.bin, no `kernel=` line in config.txt).
   hardware.raspberry-pi.firmware.uboot.enable = true;
 
-  # Same as nixos-parents: grow the partition offline on the PC after flashing
-  # rather than on first boot.
-  #   nix shell nixpkgs#cloud-utils nixpkgs#e2fsprogs -c sh -c \
-  #     'sudo growpart /dev/sdX 2 && sudo e2fsck -f /dev/sdX2 && sudo resize2fs /dev/sdX2'
-  sdImage.expandOnBoot = false;
+  sdImage.expandOnBoot = true;
+
+  # Headless printer box: no display, no bluetooth. This Pi 3B froze ~15s into
+  # every NixOS boot until these drivers were kept from loading (graphics
+  # handover was the last thing seen on screen). Kernel-param form, not
+  # boot.blacklistedKernelModules, to match exactly what was tested.
+  boot.kernelParams = [ "module_blacklist=vc4,hci_uart,btbcm" ];
 
   # avahi (for `ssh jacob@nixos-printer.local`), users.users.jacob + its
   # authorized keys, services.openssh.enable, and nix.settings.trusted-users

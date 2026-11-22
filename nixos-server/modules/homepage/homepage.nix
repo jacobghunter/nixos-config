@@ -62,6 +62,23 @@ _: {
         ];
       }
       {
+        Printing = [
+          {
+            Mainsail = {
+              icon = "mainsail.png";
+              href = "http://printer.home";
+              description = "Sovol SV06 (Klipper)";
+              widget = {
+                # Talks to Moonraker directly; the server is a trusted client
+                # (192.168.0.0/16), so no API key is needed.
+                type = "moonraker";
+                url = "http://printer.home:7125";
+              };
+            };
+          }
+        ];
+      }
+      {
         Downloads = [
           {
             qBittorrent = {
