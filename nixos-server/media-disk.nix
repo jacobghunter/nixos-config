@@ -49,7 +49,16 @@ in
       ]
       (_: {
         unitConfig.RequiresMountsFor = mountPoint;
-      });
+      })
+    // {
+      # The USB drive enumerates a few seconds after smartd would otherwise
+      # start; wait for its mount (Wants, not Requires: the SSD still gets
+      # monitored if the drive is unplugged).
+      smartd = {
+        wants = [ "media-storage.mount" ];
+        after = [ "media-storage.mount" ];
+      };
+    };
 
   services.smartd = {
     enable = true;
@@ -58,9 +67,10 @@ in
       {
         # -d sat: SMART passthrough via the USB bridge. Short test weekly
         # (Sun 03:00), long test monthly (1st, 04:00, ~13h). Warn at 50C,
-        # critical at 55C.
+        # critical at 55C. -d removable: if the drive is missing at startup,
+        # skip it instead of exiting (which also dropped SSD monitoring).
         device = "/dev/disk/by-id/${diskId}";
-        options = "-d sat -a -o on -S on -n standby,q -s (S/../../7/03|L/../01/./04) -W 4,50,55 -M exec ${ntfyAlert}";
+        options = "-d sat -d removable -a -o on -S on -n standby,q -s (S/../../7/03|L/../01/./04) -W 4,50,55 -M exec ${ntfyAlert}";
       }
       {
         device = "/dev/disk/by-id/ata-Micron_M500_MTFDDAK960MAV_130602043E0D";
