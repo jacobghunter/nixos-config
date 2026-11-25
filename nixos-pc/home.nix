@@ -35,6 +35,9 @@
     };
   };
 
+  # Runs on the server (see wake-pc in nixos-laptop/home.nix for why the IP).
+  home.shellAliases.wake-laptop = "ssh jacob@192.168.1.167 wake-laptop";
+
   home.packages = with pkgs; [
     nvtopPackages.amd
     prismlauncher

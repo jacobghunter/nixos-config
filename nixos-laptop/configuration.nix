@@ -19,7 +19,17 @@
 
   networking = {
     hostName = "nixos-laptop";
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      # Wake from sleep on a magic packet (`wake-laptop` on nixos-server), on
+      # whichever link is up: Wi-Fi (iwlwifi WoWLAN) or the dock's ethernet
+      # (e1000e). Defaults for every connection, applied when one activates.
+      # NM wants the raw flag values here: wifi magic = 0x8, ethernet magic = 0x40.
+      settings.connection = {
+        "wifi.wake-on-wlan" = 8;
+        "ethernet.wake-on-lan" = 64;
+      };
+    };
     enableIPv6 = false;
     firewall.allowedTCPPorts = [
       7236

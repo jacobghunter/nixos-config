@@ -112,8 +112,10 @@
           HostName nixos-printer.local
           User jacob
 
+        # Tailscale IP: it lives on another network, so .local (mDNS) never
+        # resolves from here or from the server that builds for it.
         Host nixos-parents
-          HostName nixos-parents.local
+          HostName 100.71.38.51
           User jacob
       '';
     };
@@ -122,30 +124,61 @@
       home-manager.enable = true;
 
       # `rebuild` / `rebuild-boot` with no args rebuild the current machine
-      # locally. With a host arg (e.g. `rebuild nixos-pihole`), they build
-      # here and deploy to that host over ssh instead - no local sudo needed
-      # since --elevate=sudo handles activation on the target (relies on
-      # passwordless sudo there, e.g. nixos-pihole's wheelNeedsPassword=false).
+      # locally. With a host arg (e.g. `rebuild nixos-pihole`), they deploy to
+      # that host over ssh - --elevate=sudo handles activation on the target.
+      # Where the build runs depends on the host, so another machine's closure
+      # never lands on (or streams through) this one:
+      #   - nixos-pc, nixos-server: build on the target itself.
+      #   - the Pis: build on nixos-server (fast, wired, emulates aarch64, has
+      #     the attic cache), driven from the server so it copies straight to
+      #     the Pi. nixos-rebuild's own --build-host would relay a
+      #     remote-to-remote copy through this machine. --use-substitutes has
+      #     the Pi fetch anything on cache.nixos.org itself, so only what the
+      #     server built (config, the Pi kernel) crosses the home uplink.
+      #   - anything else, or `--local` right after the host: build here.
+      # The server is addressed by LAN IP so this works away from home too, via
+      # its Tailscale subnet route.
       zsh.initContent = ''
-        rebuild() {
+        _nixos_deploy() {
+          local action="$1"
+          shift
           if [ -z "$1" ]; then
-            sudo nixos-rebuild switch --flake ~/nixos-config "$@"
-          else
-            local host="$1"
-            shift
-            nixos-rebuild switch --flake ~/nixos-config#"$host" --target-host "jacob@$host" --elevate=sudo "$@"
+            sudo nixos-rebuild "$action" --flake ~/nixos-config
+            return
           fi
+
+          local host="$1"
+          shift
+          local builder=local
+          if [ "$1" = "--local" ]; then
+            shift
+          else
+            case "$host" in
+              nixos-pc|nixos-server) builder=self ;;
+              nixos-pihole|nixos-parents|nixos-printer) builder=server ;;
+            esac
+          fi
+
+          case "$builder" in
+            local)
+              nixos-rebuild "$action" --flake ~/nixos-config#"$host" --target-host "jacob@$host" --elevate=sudo "$@"
+              ;;
+            self)
+              nixos-rebuild "$action" --flake ~/nixos-config#"$host" --target-host "jacob@$host" --build-host "jacob@$host" --elevate=sudo "$@"
+              ;;
+            server)
+              # Ship just this flake's source (a few hundred KB, uncommitted
+              # changes included); the server fetches the locked inputs itself.
+              local server=jacob@192.168.1.167 src
+              src=$(nix flake metadata --json ~/nixos-config | jq -r .path) || return
+              nix copy --to "ssh-ng://$server" "$src" || return
+              ssh -t "$server" nixos-rebuild "$action" --flake "$src#$host" --target-host "jacob@$host" --elevate=sudo --use-substitutes "$@"
+              ;;
+          esac
         }
 
-        rebuild-boot() {
-          if [ -z "$1" ]; then
-            sudo nixos-rebuild boot --flake ~/nixos-config "$@"
-          else
-            local host="$1"
-            shift
-            nixos-rebuild boot --flake ~/nixos-config#"$host" --target-host "jacob@$host" --elevate=sudo "$@"
-          fi
-        }
+        rebuild() { _nixos_deploy switch "$@"; }
+        rebuild-boot() { _nixos_deploy boot "$@"; }
       '';
 
       git = {
