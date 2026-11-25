@@ -27,6 +27,15 @@
       openFirewall = true;
       webuiPort = 8082;
     };
+
+    # Firmware updates (Dell OptiPlex 3060, on BIOS 1.13.0 from 2021 as of
+    # Nov 2026). Only refreshes the list of available updates - never installs
+    # on its own. `fwupdmgr get-updates` to check.
+    # TODO: update the BIOS while physically home - `sudo fwupdmgr update`,
+    # then re-check in the BIOS: AC Recovery = Power On, Continue on Warnings
+    # and Errors, Deep Sleep off / Wake on LAN = LAN Only, and that it still
+    # boots "Linux Boot Manager". A BIOS update can reset any of those.
+    fwupd.enable = true;
   };
   # Allow sudo without password
   security.sudo.wheelNeedsPassword = false;
@@ -38,6 +47,11 @@
     # subnet route - so from away, `ssh` in and run it (laptop: `wake-pc` alias).
     (writeShellScriptBin "wake-pc" ''
       ${wakeonlan}/bin/wakeonlan -i 192.168.1.255 cc:28:aa:46:2e:ad
+    '')
+    # The laptop's Wi-Fi and ethernet - only reaches it while it's on the home
+    # LAN (a sleeping laptop elsewhere isn't on this network or the tailnet).
+    (writeShellScriptBin "wake-laptop" ''
+      ${wakeonlan}/bin/wakeonlan -i 192.168.1.255 a0:29:42:c8:3c:e1 9c:2d:cd:fc:ba:8a
     '')
   ];
 
