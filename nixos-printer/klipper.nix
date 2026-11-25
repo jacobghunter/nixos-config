@@ -99,11 +99,13 @@ in
     # First boot only ("C" never overwrites): seed printer.cfg with the
     # calibration carried over from the Raspberry Pi OS install. Klipper's
     # preStart then swaps in the Nix-managed body and keeps this SAVE_CONFIG.
-    "C ${dataDir}/config/printer.cfg - - - - ${pkgs.concatText "printer-seed.cfg" [
-      ./klipper/printer.cfg
-      (pkgs.writeText "newline" "\n")
-      ./klipper/save-config.cfg
-    ]}"
+    "C ${dataDir}/config/printer.cfg - - - - ${
+      pkgs.concatText "printer-seed.cfg" [
+        ./klipper/printer.cfg
+        (pkgs.writeText "newline" "\n")
+        ./klipper/save-config.cfg
+      ]
+    }"
   ];
 
   networking.firewall.allowedTCPPorts = [

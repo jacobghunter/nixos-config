@@ -34,7 +34,27 @@
 
   time.hardwareClockInLocalTime = true;
 
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  services = {
+    xserver.videoDrivers = [ "amdgpu" ];
+
+    # Wake-on-LAN (magic packet) on the onboard r8169 NIC, so the server can wake
+    # the PC from suspend - see `wake-pc` in nixos-server/configuration.nix.
+    # Done with ethtool from udev rather than networking.interfaces.eno1.wakeOnLan:
+    # that option's .link file matches OriginalName (the kernel's eth0, not the
+    # renamed eno1), so it never applies. Matching on MAC survives renames.
+    # NetworkManager leaves WoL alone (its per-connection default is "ignore").
+    # Also needs "Wake on LAN" / "Power On By PCI-E" enabled in the BIOS.
+    udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="cc:28:aa:46:2e:ad", RUN+="${pkgs.ethtool}/bin/ethtool -s $name wol g"
+    '';
+
+    # --- AUDIO ---
+    # Some already defined in graphical/configration.nix
+    pipewire = {
+      jack.enable = true;
+      wireplumber.enable = true;
+    };
+  };
 
   # Hardware Acceleration (Video)
   hardware.graphics = {
@@ -87,12 +107,5 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 14d";
-  };
-
-  # --- AUDIO & SERVICES ---
-  # Some already defined in graphical/configration.nix
-  services.pipewire = {
-    jack.enable = true;
-    wireplumber.enable = true;
   };
 }
