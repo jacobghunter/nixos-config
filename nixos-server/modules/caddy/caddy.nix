@@ -106,6 +106,7 @@ in
           redir /pihole-backup http://server.home:8053/admin
           redir /printer http://printer.home
           redir /attic http://server.home:8081
+          redir /scrutiny http://server.home:8084
           redir /ollama http://server.home:11434
         '';
       }

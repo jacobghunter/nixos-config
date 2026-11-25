@@ -63,7 +63,9 @@ in
         both the drive's block device (/dev/srN) and its matching SCSI
         generic device (/dev/sgN) - MakeMKV won't detect the drive without
         the latter. Numbering is machine-specific, so set this per-host
-        (check with `lsscsi` or `ls /dev/sr* /dev/sg*`).
+        (check with `lsscsi` or `ls /dev/sr* /dev/sg*`). A "host:container"
+        entry maps a host path (e.g. a stable udev symlink) to a different
+        path inside the container.
       '';
     };
 
@@ -127,7 +129,9 @@ in
         }
         // cfg.extraEnvironment;
 
-        extraOptions = map (dev: "--device=${dev}:${dev}") cfg.devices;
+        extraOptions = map (
+          dev: "--device=${if lib.hasInfix ":" dev then dev else "${dev}:${dev}"}"
+        ) cfg.devices;
       };
     };
 

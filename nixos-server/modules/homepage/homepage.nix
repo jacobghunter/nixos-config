@@ -19,7 +19,10 @@ _: {
         resources = {
           cpu = true;
           memory = true;
-          disk = "/";
+          disk = [
+            "/"
+            "/media/storage"
+          ];
         };
       }
       {
@@ -127,6 +130,21 @@ _: {
                 version = 6;
                 # Both Pi-holes share the same admin password (module default).
                 key = "{{HOMEPAGE_VAR_PIHOLE_KEY}}";
+              };
+            };
+          }
+        ];
+      }
+      {
+        Storage = [
+          {
+            Scrutiny = {
+              icon = "scrutiny.png";
+              href = "http://server.home:8084";
+              description = "Drive health (SMART)";
+              widget = {
+                type = "scrutiny";
+                url = "http://127.0.0.1:8084";
               };
             };
           }

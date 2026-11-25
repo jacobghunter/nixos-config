@@ -33,6 +33,12 @@
 
   environment.systemPackages = with pkgs; [
     nodejs
+    # Wake the PC from suspend with a magic packet. Run here rather than from a
+    # roaming device: WoL is a LAN broadcast, which doesn't cross Tailscale's
+    # subnet route - so from away, `ssh` in and run it (laptop: `wake-pc` alias).
+    (writeShellScriptBin "wake-pc" ''
+      ${wakeonlan}/bin/wakeonlan -i 192.168.1.255 cc:28:aa:46:2e:ad
+    '')
   ];
 
   modules = {
@@ -66,12 +72,12 @@
 
     makemkv = {
       enable = true;
-      # sg0 is the WD disk (target 3:0:0:0); the BD-RE drive (target
-      # 10:0:0:0) is sg1 - confirmed via udevadm/lsscsi, not the module's
-      # default guess. Both /dev/sr0 and /dev/sg1 are group cdrom (gid 24).
+      # /dev/sgN numbering shifts whenever USB devices are replugged/moved, so
+      # pass the Blu-ray drive via the stable udev symlinks below. Both are
+      # group cdrom (gid 24).
       devices = [
-        "/dev/sr0"
-        "/dev/sg1"
+        "/dev/bluray:/dev/sr0"
+        "/dev/bluray-sg:/dev/sg0"
       ];
       extraEnvironment.SUP_GROUP_IDS = "24";
       outputDir = "/media/storage/movies";
@@ -79,6 +85,12 @@
       pgid = 990;
     };
   };
+
+  # Stable names for the USB Blu-ray drive (see makemkv above).
+  services.udev.extraRules = ''
+    SUBSYSTEM=="block", KERNEL=="sr*", ATTRS{vendor}=="HL-DT-ST", ATTRS{model}=="BD-RE BP60NB10*", SYMLINK+="bluray"
+    SUBSYSTEM=="scsi_generic", ATTRS{vendor}=="HL-DT-ST", ATTRS{model}=="BD-RE BP60NB10*", SYMLINK+="bluray-sg"
+  '';
 
   system.stateVersion = "25.05";
 }
