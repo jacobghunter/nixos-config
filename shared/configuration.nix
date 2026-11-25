@@ -86,22 +86,47 @@
   # and risks silently importing a pool in an inconsistent state.
   boot.zfs.forceImportRoot = false;
 
-  # Enable Nix Flakes
-  nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    download-buffer-size = 134217728;
-    trusted-users = [
-      "root"
-      "@wheel"
-    ];
+  nix = {
+    # Enable Nix Flakes
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      download-buffer-size = 134217728;
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
 
-    # Local attic cache on the server (nixos-server/modules/attic) - public
-    # read, LAN-only, so any host here can pull already-built outputs (e.g.
-    # a kernel built for the pi) instead of rebuilding them.
-    substituters = [ "http://192.168.1.167:8081/nixos-config" ];
-    trusted-public-keys = [ "nixos-config:8W0E2b09uOT6kNIBlkeEgfHnVG5jiD/nm5oG586Vi1o=" ];
+      # Local attic cache on the server (nixos-server/modules/attic) - public
+      # read, LAN-only, so any host here can pull already-built outputs (e.g.
+      # a kernel built for the pi) instead of rebuilding them.
+      substituters = [ "http://192.168.1.167:8081/nixos-config" ];
+      trusted-public-keys = [ "nixos-config:8W0E2b09uOT6kNIBlkeEgfHnVG5jiD/nm5oG586Vi1o=" ];
+
+      # Safety net between weekly GCs: if free space drops under 10 GiB during
+      # a build, nix collects garbage until 30 GiB is free (or nothing's left).
+      min-free = 10 * 1024 * 1024 * 1024;
+      max-free = 30 * 1024 * 1024 * 1024;
+    };
+
+    # Without this, every rebuild's old generation and everything only it
+    # used stays in the store forever (the laptop hit 113 GiB of it). Generations
+    # older than 14 days go, and with them their boot menu entries. Persistent
+    # timer, so a run missed while the machine was off/asleep happens on boot.
+    # Both jobs are disk-heavy, so they run early Monday morning rather than
+    # midnight (gc's "weekly") or nightly (optimise's default) - off gaming hours.
+    gc = {
+      automatic = true;
+      dates = "Mon 04:00";
+      options = "--delete-older-than 14d";
+    };
+
+    # Hard-links identical files across store paths.
+    optimise = {
+      automatic = true;
+      dates = [ "Mon 04:30" ];
+    };
   };
 }

@@ -1,11 +1,6 @@
 { pkgs, inputs, ... }:
 let
   attic-client = inputs.attic.packages.${pkgs.stdenv.hostPlatform.system}.attic-client;
-
-  # The attic server (nixos-server/modules/attic) - same host:port as the
-  # substituter in shared/configuration.nix.
-  cacheHost = "192.168.1.167";
-  cachePort = "8081";
 in
 {
   environment.systemPackages = [ attic-client ];
@@ -15,46 +10,41 @@ in
   # /root/.config/attic/config.toml - that's a credential and can't be
   # provisioned through the Nix store.
   #
-  # A failing post-build-hook fails the *entire* build/rebuild that
-  # triggered it, so this must never exit non-zero - push is best-effort,
-  # not a build requirement.
+  # Pushes to the attic server (nixos-server/modules/attic) from a background
+  # service that watches /nix/store, rather than a nix post-build-hook. Nix
+  # runs that hook synchronously and stalls the build until it returns, so a
+  # separate `attic push` per derivation (a second or two each, even for a
+  # few-KB file) added minutes to every rebuild, and a slow link (the laptop
+  # on Wi-Fi) or an unreachable server stalled it far worse. Here a rebuild
+  # never waits on the cache. watch-store also picks up substituted paths
+  # (e.g. from hyprland.cachix.org), skipping ones signed by cache.nixos.org.
   #
-  # `attic push` has no --connect-timeout of its own, and when the server is
-  # unreachable (off the home LAN, server down) the connection attempt just
-  # hangs - confirmed a bare TCP connect to it can sit for 40s+ without even
-  # failing, since Linux's tcp_syn_retries default lets an unanswered SYN
-  # retry for 100+ seconds. So reachability is checked separately with a
-  # short bare TCP connect first, and only *that* failing marks the cache
-  # unreachable. The push itself gets a long timeout - it's only a backstop
-  # against a hang mid-upload; bounding the whole push to a few seconds
-  # killed big outputs (a 47 MB pi kernel over Wi-Fi) partway through and
-  # wrongly marked a reachable server as down.
-  #
-  # A single rebuild can trigger this hook once per newly-built derivation,
-  # so the marker file remembers an unreachable server for 5 minutes and the
-  # rest of *this* rebuild skips straight past every subsequent push instead
-  # of re-paying the connect timeout per derivation - short-lived and in /run
-  # (cleared on reboot) so reconnecting to the home network gets retried on
-  # its own before long.
-  nix.settings.post-build-hook = "${pkgs.writeShellScript "attic-push" ''
-    set -f # disable globbing
-    marker=/run/attic-push-unreachable
+  # Off the home LAN the server is unreachable and watch-store exits; it's
+  # restarted every 30s forever, so it reconnects on its own back home. Paths
+  # added while away are not backfilled - a one-off
+  # `sudo attic push nixos-config /run/current-system` catches them up.
+  systemd.services.attic-watch-store = {
+    description = "Push new Nix store paths to the attic cache";
+    wantedBy = [ "multi-user.target" ];
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    # Never stop retrying, however long the server stays unreachable.
+    startLimitIntervalSec = 0;
 
-    if [ -n "$(${pkgs.findutils}/bin/find "$marker" -mmin -5 2>/dev/null)" ]; then
-      echo "attic-push: skipping, marked unreachable within the last 5 min" >&2
-      exit 0
-    fi
+    # Not logged in yet: stay inactive rather than restart-looping.
+    unitConfig.ConditionPathExists = "/root/.config/attic/config.toml";
 
-    if ! ${pkgs.coreutils}/bin/timeout 3 ${pkgs.bash}/bin/bash -c ': </dev/tcp/${cacheHost}/${cachePort}' 2>/dev/null; then
-      touch "$marker"
-      echo "attic-push: cache unreachable, skipping further pushes for 5 min" >&2
-      exit 0
-    fi
-    rm -f "$marker"
+    # Root's attic config lives under $HOME, which systemd leaves unset for
+    # services without User=.
+    environment.HOME = "/root";
 
-    if ! ${pkgs.coreutils}/bin/timeout 600 ${attic-client}/bin/attic push nixos-config $OUT_PATHS; then
-      echo "attic-push: failed to push to nixos-config, continuing anyway" >&2
-    fi
-    exit 0
-  ''}";
+    serviceConfig = {
+      ExecStart = "${attic-client}/bin/attic watch-store nixos-config";
+      Restart = "always";
+      RestartSec = "30s";
+      # Uploads are background work - never compete with a build or the desktop.
+      Nice = 19;
+      IOSchedulingClass = "idle";
+    };
+  };
 }
