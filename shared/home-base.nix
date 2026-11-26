@@ -83,39 +83,51 @@
       # ~/.ssh/config: `Include ~/.ssh/conf.d/*.conf` - putting it at the end
       # means anything defined earlier in that file wins (ssh_config uses
       # first-match-wins), so hand-written entries can still override these.
+      #
+      # Fleet hosts are tried over mDNS first (home LAN), then over Tailscale
+      # via MagicDNS - so the same alias works at home and away. HostKeyAlias
+      # keeps one known_hosts entry per host, whichever name was used.
       file.".ssh/conf.d/nixos-hosts.conf".text = ''
+        Match host nixos-laptop,nixos-pc,nixos-server,nixos-wsl,nixos-pihole,nixos-printer exec "getent hosts %h.local"
+          HostName %h.local
+
+        Match host nixos-laptop,nixos-pc,nixos-server,nixos-wsl,nixos-pihole,nixos-printer
+          HostName %h.tail69efc.ts.net
+
         Host nixos-laptop
-          HostName nixos-laptop.local
+          HostKeyAlias nixos-laptop
           User jacob
 
         Host nixos-pc
-          HostName nixos-pc.local
+          HostKeyAlias nixos-pc
           User jacob
 
         Host nixos-server
-          HostName nixos-server.local
+          HostKeyAlias nixos-server
           User jacob
 
         Host nixos-wsl
-          HostName nixos-wsl.local
+          HostKeyAlias nixos-wsl
           User jacob
 
         Host nixos-pihole
-          HostName nixos-pihole.local
+          HostKeyAlias nixos-pihole
+          User jacob
+
+        Host nixos-printer
+          HostKeyAlias nixos-printer
           User jacob
 
         Host tv
           HostName 192.168.1.223
+          HostKeyAlias tv
           User root
-
-        Host nixos-printer
-          HostName nixos-printer.local
-          User jacob
 
         # Tailscale IP: it lives on another network, so .local (mDNS) never
         # resolves from here or from the server that builds for it.
         Host nixos-parents
           HostName 100.71.38.51
+          HostKeyAlias nixos-parents
           User jacob
       '';
     };
