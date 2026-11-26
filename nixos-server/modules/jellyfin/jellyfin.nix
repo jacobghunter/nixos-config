@@ -22,17 +22,24 @@ let
     HardwareAccelerationType = "vaapi";
     VaapiDevice = "/dev/dri/renderD128";
     EnableHardwareEncoding = "true";
-    # HEVC Main10 output keeps HDR10 for clients that support it, and is what
-    # makes 4K fit under RemoteClientBitrateLimit. ~2.6x realtime at 4K on
-    # the UHD 630.
+    # HEVC output is what makes 4K fit under RemoteClientBitrateLimit. ~2.6x
+    # realtime at 4K on the UHD 630. Jellyfin (10.11) only encodes 8-bit Main
+    # here, even when the client asks for main10 + HDR10.
     AllowHevcEncoding = "true";
-    # HDR -> SDR via OpenCL on the GPU (intel-compute-runtime-legacy1).
+    # HDR -> SDR via OpenCL on the GPU (intel-compute-runtime-legacy1). Every
+    # HDR transcode gets tonemapped whatever the client supports - with this
+    # off, 8-bit output would carry the HDR picture untonemapped instead.
     EnableTonemapping = "true";
     EnableDecodingColorDepth10Hevc = "true";
     EnableDecodingColorDepth10Vp9 = "true";
     # Pause transcodes that are far enough ahead, and clean up old segments.
     EnableThrottling = "true";
     EnableSegmentDeletion = "true";
+    # Becomes hevc_vaapi -compression_level 7. The UHD 630 only accepts levels
+    # 1, 4 and 7 - slower/slow/fast/faster (2, 3, 5, 6) fail every transcode
+    # with "Error encoding a frame: Input/output error". medium (4) only runs
+    # ~1x at 4K next to a second stream, so veryfast keeps two streams working.
+    EncoderPreset = "veryfast";
     # Everything the UHD 630 can decode (no AV1 on Gen9).
     HardwareDecodingCodecs = [
       "h264"
@@ -46,7 +53,7 @@ let
 
   # system.xml (Dashboard -> Playback -> Streaming).
   serverSettings = {
-    # Bits/s, per stream - enough for 4K HDR10 HEVC. Anything over it gets a
+    # Bits/s, per stream - enough for 4K HEVC. Anything over it gets a
     # (hardware) transcode down to fit. jellyfin-bitrate-share below lowers it
     # per user when other remote streams are already using the upload.
     RemoteClientBitrateLimit = "20000000";
@@ -92,6 +99,8 @@ let
 
     for tag, value in settings.items():
         el = child(tag)
+        # Unset options are written as <Tag xsi:nil="true" />.
+        el.attrib.pop("{http://www.w3.org/2001/XMLSchema-instance}nil", None)
         if isinstance(value, list):
             for old in list(el):
                 el.remove(old)
