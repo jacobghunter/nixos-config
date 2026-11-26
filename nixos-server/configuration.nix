@@ -7,6 +7,14 @@
 
     # QEMU emulation for cross-building aarch64
     binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+    # BBR instead of cubic: remote Jellyfin streams over lossy wifi (e.g. 0.3%
+    # loss at 50ms) cap out around 5-10 Mbps on cubic, BBR holds ~28 Mbps.
+    kernelModules = [ "tcp_bbr" ];
+    kernel.sysctl = {
+      "net.core.default_qdisc" = "fq";
+      "net.ipv4.tcp_congestion_control" = "bbr";
+    };
   };
   networking.hostName = "nixos-server";
   networking.networkmanager.enable = true;
