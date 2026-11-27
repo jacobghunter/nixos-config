@@ -135,8 +135,9 @@
     programs = {
       home-manager.enable = true;
 
-      # `rebuild` / `rebuild-boot` with no args rebuild the current machine
-      # locally. With a host arg (e.g. `rebuild nixos-pihole`), they deploy to
+      # `rebuild` / `rebuild-boot` with no host arg rebuild the current machine
+      # locally (any flags, e.g. `rebuild --show-trace`, pass straight through
+      # to nixos-rebuild). With a host arg (e.g. `rebuild nixos-pihole`), they deploy to
       # that host over ssh - --elevate=sudo handles activation on the target.
       # Where the build runs depends on the host, so another machine's closure
       # never lands on (or streams through) this one:
@@ -154,8 +155,10 @@
         _nixos_deploy() {
           local action="$1"
           shift
-          if [ -z "$1" ]; then
-            sudo nixos-rebuild "$action" --flake ~/nixos-config
+          # No host (or flags straight away - hostnames never start with "-"):
+          # rebuild this machine, passing any flags through.
+          if [ -z "$1" ] || [ "''${1#-}" != "$1" ]; then
+            sudo nixos-rebuild "$action" --flake ~/nixos-config "$@"
             return
           fi
 
