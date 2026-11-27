@@ -25,18 +25,51 @@ let
 
   # Caelestia writes runtime state back into shell.json itself (e.g. the VPN
   # tile saves utilities.vpn.enabled on every connect/disconnect, reformatting
-  # the whole file as it goes), which tripped caelestia-config-reload and
-  # restarted the shell mid-toggle. Only restart when the parsed settings
+  # the whole file as it goes), which would trip the liveReload watcher and
+  # restart the shell mid-toggle. Only restart when the parsed settings
   # actually changed - ignoring formatting and the keys the shell owns.
   shellOwnedKeys = [ ".utilities.vpn.enabled" ];
+  reloadCache = "\${XDG_RUNTIME_DIR:-/tmp}/caelestia-shell.json.normalized";
+  normalizeShellJson = "${pkgs.jq}/bin/jq -S 'del(${lib.concatStringsSep ", " shellOwnedKeys})' \"${shellJsonPath}\"";
   reloadIfChanged = pkgs.writeShellScript "caelestia-reload-if-changed" ''
-    cache="''${XDG_RUNTIME_DIR:-/tmp}/caelestia-shell.json.normalized"
-    new=$(${pkgs.jq}/bin/jq -S 'del(${lib.concatStringsSep ", " shellOwnedKeys})' "${shellJsonPath}") || exit 0
+    cache="${reloadCache}"
+    new=$(${normalizeShellJson}) || exit 0
     if [ -f "$cache" ] && [ "$new" = "$(cat "$cache")" ]; then
       exit 0
     fi
     printf '%s' "$new" > "$cache"
     exec ${pkgs.systemd}/bin/systemctl --user try-restart caelestia.service
+  '';
+
+  # The cache lives in XDG_RUNTIME_DIR, so it's gone after every login, and
+  # the shell's first own write to shell.json (~1 min in) would restart it
+  # unconditionally. Seeding it with what the shell is about to load avoids
+  # that second startup.
+  seedReloadCache = pkgs.writeShellScript "caelestia-seed-reload-cache" ''
+    ${normalizeShellJson} > "${reloadCache}" || true
+  '';
+
+  # Apps whose notifications are only worth the popup: kitty (OSC 99 from
+  # terminal programs, e.g. Claude Code's "waiting for input") and blueman
+  # (every device connect/disconnect). Caelestia keeps every notification
+  # until dismissed, so these piled up into the hundreds - and its animated
+  # clear-all lags badly at that size. Patched below to close these outright
+  # when their popup times out instead of just hiding the popup.
+  ephemeralNotifApps = [
+    "kitty"
+    "blueman"
+  ];
+
+  # KillMode=process (below) leaves the shell's `nmcli monitor` children
+  # running after every restart, orphaned in the unit's cgroup and each
+  # still waking on every NetworkManager event. Kill just those.
+  killLeftoverNmcli = pkgs.writeShellScript "caelestia-kill-leftover-nmcli" ''
+    procs="/sys/fs/cgroup$(${pkgs.systemd}/bin/systemctl --user show -P ControlGroup caelestia.service)/cgroup.procs"
+    [ -r "$procs" ] || exit 0
+    while read -r pid; do
+      [ "$(cat /proc/$pid/comm 2>/dev/null)" = nmcli ] && kill "$pid" 2>/dev/null
+    done < "$procs"
+    exit 0
   '';
 
   # Caelestia locks on logind's PrepareForSleep (general.idle.lockBeforeSleep)
@@ -110,6 +143,14 @@ in
         without a battery to run flat.
       '';
     };
+
+    liveReload = lib.mkEnableOption ''
+      restarting the shell whenever shell.json changes. Caelestia's own
+      watcher misses an editor's atomic rename-over-save on the repo file, so
+      without this hand edits need `systemctl --user restart caelestia`.
+      Off by default: it's only useful while actively editing, and each
+      restart is a full shell startup
+    '';
 
     monitors = lib.mkOption {
       type = lib.types.listOf lib.types.str;
@@ -185,6 +226,13 @@ in
                   --replace-fail "        function isLocked(): bool {" \
                                  "        function isSecure(): bool { return lock.secure; }
                 function isLocked(): bool {"
+
+                # See ephemeralNotifApps.
+                substituteInPlace services/NotifData.qml \
+                  --replace-fail "                notif.popup = false;" \
+                                 "                notif.popup = false;
+                        if (${builtins.toJSON ephemeralNotifApps}.includes(notif.appName))
+                            notif.close();"
               '';
             });
 
@@ -193,8 +241,7 @@ in
         # editing, no writes from the GUI below). Instead, shell.json is
         # symlinked straight to this module's own file (out-of-store), so
         # editing it - by hand or via the GUI - lands directly in this
-        # git-tracked file, no rebuild needed to pick it up. See the
-        # caelestia-config-reload path/service below for *why* it's picked up.
+        # git-tracked file, no rebuild needed to pick it up (see liveReload).
 
         cli = {
           enable = true;
@@ -240,22 +287,6 @@ in
       );
 
       systemd.user = {
-        # Caelestia's own file watcher (QFileSystemWatcher on the literal
-        # ~/.config/caelestia/shell.json path) doesn't survive an editor's
-        # atomic rename-over-save on the real file: the watched inode dies with
-        # the rename, and the directory-level fallback watches
-        # ~/.config/caelestia/, not this repo's directory where the rename
-        # actually happens - so reload silently stops working until something
-        # restarts the process. There's no IPC reload command to paper over it
-        # (checked caelestia-shell's source: none exists). This path unit
-        # watches the real repo file directly and restarts the shell whenever
-        # it changes, so no manual restart is needed either.
-        paths.caelestia-config-reload = {
-          Unit.Description = "Watch Caelestia's shell.json for changes";
-          Path.PathModified = shellJsonPath;
-          Install.WantedBy = [ "default.target" ];
-        };
-
         # `caelestia scheme set` rewrites hypr/scheme/current.lua (see
         # hyprland.lua, which reads it for border colours) but has no way to
         # tell Hyprland to re-read it - hyprctl reload is the only mechanism,
@@ -270,15 +301,11 @@ in
           # The launcher spawns apps as plain children (DesktopEntry.execute), so
           # they land in caelestia.service's cgroup - and the default
           # KillMode=control-group takes Steam/Discord/etc. down with every shell
-          # restart, including the config-reload one below. Only kill the shell.
-          caelestia.Service.KillMode = "process";
-
-          caelestia-config-reload = {
-            Unit.Description = "Restart Caelestia shell after shell.json changes";
-            Service = {
-              Type = "oneshot";
-              ExecStart = "${reloadIfChanged}";
-            };
+          # restart, including liveReload's. Only kill the shell.
+          caelestia.Service = {
+            KillMode = "process";
+            ExecStartPre = lib.mkIf cfg.liveReload "${seedReloadCache}";
+            ExecStopPost = "${killLeftoverNmcli}";
           };
 
           caelestia-sleep-lock = {
@@ -301,6 +328,24 @@ in
               ExecStart = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl reload";
             };
           };
+        };
+      };
+    })
+    (lib.mkIf (cfg.enable && cfg.liveReload) {
+      # Watches the real repo file directly (not the ~/.config symlink, whose
+      # watched inode dies with an editor's rename-over-save) - there's no IPC
+      # reload command to use instead (checked caelestia-shell's source).
+      systemd.user.paths.caelestia-config-reload = {
+        Unit.Description = "Watch Caelestia's shell.json for changes";
+        Path.PathModified = shellJsonPath;
+        Install.WantedBy = [ "default.target" ];
+      };
+
+      systemd.user.services.caelestia-config-reload = {
+        Unit.Description = "Restart Caelestia shell after shell.json changes";
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${reloadIfChanged}";
         };
       };
     })
