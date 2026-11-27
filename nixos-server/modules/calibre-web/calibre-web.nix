@@ -64,10 +64,6 @@ in
     }
   ];
 
-  systemd.tmpfiles.rules = [
-    "d ${libraryPath} 0750 calibre-web calibre-web -"
-  ];
-
   services.calibre-web = {
     enable = true;
     # nixpkgs leaves the "kobo" extra (jsonschema) out by default; without it
@@ -101,15 +97,31 @@ in
     };
   };
 
-  systemd.services.calibre-web.serviceConfig.ExecStartPre = lib.mkMerge [
-    # Must run before the upstream module's own ExecStartPre, which checks
-    # for metadata.db and fails the unit if it's missing.
-    (lib.mkBefore [ "${initLibrary}" ])
-    # Must run after it - that's the step that runs migrations and creates
-    # the admin row in the first place.
-    (lib.mkAfter [
-      "${setAdminAccount}"
-      "${enableKoboSync}"
-    ])
-  ];
+  systemd = {
+    tmpfiles.rules = [
+      "d ${libraryPath} 0750 calibre-web calibre-web -"
+    ];
+  };
+
+  services.calibre-web.serviceConfig = {
+    # The upstream module denies @resources, which includes setpriority - and
+    # calibre's ebook-convert calls os.nice() before converting, so every
+    # kepub conversion died with SIGSYS and new books sat "pending" on the
+    # Kobo. A later allow entry carves that one syscall back out of the deny.
+    SystemCallFilter = lib.mkAfter [ "setpriority" ];
+
+    ExecStartPre = lib.mkMerge [
+      # Must run before the upstream module's own ExecStartPre, which checks
+      # for metadata.db and fails the unit if it's missing.
+      (lib.mkBefore [ "${initLibrary}" ])
+      # Must run after it - that's the step that runs migrations and creates
+      # the admin row in the first place.
+      (lib.mkAfter [
+        "${setAdminAccount}"
+        "${enableKoboSync}"
+      ])
+    ];
+
+  };
+
 }
