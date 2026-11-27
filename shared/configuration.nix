@@ -104,6 +104,12 @@
       # a kernel built for the pi) instead of rebuilding them.
       substituters = [ "http://192.168.1.167:8081/nixos-config" ];
       trusted-public-keys = [ "nixos-config:8W0E2b09uOT6kNIBlkeEgfHnVG5jiD/nm5oG586Vi1o=" ];
+      # Away from home without Tailscale (or with the home internet down) the
+      # cache above is unreachable. It answers in milliseconds when it's up,
+      # so give up quickly instead of 15s x 5 attempts per path, and build
+      # locally when a substitute can't be fetched rather than failing.
+      connect-timeout = 3;
+      fallback = true;
 
       # Safety net between weekly GCs: if free space drops under 10 GiB during
       # a build, nix collects garbage until 30 GiB is free (or nothing's left).
