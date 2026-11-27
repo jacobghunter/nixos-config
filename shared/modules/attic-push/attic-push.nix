@@ -1,6 +1,15 @@
 { pkgs, inputs, ... }:
 let
   attic-client = inputs.attic.packages.${pkgs.stdenv.hostPlatform.system}.attic-client;
+
+  # Waits (as a running service, not a failing one) until the cache answers,
+  # then hands over to watch-store.
+  watchStore = pkgs.writeShellScript "attic-watch-store" ''
+    until ${pkgs.curl}/bin/curl -sf -m 5 -o /dev/null http://192.168.1.167:8081/nixos-config/nix-cache-info; do
+      sleep 30
+    done
+    exec ${attic-client}/bin/attic watch-store nixos-config
+  '';
 in
 {
   environment.systemPackages = [ attic-client ];
@@ -19,9 +28,12 @@ in
   # never waits on the cache. watch-store also picks up substituted paths
   # (e.g. from hyprland.cachix.org), skipping ones signed by cache.nixos.org.
   #
-  # Off the home LAN the server is unreachable and watch-store exits; it's
-  # restarted every 30s forever, so it reconnects on its own back home. Paths
-  # added while away are not backfilled - a one-off
+  # Off the home LAN (without Tailscale) the server is unreachable, so the
+  # service polls it every 30s and only starts watch-store once it answers.
+  # watch-store exiting on its own would leave the unit in auto-restart, which
+  # switch-to-configuration reports as failed on every rebuild away from home.
+  # If the connection drops later, watch-store exits and is restarted back
+  # into the wait. Paths added while away are not backfilled - a one-off
   # `sudo attic push nixos-config /run/current-system` catches them up.
   systemd.services.attic-watch-store = {
     description = "Push new Nix store paths to the attic cache";
@@ -39,7 +51,7 @@ in
     environment.HOME = "/root";
 
     serviceConfig = {
-      ExecStart = "${attic-client}/bin/attic watch-store nixos-config";
+      ExecStart = watchStore;
       Restart = "always";
       RestartSec = "30s";
       # Uploads are background work - never compete with a build or the desktop.
