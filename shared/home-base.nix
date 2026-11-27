@@ -85,10 +85,12 @@
       # first-match-wins), so hand-written entries can still override these.
       #
       # Fleet hosts are tried over mDNS first (home LAN), then over Tailscale
-      # via MagicDNS - so the same alias works at home and away. HostKeyAlias
+      # via MagicDNS - so the same alias works at home and away. mDNS answers
+      # in milliseconds on the LAN but takes ~25s to give up away from it, so
+      # the check is capped at 1s. HostKeyAlias
       # keeps one known_hosts entry per host, whichever name was used.
       file.".ssh/conf.d/nixos-hosts.conf".text = ''
-        Match host nixos-laptop,nixos-pc,nixos-server,nixos-wsl,nixos-pihole,nixos-printer exec "getent hosts %h.local"
+        Match host nixos-laptop,nixos-pc,nixos-server,nixos-wsl,nixos-pihole,nixos-printer exec "timeout 1 getent hosts %h.local"
           HostName %h.local
 
         Match host nixos-laptop,nixos-pc,nixos-server,nixos-wsl,nixos-pihole,nixos-printer
